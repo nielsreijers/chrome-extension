@@ -16,4 +16,12 @@ changeColor.onclick = function(element) {
     console.log("Button onclick has finished.");
 };
 
+getTitle.onclick = function(element) {
+    chrome.tabs.getSelected(null, function(tab) {
+        title = tab.title;
+        document.getElementById("title").innerHTML = title;
+        console.log("The title is: " + title);
+    });
+}
+
 console.log("popup.js has finished.");
