@@ -1,27 +1,27 @@
-let changeColor = document.getElementById('changeColor');
+addTextsList = function(parent, list) {
+    parent.innerHTML = "";
+    ul = document.createElement("ul");
+    parent.appendChild(ul);
 
-chrome.storage.sync.get('color', function(data) {
-    changeColor.style.backgroundColor = data.color;
-    changeColor.setAttribute('value', data.color);
-    console.log("Button color has been set.");
-});
-
-changeColor.onclick = function(element) {
-    let color = element.target.value;
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        chrome.tabs.executeScript(
-            tabs[0].id,
-            {code: 'document.body.style.backgroundColor = "' + color + '"; console.log("backgroundColor has been set.");'});
-    });
-    console.log("Button onclick has finished.");
-};
-
-getTitle.onclick = function(element) {
-    chrome.tabs.getSelected(null, function(tab) {
-        title = tab.title;
-        document.getElementById("title").innerHTML = title;
-        console.log("The title is: " + title);
+    list.forEach(t => {
+        var li = document.createElement("li");
+        var textnode = document.createTextNode(t);
+        li.appendChild(textnode);
+        ul.appendChild(li);
     });
 }
 
-console.log("popup.js has finished.");
+document.getElementById('scanButton').onclick = function(element) {
+    chrome.tabs.getSelected(null, function(tab) {
+        textsDiv = document.getElementById('textsList');
+        linksDiv = document.getElementById('linksList');
+
+        // Send a request to the content script.
+        chrome.tabs.sendMessage(tab.id, {action: "getTexts"}, null, function(response) {
+            addTextsList(textsDiv, response);
+        });
+        chrome.tabs.sendMessage(tab.id, {action: "getLinks"}, null, function(response) {
+            addTextsList(linksDiv, response);
+        });
+    });
+};
