@@ -1,5 +1,7 @@
 FB_CLASS_MESSAGE_SPAN = "_5yl5"
-MARKED_LINK_ATTRIBUTE = "VLIEGTUIG"
+MARKED_LINK_ATTRIBUTE = "VLIEGTUIG_MARKED"
+POPOVER_ID = "VLIEGTUIG_POPOVER"
+POPOVER_CONTENT_ID = "VLIEGTUIG_POPOVER_CONTENT"
 
 getConversationTexts = function() {
     return document.querySelectorAll(`.${FB_CLASS_MESSAGE_SPAN} > span`)
@@ -24,8 +26,36 @@ markLinks = function () {
         elem.setAttribute("height", "24");
         elem.setAttribute("width", "24");
         elem.setAttribute("alt", "Flower");
+        elem.onclick = function() {
+            getPopoverElement().style.display = "block"
+        }
         a.parentElement.appendChild(elem);
     });
+}
+
+getPopoverElement = function() {
+    var popover = document.getElementById(POPOVER_ID);
+    if (popover == null) {
+        popover = document.createElement("div");
+        popover.setAttribute("id", POPOVER_ID)
+        popover.setAttribute("class", "vliegtuig-modal");
+            popover_content = document.createElement("div");
+            popover_content.setAttribute("class", "vliegtuig-modal-content");
+            popover_content.setAttribute("id", POPOVER_CONTENT_ID);
+                closebutton = document.createElement("span");
+                closebutton.innerText = "×";
+                closebutton.setAttribute("class", "vliegtuig-close");
+                closebutton.onclick = function() {
+                      popover.style.display = "none";
+                }
+                p = document.createElement("p");
+                p.innerText = "Some text in the popover..";
+                popover_content.prepend(p);
+                popover_content.prepend(closebutton);
+            popover.prepend(popover_content);
+        document.body.prepend(popover);
+    }
+    return popover;
 }
 
 chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
@@ -39,3 +69,4 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
         sendResponse({}); // Send nothing..
     }
 });
+
