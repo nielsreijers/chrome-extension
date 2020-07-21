@@ -1,6 +1,7 @@
 
 X automatically add icon to links as they appear in conversations
-- add icon to links other than <a href> (there are different flavours in FB messages)
 - lookup the url in NewsGuard like Pennyworth
+- modal isn't really modal... :-(
 - display NewsGuard report card in the popup
+- add icon to links other than <a href> (there are different flavours in FB messages)
 - add buttons to do autoreply
