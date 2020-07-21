@@ -2,6 +2,7 @@ FB_CLASS_MESSAGE_SPAN = "_5yl5"
 MARKED_LINK_ATTRIBUTE = "VLIEGTUIG_MARKED"
 POPOVER_ID = "VLIEGTUIG_POPOVER"
 POPOVER_CONTENT_ID = "VLIEGTUIG_POPOVER_CONTENT"
+POPOVER_CLOSE_BUTTON_ID = "VLIEGTUIG_POPOVER_CLOSE_BUTTON"
 
 getConversationTexts = function() {
     return document.querySelectorAll(`.${FB_CLASS_MESSAGE_SPAN} > span`)
@@ -18,6 +19,42 @@ getUnmarkedConversationLinksAndMark = function() {
     return unmarkedElements;
 }
 
+popoverPinned = false;
+showPopoverUntilClosed = function() {
+console.log("showPopoverUntilClosed");
+    getPopoverElement().style.display = "block";
+    popoverPinned = true;
+    document.getElementById(POPOVER_CLOSE_BUTTON_ID).innerText = "×";
+
+}
+hidePopover = function() {
+console.log("hidePopover");
+    getPopoverElement().style.display = "none";
+    popoverPinned = false;
+    document.getElementById(POPOVER_CLOSE_BUTTON_ID).innerText = "";
+}
+
+hidePopoverTimer = null;
+showPopoverWhileHoveringWithHalfSecondDelay = function() {
+console.log("showPopoverWhileHoveringWithHalfSecondDelay");
+    if (hidePopoverTimer != null) {
+        clearTimeout(hidePopoverTimer);
+        hidePopoverTimer = null;
+    }
+    getPopoverElement().style.display = "block";
+}
+hidePopoverAfterHalfSecond = function() {
+console.log("hidePopoverAfterHalfSecond");
+console.log("popoverPinned:" + popoverPinned);
+    if (!popoverPinned) {
+        hidePopoverTimer = setTimeout(function() {
+            console.log("hidePopoverAfterHalfSecond: TIMEOUT");
+            getPopoverElement().style.display = "none";
+            hidePopoverTimer = null;
+        }, 500);
+    }    
+}
+
 markLinks = function () {
     iconImg = chrome.runtime.getURL('images/check-t.png');
     getUnmarkedConversationLinksAndMark().forEach(a => {
@@ -26,9 +63,9 @@ markLinks = function () {
         elem.setAttribute("height", "24");
         elem.setAttribute("width", "24");
         elem.setAttribute("alt", "Flower");
-        elem.onclick = function() {
-            getPopoverElement().style.display = "block"
-        }
+        elem.onclick = showPopoverUntilClosed;
+        elem.onmouseenter = showPopoverWhileHoveringWithHalfSecondDelay;
+        elem.onmouseleave = hidePopoverAfterHalfSecond;
         a.parentElement.appendChild(elem);
     });
 }
@@ -42,11 +79,13 @@ getPopoverElement = function() {
             popover_content = document.createElement("div");
             popover_content.setAttribute("class", "vliegtuig-modal-content");
             popover_content.setAttribute("id", POPOVER_CONTENT_ID);
+            popover_content.onmouseenter = showPopoverWhileHoveringWithHalfSecondDelay;
+            popover_content.onmouseleave = hidePopoverAfterHalfSecond;
                 closebutton = document.createElement("span");
-                closebutton.innerText = "×";
                 closebutton.setAttribute("class", "vliegtuig-close");
+                closebutton.setAttribute("id", POPOVER_CLOSE_BUTTON_ID);
                 closebutton.onclick = function() {
-                      popover.style.display = "none";
+                    hidePopover();
                 }
                 p = document.createElement("p");
                 p.innerText = "Some text in the popover..";
