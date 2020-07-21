@@ -1,30 +1,38 @@
-getTexts = function(tab) {
-    return Array.prototype.map.call(document.querySelectorAll("._5yl5 > span"), x => x.innerText)
+FB_CLASS_MESSAGE_SPAN = "_5yl5"
+MARKED_LINK_ATTRIBUTE = "VLIEGTUIG"
+
+getConversationTexts = function() {
+    return document.querySelectorAll(`.${FB_CLASS_MESSAGE_SPAN} > span`)
 }
 
-getLinks = function(tab) {
-    return Array.prototype.map.call(document.querySelectorAll("._5yl5 > span > a"), x => x.href)
+getConversationLinks = function() {
+    return document.querySelectorAll(`.${FB_CLASS_MESSAGE_SPAN} > span > a`)
 }
 
-markLinks = function (argument) {
-    console.log("HALLO");
-    document.querySelectorAll("._5yl5 > span > a").forEach(a => {
+getUnmarkedConversationLinksAndMark = function() {
+    var linkElements = getConversationLinks();
+    var unmarkedElements = Array.prototype.filter.call(linkElements, e => e.getAttribute(MARKED_LINK_ATTRIBUTE) == null);
+    unmarkedElements.forEach(e => e.setAttribute(MARKED_LINK_ATTRIBUTE, true));
+    return unmarkedElements;
+}
+
+markLinks = function () {
+    iconImg = chrome.runtime.getURL('images/check-t.png');
+    getUnmarkedConversationLinksAndMark().forEach(a => {
         var elem = document.createElement("img");
-        elem.setAttribute("src", "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQ7MFCy44fuadGhTjogQ7XbiLE7GyJ648e8Vw&usqp=CAU");
+        elem.setAttribute("src", iconImg);
         elem.setAttribute("height", "24");
         elem.setAttribute("width", "24");
         elem.setAttribute("alt", "Flower");
         a.parentElement.appendChild(elem);
-        console.log("added image for " + a.href);
     });
 }
 
 chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
-    console.log("de post. de post. wat brengt vandaag de post?")
     if (request.action == "getTexts") {
-        sendResponse(getTexts());
+        sendResponse(Array.prototype.map.call(getConversationTexts()), x => x.innerText);
     } else if (request.action == "getLinks") {
-        sendResponse(getLinks());
+        sendResponse(Array.prototype.map.call(getConversationLinks(), x => x.href));
     } else if (request.action == "markLinks") {
         markLinks();
     } else {

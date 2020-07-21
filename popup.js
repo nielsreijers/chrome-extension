@@ -30,8 +30,7 @@ document.getElementById('markButton').onclick = function(element) {
     chrome.tabs.getSelected(null, function(tab) {
 
         // Send a request to the content script.
-        chrome.tabs.sendMessage(tab.id, {action: "markLinks"}, null, function(response) {
-        });
+        chrome.tabs.sendMessage(tab.id, {action: "markLinks"}, null, null);
     });
 }
 
