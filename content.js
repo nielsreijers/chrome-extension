@@ -62,8 +62,8 @@ function getPopoverElement() {
         popover.setAttribute("class", "vliegtuig-modal");
             let popover_outer_content = document.createElement("div");
             popover_outer_content.setAttribute("class", "vliegtuig-modal-container");
-            popover_outer_content.onmouseenter = handle_icon_mouseenter;
-            popover_outer_content.onmouseleave = handle_icon_mouseleave;
+            popover_outer_content.onmouseenter = handle_icon_mouseenter_content;
+            popover_outer_content.onmouseleave = handle_icon_mouseleave_content;
                 let closebutton = document.createElement("span");
                 closebutton.setAttribute("class", "vliegtuig-close");
                 closebutton.setAttribute("id", POPOVER_CLOSE_BUTTON_ID);
@@ -79,43 +79,66 @@ function getPopoverElement() {
     return popover;
 }
 
-function openPopup(url) {
+function openPopover(url) {
     getPopoverElement().style.display = "block";
     setPopupContentForUrl(url);
 }
 
-function hidePopup() {
+function hidePopover() {
     getPopoverElement().style.display = "none";
 }
 
-function handle_icon_mouseenter(url) {
-    if (!popoverPinned) {
-        if (hidePopoverTimer != null) {
-            clearTimeout(hidePopoverTimer);
-            hidePopoverTimer = null;
-        }
-        openPopup(url);
-    }
+var hidePopoverTimer = null;
+function startHidePopoverTimer() {
+    hidePopoverTimer = setTimeout(function() {
+        hidePopover();
+        hidePopoverTimer = null;
+    }, 500);
+}
+
+function stopHidePopoverTimer() {
+    if (hidePopoverTimer != null) {
+        clearTimeout(hidePopoverTimer);
+        hidePopoverTimer = null;
+    }    
 }
 
 var popoverPinned = false;
+function handle_icon_mouseenter_icon(url) {
+    if (!popoverPinned) {
+        stopHidePopoverTimer();
+        openPopover(url);
+    }
+}
+
 function handle_icon_clicked(url) {
     popoverPinned = true;
     document.getElementById(POPOVER_CLOSE_BUTTON_ID).innerText = "×";
 }
 
-var hidePopoverTimer = null;
-function handle_icon_mouseleave() {
+function handle_icon_mouseleave_icon() {
     if (!popoverPinned) {
-        hidePopoverTimer = setTimeout(function() {
-            getPopoverElement().style.display = "none";
+        startHidePopoverTimer();
+    }    
+}
+
+function handle_icon_mouseenter_content() {
+    if (!popoverPinned) {
+        if (hidePopoverTimer != null) {
+            clearTimeout(hidePopoverTimer);
             hidePopoverTimer = null;
-        }, 500);
+        }
+    }
+}
+
+function handle_icon_mouseleave_content() {
+    if (!popoverPinned) {
+        startHidePopoverTimer();
     }    
 }
 
 function handle_close_clicked() {
-    hidePopup();
+    hidePopover();
     popoverPinned = false;
     document.getElementById(POPOVER_CLOSE_BUTTON_ID).innerText = "";
 }
@@ -131,8 +154,8 @@ function markLink(link) {
     elem.setAttribute("width", "24");
     elem.setAttribute("alt", "check");
     elem.onclick = () => handle_icon_clicked(url);
-    elem.onmouseenter = () => handle_icon_mouseenter(url);
-    elem.onmouseleave = () => handle_icon_mouseleave();
+    elem.onmouseenter = () => handle_icon_mouseenter_icon(url);
+    elem.onmouseleave = () => handle_icon_mouseleave_icon();
     // TODO: placement needs some tweaking
     link.parentElement.appendChild(elem);
     console.log("added icon to " + url);
