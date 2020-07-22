@@ -211,16 +211,16 @@ function getContentPromiseForURL(url) {
          //     sleep(debug_delay).then(() => resolve(content));
          //     debug_delay /= 2;
          // });
-         popupContentPerUrl[url] = getNewsGuardData(url).then(newsGuardDataToContent);
+         popupContentPerUrl[url] = getNewsGuardData(url).then(data => newsGuardDataToContent(data, url));
     }
     return popupContentPerUrl[url];
 }
 
 
-function newsGuardDataToContent(data) {
+function newsGuardDataToContent(data, url) {
     if (data.rank == null) {
         return getContentDiv(iconImgQuestionmark, "not found",
-                             `This site is not in NewsGuard's database.`);
+                             `${url} is not in NewsGuard's database.`);
     } else if (data.rank == 'P' && data.score == 0) {
         return getContentDiv(iconImgGrey, "not rated",
                              `${data.identifier} is in NewsGuard's database, but does not get a score since it publishes content from its users that it does not vet.`);
