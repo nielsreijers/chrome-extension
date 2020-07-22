@@ -54,17 +54,18 @@ function getPopoverElement() {
         popover.setAttribute("id", POPOVER_ID)
         popover.setAttribute("class", "vliegtuig-modal");
             let popover_outer_content = document.createElement("div");
-            popover_outer_content.setAttribute("class", "vliegtuig-modal-content");
+            popover_outer_content.setAttribute("class", "vliegtuig-modal-container");
             popover_outer_content.onmouseenter = handle_icon_mouseenter;
             popover_outer_content.onmouseleave = handle_icon_mouseleave;
                 let closebutton = document.createElement("span");
                 closebutton.setAttribute("class", "vliegtuig-close");
                 closebutton.setAttribute("id", POPOVER_CLOSE_BUTTON_ID);
                 closebutton.onclick = handle_close_clicked;
+                popover_outer_content.prepend(closebutton);
                 let popover_inner_content = document.createElement("div");
                 popover_inner_content.setAttribute("id", POPOVER_CONTENT_ID);
+                popover_inner_content.setAttribute("class", "vliegtuig-modal-content");
                 popover_outer_content.prepend(popover_inner_content);
-                popover_outer_content.prepend(closebutton);
             popover.prepend(popover_outer_content);
         document.body.prepend(popover);
     }
@@ -173,14 +174,41 @@ var popupContentPerUrl = {}
 var debug_delay = 4000 // to test if we show the right content if it takes a while to fetch data from NewsGuard and the user points at a different link in the meantime
 function getContentPromiseForURL(url) {
     if (popupContentPerUrl[url] == undefined) {
-         popupContentPerUrl[url] = new Promise(resolve => {
-             let content = document.createElement("div");
-             content.innerText = `NewsGuard data for ${url} goes here...`;
-             sleep(debug_delay).then(() => resolve(content));
-             debug_delay /= 2;
-         });
+         // popupContentPerUrl[url] = new Promise(resolve => {
+         //     let content = document.createElement("div");
+         //     content.innerText = `NewsGuard data for ${url} goes here...`;
+         //     sleep(debug_delay).then(() => resolve(content));
+         //     debug_delay /= 2;
+         // });
+         popupContentPerUrl[url] = getNewsGuardData(url).then(newsGuardDataToContent);
     }
     return popupContentPerUrl[url];
+}
+
+
+function newsGuardDataToContent(data) {
+    let content = document.createElement("div");
+    var result = ""
+    if (data.rank == null) {
+        result = `This site is not in NewsGuard's database.`
+    } else if (data.rank == 'P' && data.score == 0) {
+        result = `${data.identifier} is in NewsGuard's database, but does not get a score since it publishes content from its users that it does not vet.`
+    } else if (data.rank == 'T') {
+        result = `${data.identifier} gets a score of ${data.score} in NewsGuard's database. It should be safe.`
+    } else if (data.rank == 'N') {
+        result = `${data.identifier} gets a score of ${data.score} in NewsGuard's database. Proceed with caution.`
+    } else {
+        result = `${data.identifier} gets rank ${data.rank} and a score of {score} in NewsGuard's database.`
+    }
+    content.innerText = result;
+    return content;
+}
+
+
+
+// ----------------- Get data from Newsguard -----------------
+function getNewsGuardData(url) {
+    return fetch(`https://api.newsguardtech.com/check?url=${encodeURIComponent(url)}`).then(r => r.json());
 }
 
 

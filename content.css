@@ -15,13 +15,20 @@ body {font-family: Arial, Helvetica, sans-serif;}
   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
 
-/* Modal Content */
-.vliegtuig-modal-content {
+/* Modal Container */
+.vliegtuig-modal-container {
   background-color: #fefefe;
   margin: auto;
   padding: 20px;
   border: 1px solid #888;
   width: 80%;
+  display: table;
+}
+
+/* Modal Content */
+.vliegtuig-modal-content {
+  display: table-cell;
+  vertical-align: top;
 }
 
 /* The Close Button */
@@ -30,8 +37,9 @@ body {font-family: Arial, Helvetica, sans-serif;}
   float: right;
   font-size: 28px;
   font-weight: bold;
+  display: table-cell;
+  vertical-align: top;
 }
-
 .vliegtuig-close:hover,
 .vliegtuig-close:focus {
   color: #000;
