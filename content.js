@@ -4,6 +4,13 @@ POPOVER_ID = "VLIEGTUIG_POPOVER"
 POPOVER_CONTENT_ID = "VLIEGTUIG_POPOVER_CONTENT"
 POPOVER_CLOSE_BUTTON_ID = "VLIEGTUIG_POPOVER_CLOSE_BUTTON"
 
+let iconImg = chrome.runtime.getURL('images/check-t.png');
+let iconImgGreen = chrome.runtime.getURL('images/check-t-green.png');
+let iconImgRed = chrome.runtime.getURL('images/check-t-red.png');
+let iconImgQuestionmark = chrome.runtime.getURL('images/check-t-questionmark.png');
+let iconImgGrey = chrome.runtime.getURL('images/check-t-grey.png');
+let iconImgEmpty = chrome.runtime.getURL('images/check-t-empty.png');
+
 
 
 // ----------------- debug stuff -----------------
@@ -116,7 +123,6 @@ function handle_close_clicked() {
 
 
 // ----------------- Add our icon before links -----------------
-let iconImg = chrome.runtime.getURL('images/check-t.png');
 function markLink(link) {
     let url = link.innerText;
     let elem = document.createElement("img");
@@ -158,7 +164,9 @@ function setPopupContentForUrl(url) {
 
     current_url = url;
     let contentDiv = document.getElementById(POPOVER_CONTENT_ID);
-    contentDiv.innerText = "loading " + url;
+    contentDiv.innerText = "";
+    contentDiv.appendChild(getContentDiv(iconImgEmpty, "loading", `loading ${url}....`));
+    
     getContentPromiseForURL(url).then(content => {
         if (current_url == url) {
             // Only set the content if this is still the URL we want to show the data for.
@@ -187,23 +195,39 @@ function getContentPromiseForURL(url) {
 
 
 function newsGuardDataToContent(data) {
-    let content = document.createElement("div");
-    var result = ""
     if (data.rank == null) {
-        result = `This site is not in NewsGuard's database.`
+        return getContentDiv(iconImgQuestionmark, "not found",
+                             `This site is not in NewsGuard's database.`);
     } else if (data.rank == 'P' && data.score == 0) {
-        result = `${data.identifier} is in NewsGuard's database, but does not get a score since it publishes content from its users that it does not vet.`
+        return getContentDiv(iconImgGrey, "not rated",
+                             `${data.identifier} is in NewsGuard's database, but does not get a score since it publishes content from its users that it does not vet.`);
     } else if (data.rank == 'T') {
-        result = `${data.identifier} gets a score of ${data.score} in NewsGuard's database. It should be safe.`
+        return getContentDiv(iconImgGreen, "safe",
+                             `${data.identifier} gets a score of ${data.score} in NewsGuard's database. It should be safe.`);
     } else if (data.rank == 'N') {
-        result = `${data.identifier} gets a score of ${data.score} in NewsGuard's database. Proceed with caution.`
+        return getContentDiv(iconImgRed, "unsafe",
+                             `${data.identifier} gets a score of ${data.score} in NewsGuard's database. Proceed with caution.`);
     } else {
-        result = `${data.identifier} gets rank ${data.rank} and a score of {score} in NewsGuard's database.`
+        return getContentDiv(iconImgQuestionmark, "unsure",
+                             `${data.identifier} gets rank ${data.rank} and a score of ${data.score} in NewsGuard's database.`);
     }
-    content.innerText = result;
-    return content;
 }
 
+
+function getContentDiv(image, alt, text) {
+    let content = document.createElement("div");
+
+    let img = document.createElement("img");
+    img.setAttribute("src", image);
+    img.setAttribute("alt", alt);
+    content.appendChild(img);
+
+    let span = document.createElement("span");
+    span.innerText = text;
+    content.appendChild(span);
+
+    return content;
+}
 
 
 // ----------------- Get data from Newsguard -----------------

@@ -31,5 +31,12 @@
         "128": "images/get_started128.png"
     },
     "manifest_version": 2,
-    "web_accessible_resources": ["images/check-t.png"]
+    "web_accessible_resources": [
+        "images/check-t.png",
+        "images/check-t-empty.png",
+        "images/check-t-green.png",
+        "images/check-t-grey.png",
+        "images/check-t-questionmark.png",
+        "images/check-t-red.png"
+    ]
 }
