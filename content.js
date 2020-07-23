@@ -272,3 +272,40 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
         sendResponse({}); // Send nothing..
     }
 });
+
+
+
+
+
+// ----------------- Sending Facebook messages -----------------
+function sendFbMessage(message, friend_id) {
+    const http = new XMLHttpRequest();
+    const url = 'https://mbasic.facebook.com/messages/send/';
+    http.open("POST", url);
+    http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    http.withCredentials = true;
+    // http.onreadystatechange = e => {
+    //     console.log("VLIEGTUIG");
+    //     console.log(e);
+    //     console.log(http.responseText);
+    // };
+    friend_ids='ids['+friend_id+']'
+    let params = {}
+    params['body'] = message;
+    // fb_dtsg is the token that identifies the current user.
+    // There are usually 3 elements with a token found in the document, but they all seem to work.
+    params['fb_dtsg'] = document.getElementsByName("fb_dtsg")[0].value;
+    params[`ids[${friend_id}]`] = friend_id;
+
+    // convert object to list -- to enable .map
+    let data = Object.entries(params);
+    // encode every parameter (unpack list into 2 variables)
+    data = data.map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`);
+    // combine into string
+    let b = data.join('&');
+
+    http.send(b);
+    return http;
+}
+// var h = sendFbMessage('zwarte pieten', 100001293926477);
+
