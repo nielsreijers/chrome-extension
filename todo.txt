@@ -1,7 +1,33 @@
 
 X automatically add icon to links as they appear in conversations
-- lookup the url in NewsGuard like Pennyworth
+X lookup the url in NewsGuard like Pennyworth
 - modal isn't really modal... :-(
-- display NewsGuard report card in the popup
+X display NewsGuard report card in the popup
 - add icon to links other than <a href> (there are different flavours in FB messages)
 - add buttons to do autoreply
+- FB message interfaces:
+    - message box in facebook feed
+    - www.facebook.com/messages
+    - www.messenger.com
+    - mbasic.facebook.com
+
+
+
+NOTES
+
+http://networkdynamics.org/2015/04/16/facebook-messenger-analytics-part-1-data-collection/
+
+message_history_url = 'https://www.facebook.com/ajax/mercury/thread_info.php?&messages[user_ids][%d][limit]=%d&messages[user_ids][%d][offset]=%d&client=web_messenger&__user=%d&__a=1&fb_dtsg=%s' % (friend_id, json_limit, friend_id, offset, my_id, fb_dtsg)
+
+
+message_history_url = 'https://www.facebook.com/ajax/mercury/thread_info.php?&messages[user_ids][{friend_id}][limit]={json_limit}&messages[user_ids][{friend_id}][offset]={offset}&client=web_messenger&__user={my_id}&__a=1&fb_dtsg={fb_dtsg}' % (friend_id, json_limit, friend_id, offset, my_id, fb_dtsg)
+
+fb_dtsg:
+AQHiEXzV-27o:AQE0cpFKEdDV
+AQHkORZ3kUxf:AQGI1rJ2zUtT
+AQGJ35zUNDGG:AQFBJBCG9WcU
+
+
+
+bernadette fantaTabMain-user:100001293926477
+group prof li fantaTabMain-thread:4062935763748221

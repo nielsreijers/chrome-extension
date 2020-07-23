@@ -79,9 +79,10 @@ function getPopoverElement() {
     return popover;
 }
 
-function openPopover(url) {
+function openPopover(url, messageElement) {
     getPopoverElement().style.display = "block";
-    setPopupContentForUrl(url);
+    setPopupContentForUrl(url, messageElement);
+    console.log(messageElement);
 }
 
 function hidePopover() {
@@ -104,10 +105,10 @@ function stopHidePopoverTimer() {
 }
 
 var popoverPinned = false;
-function handle_icon_mouseenter_icon(url) {
+function handle_icon_mouseenter_icon(url, messageElement) {
     if (!popoverPinned) {
         stopHidePopoverTimer();
-        openPopover(url);
+        openPopover(url, messageElement);
     }
 }
 
@@ -154,7 +155,7 @@ function markLink(link) {
     elem.setAttribute("width", "24");
     elem.setAttribute("alt", "check");
     elem.onclick = () => handle_icon_clicked(url);
-    elem.onmouseenter = () => handle_icon_mouseenter_icon(url);
+    elem.onmouseenter = (e) => handle_icon_mouseenter_icon(url, e.fromElement);
     elem.onmouseleave = () => handle_icon_mouseleave_icon();
     // TODO: placement needs some tweaking
     link.parentElement.appendChild(elem);
@@ -179,7 +180,7 @@ domObserver.observe(document, { childList: true, subtree: true });
 
 // ----------------- Put content in popup -----------------
 var current_url = ""
-function setPopupContentForUrl(url) {
+function setPopupContentForUrl(url, messageElement) {
     if (current_url == url) {
         // already set for this URL. skipping.
         return;
@@ -190,11 +191,12 @@ function setPopupContentForUrl(url) {
     contentDiv.innerText = "";
     contentDiv.appendChild(getContentDiv(iconImgEmpty, "loading", `loading ${url}....`));
     
-    getContentPromiseForURL(url).then(content => {
+    getNewsGuardContentPromiseForURL(url).then(content => {
         if (current_url == url) {
             // Only set the content if this is still the URL we want to show the data for.
             contentDiv.innerText = "";
             contentDiv.appendChild(content);
+            contentDiv.appendChild(getSendReplyButton(url, messageElement));
         }
     });
 }
@@ -203,7 +205,7 @@ function setPopupContentForUrl(url) {
 // ----------------- Get popup content -----------------
 var popupContentPerUrl = {}
 var debug_delay = 4000 // to test if we show the right content if it takes a while to fetch data from NewsGuard and the user points at a different link in the meantime
-function getContentPromiseForURL(url) {
+function getNewsGuardContentPromiseForURL(url) {
     if (popupContentPerUrl[url] == undefined) {
          // popupContentPerUrl[url] = new Promise(resolve => {
          //     let content = document.createElement("div");
@@ -216,8 +218,7 @@ function getContentPromiseForURL(url) {
     return popupContentPerUrl[url];
 }
 
-
-function newsGuardDataToContent(data, url) {
+function newsGuardDataToContent(data, url) {    
     if (data.rank == null) {
         return getContentDiv(iconImgQuestionmark, "not found",
                              `${url} is not in NewsGuard's database.`);
@@ -236,7 +237,6 @@ function newsGuardDataToContent(data, url) {
     }
 }
 
-
 function getContentDiv(image, alt, text) {
     let content = document.createElement("div");
 
@@ -252,6 +252,21 @@ function getContentDiv(image, alt, text) {
     return content;
 }
 
+function getSendReplyButton(url, messageElement) {
+    var friend_id = findFacebookUserId(messageElement);
+    if (friend_id != null) {
+        b = document.createElement("button");
+        b.innerText = "send reply to user with id " + friend_id;
+        b.onclick = () => {
+            sendFbMessage("reply to " + url, friend_id);
+        };
+        return b;
+    } else {
+        s = document.createElement("span");
+        s.innerText = "user not found";
+        return s;
+    }
+}
 
 // ----------------- Get data from Newsguard -----------------
 function getNewsGuardData(url) {
