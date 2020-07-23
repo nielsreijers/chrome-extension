@@ -309,3 +309,16 @@ function sendFbMessage(message, friend_id) {
 }
 // var h = sendFbMessage('zwarte pieten', 100001293926477);
 
+function findFacebookUserId(messageElement) {
+    re = new RegExp('fantaTabMain-user:([0-9]+)');
+    e = messageElement;
+    while (e != null) {
+        c = e.getAttribute("class");
+        match = re.exec(c);
+        if (match != null) {
+            return match[1];
+        }
+        e = e.parentElement;
+    }
+    return null;
+}
