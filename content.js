@@ -48,10 +48,27 @@ function getUnmarkedConversationLinksAndMark(parent) {
     let linkElements = getConversationLinks(parent);
     let unmarkedElements = Array.prototype.filter.call(linkElements, e => e.getAttribute(MARKED_LINK_ATTRIBUTE) == null);
     unmarkedElements.forEach(e => e.setAttribute(MARKED_LINK_ATTRIBUTE, true));
-    return unmarkedElements;
+    return unmarkedElements.map(elementToLinkData);
 }
 
-
+function elementToLinkData(e) {
+    var reply_to_type=null;
+    var reply_to_id=findFacebookUserId(e);
+    if (reply_to_id != null) {
+        reply_to_type = 'user';
+    } else {
+        reply_to_id=findFacebookGroupId(e);
+        if (reply_to_id != null) {
+            reply_to_type = 'group';
+        }
+    }
+    return {
+        element:e,
+        url:e.innerText,
+        reply_to_type:reply_to_type,
+        reply_to_id:reply_to_id
+    };
+}
 
 // ----------------- Manage popover -----------------
 function getPopoverElement() {
@@ -79,10 +96,9 @@ function getPopoverElement() {
     return popover;
 }
 
-function openPopover(url, messageElement) {
+function openPopover(linkdata) {
     getPopoverElement().style.display = "block";
-    setPopupContentForUrl(url, messageElement);
-    console.log(messageElement);
+    setPopupContentForUrl(linkdata);
 }
 
 function hidePopover() {
@@ -105,14 +121,14 @@ function stopHidePopoverTimer() {
 }
 
 var popoverPinned = false;
-function handle_icon_mouseenter_icon(url, messageElement) {
+function handle_icon_mouseenter_icon(linkdata) {
     if (!popoverPinned) {
         stopHidePopoverTimer();
-        openPopover(url, messageElement);
+        openPopover(linkdata);
     }
 }
 
-function handle_icon_clicked(url) {
+function handle_icon_clicked() {
     popoverPinned = true;
     document.getElementById(POPOVER_CLOSE_BUTTON_ID).innerText = "×";
 }
@@ -147,19 +163,18 @@ function handle_close_clicked() {
 
 
 // ----------------- Add our icon before links -----------------
-function markLink(link) {
-    let url = link.innerText;
+function markLink(linkdata) {
     let elem = document.createElement("img");
     elem.setAttribute("src", iconImg);
     elem.setAttribute("height", "24");
     elem.setAttribute("width", "24");
     elem.setAttribute("alt", "check");
-    elem.onclick = () => handle_icon_clicked(url);
-    elem.onmouseenter = (e) => handle_icon_mouseenter_icon(url, e.fromElement);
+    elem.onclick = () => handle_icon_clicked();
+    elem.onmouseenter = () => handle_icon_mouseenter_icon(linkdata);
     elem.onmouseleave = () => handle_icon_mouseleave_icon();
     // TODO: placement needs some tweaking
-    link.parentElement.appendChild(elem);
-    console.log("added icon to " + url);
+    linkdata.element.appendChild(elem);
+    console.log("added icon to " + linkdata.url);
 }
 
 function markLinks(parent) {
@@ -180,23 +195,23 @@ domObserver.observe(document, { childList: true, subtree: true });
 
 // ----------------- Put content in popup -----------------
 var current_url = ""
-function setPopupContentForUrl(url, messageElement) {
-    if (current_url == url) {
+function setPopupContentForUrl(linkdata) {
+    if (current_url == linkdata.url) {
         // already set for this URL. skipping.
         return;
     }
 
-    current_url = url;
+    current_url = linkdata.url;
     let contentDiv = document.getElementById(POPOVER_CONTENT_ID);
     contentDiv.innerText = "";
-    contentDiv.appendChild(getContentDiv(iconImgEmpty, "loading", `loading ${url}....`));
+    contentDiv.appendChild(getContentDiv(iconImgEmpty, "loading", `loading ${linkdata.url}....`));
     
-    getNewsGuardContentPromiseForURL(url).then(content => {
-        if (current_url == url) {
+    getNewsGuardContentPromiseForURL(linkdata.url).then(content => {
+        if (current_url == linkdata.url) {
             // Only set the content if this is still the URL we want to show the data for.
             contentDiv.innerText = "";
             contentDiv.appendChild(content);
-            contentDiv.appendChild(getSendReplyButton(url, messageElement));
+            contentDiv.appendChild(getSendReplyButton(linkdata));
         }
     });
 }
@@ -213,7 +228,7 @@ function getNewsGuardContentPromiseForURL(url) {
          //     sleep(debug_delay).then(() => resolve(content));
          //     debug_delay /= 2;
          // });
-         popupContentPerUrl[url] = getNewsGuardData(url).then(data => newsGuardDataToContent(data, url));
+         popupContentPerUrl[url] = getNewsGuardDataPromise(url).then(data => newsGuardDataToContent(data, url));
     }
     return popupContentPerUrl[url];
 }
@@ -252,13 +267,19 @@ function getContentDiv(image, alt, text) {
     return content;
 }
 
-function getSendReplyButton(url, messageElement) {
-    var friend_id = findFacebookUserId(messageElement);
-    if (friend_id != null) {
+function getSendReplyButton(linkdata) {
+    if (linkdata.reply_to_type == 'user') {
         b = document.createElement("button");
-        b.innerText = "send reply to user with id " + friend_id;
+        b.innerText = "send reply to user with id " + linkdata.reply_to_id;
         b.onclick = () => {
-            sendFbMessage("reply to " + url, friend_id);
+            sendFbMessageToUser("reply to " + linkdata.url, linkdata.reply_to_id);
+        };
+        return b;
+    } else if (linkdata.reply_to_type == 'group') {
+        b = document.createElement("button");
+        b.innerText = "send reply to group with id " + linkdata.reply_to_id;
+        b.onclick = () => {
+            sendFbMessageToGroup("reply to " + linkdata.url, linkdata.reply_to_id);
         };
         return b;
     } else {
@@ -269,7 +290,7 @@ function getSendReplyButton(url, messageElement) {
 }
 
 // ----------------- Get data from Newsguard -----------------
-function getNewsGuardData(url) {
+function getNewsGuardDataPromise(url) {
     return fetch(`https://api.newsguardtech.com/check?url=${encodeURIComponent(url)}`).then(r => r.json());
 }
 
@@ -293,7 +314,7 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
 
 
 // ----------------- Sending Facebook messages -----------------
-function sendFbMessage(message, friend_id) {
+function sendFbMessage(params) {
     const http = new XMLHttpRequest();
     const url = 'https://mbasic.facebook.com/messages/send/';
     http.open("POST", url);
@@ -304,13 +325,9 @@ function sendFbMessage(message, friend_id) {
     //     console.log(e);
     //     console.log(http.responseText);
     // };
-    friend_ids='ids['+friend_id+']'
-    let params = {}
-    params['body'] = message;
     // fb_dtsg is the token that identifies the current user.
     // There are usually 3 elements with a token found in the document, but they all seem to work.
     params['fb_dtsg'] = document.getElementsByName("fb_dtsg")[0].value;
-    params[`ids[${friend_id}]`] = friend_id;
 
     // convert object to list -- to enable .map
     let data = Object.entries(params);
@@ -322,10 +339,25 @@ function sendFbMessage(message, friend_id) {
     http.send(b);
     return http;
 }
-// var h = sendFbMessage('zwarte pieten', 100001293926477);
 
-function findFacebookUserId(messageElement) {
-    re = new RegExp('fantaTabMain-user:([0-9]+)');
+function sendFbMessageToUser(message, friend_id) {
+    let params = {}
+    params['body'] = message;
+    params[`ids[${friend_id}]`] = friend_id;
+    sendFbMessage(params);
+}
+// var h = sendFbMessageToUser('zwarte pieten', 100001293926477);
+
+function sendFbMessageToGroup(message, thread_id) {
+    let params = {}
+    params['body'] = message;
+    params['tids'] = `cid.g.${thread_id}`;
+    sendFbMessage(params);
+}
+// var h = sendFbMessageToGroup('zwarte pieten', 3217309048308227);
+
+function findFantaTab(tabType, messageElement) {
+    re = new RegExp(`fantaTabMain-${tabType}:([0-9]+)`);
     e = messageElement;
     while (e != null) {
         c = e.getAttribute("class");
@@ -335,5 +367,13 @@ function findFacebookUserId(messageElement) {
         }
         e = e.parentElement;
     }
-    return null;
+    return null;    
+}
+
+function findFacebookUserId(messageElement) {
+    return findFantaTab('user', messageElement);
+}
+
+function findFacebookGroupId(messageElement) {
+    return findFantaTab('thread', messageElement);
 }

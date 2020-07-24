@@ -1,19 +1,4 @@
 
-X automatically add icon to links as they appear in conversations
-X lookup the url in NewsGuard like Pennyworth
-- modal isn't really modal... :-(
-X display NewsGuard report card in the popup
-- add icon to links other than <a href> (there are different flavours in FB messages)
-- add buttons to do autoreply
-- FB message interfaces:
-    - message box in facebook feed
-    - www.facebook.com/messages
-    - www.messenger.com
-    - mbasic.facebook.com
-
-
-
-NOTES
 
 http://networkdynamics.org/2015/04/16/facebook-messenger-analytics-part-1-data-collection/
 
