@@ -177,7 +177,7 @@ function markLink(linkdata) {
     elem.onmouseleave = () => handle_icon_mouseleave_icon();
     linkdata.evaluationPromise.then(evaluation => elem.setAttribute("src", evaluation.icon));
     // TODO: placement needs some tweaking
-    linkdata.element.appendChild(elem);
+    linkdata.element.parentElement.appendChild(elem);
     console.log("added icon to " + linkdata.url);
 }
 
