@@ -26,4 +26,4 @@ X fix: popover doesn't really popover everything
     - www.messenger.com
     - mbasic.facebook.com
 - research good, non-confrontational message texts
-
+- close popover after sending message

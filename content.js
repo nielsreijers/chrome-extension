@@ -4,6 +4,8 @@ POPOVER_ID = "VLIEGTUIG_POPOVER"
 POPOVER_CONTENT_ID = "VLIEGTUIG_POPOVER_CONTENT"
 POPOVER_CLOSE_BUTTON_ID = "VLIEGTUIG_POPOVER_CLOSE_BUTTON"
 
+TEMPORARY_FILE_INPUT_ID = "VLIEGTUIG_FILE_INPUT"
+
 let iconImg = chrome.runtime.getURL('images/check-t.png');
 let iconImgGreen = chrome.runtime.getURL('images/check-t-green.png');
 let iconImgRed = chrome.runtime.getURL('images/check-t-red.png');
@@ -72,6 +74,8 @@ function elementToLinkData(e) {
         evaluationPromise:evaluationPromise
     };
 }
+
+
 
 // ----------------- Manage popover -----------------
 function getPopoverElement() {
@@ -306,22 +310,30 @@ function evaluationToMessageText(evaluation) {
 }
 
 function getSendReplyButton(linkdata) {
-    if (linkdata.reply_to_type == 'user') {
-        b = document.createElement("button");
-        b.innerText = "send reply to user with id " + linkdata.reply_to_id;
+    if (linkdata.reply_to_type == 'user' || linkdata.reply_to_type == 'group') {
+        var b = document.createElement("button");
+        if (linkdata.reply_to_type == 'user') {
+            var sendFunction = sendFbMessageToUser
+            var text = "send reply to user with id " + linkdata.reply_to_id;
+        } else {
+            var sendFunction = sendFbMessageToGroup
+            var text = "send reply to group with id " + linkdata.reply_to_id;            
+        }
         b.onclick = () => {
-            linkdata.evaluationPromise.then(evaluation => sendFbMessageToUser(evaluationToMessageText(evaluation), linkdata.reply_to_id));
+            linkdata.evaluationPromise.then(evaluation => sendFunction(evaluationToMessageText(evaluation), linkdata.reply_to_id));
         };
-        return b;
-    } else if (linkdata.reply_to_type == 'group') {
-        b = document.createElement("button");
-        b.innerText = "send reply to group with id " + linkdata.reply_to_id;
-        b.onclick = () => {
-            linkdata.evaluationPromise.then(evaluation => sendFbMessageToGroup(evaluationToMessageText(evaluation), linkdata.reply_to_id));
-        };
-        return b;
+        b.innerText = text;
+
+        var i = document.createElement("input");
+        i.setAttribute("type", "file");
+        i.setAttribute("id", TEMPORARY_FILE_INPUT_ID);
+
+        var d = document.createElement("div");
+        d.appendChild(b);
+        d.appendChild(i);
+        return d;
     } else {
-        s = document.createElement("span");
+        var s = document.createElement("span");
         s.innerText = "user not found";
         return s;
     }
@@ -378,11 +390,45 @@ function sendFbMessage(params) {
     return http;
 }
 
+function sendFbMessageWithImage(params, image) {
+    const http = new XMLHttpRequest();
+    const url = 'https://upload.facebook.com/_mupload_/mbasic/messages/attachment/photo/';
+    http.open("POST", url);
+    // http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    http.withCredentials = true;
+    let data = new FormData();
+    for (let [key, value] of Object.entries(params)) {
+        data.append(key, value);
+    }
+    // fb_dtsg is the token that identifies the current user.
+    // There are usually 3 elements with a token found in the document, but they all seem to work.
+    data.append('fb_dtsg', document.getElementsByName("fb_dtsg")[0].value);
+    data.append('file1', "vliegtuig.jpg");
+    data.append('vliegtuig.jpg', image);
+console.log(data);
+    http.send(data);
+    return http;
+}
+
+function temporaryGetFile() {
+    var i = document.getElementById(TEMPORARY_FILE_INPUT_ID);
+    if (i.files.length == 0) {
+        return null;
+    } else {
+        return i.files[0];
+    }
+}
+
 function sendFbMessageToUser(message, friend_id) {
     let params = {}
     params['body'] = message;
     params[`ids[${friend_id}]`] = friend_id;
-    sendFbMessage(params);
+
+    if (temporaryGetFile() == null) {
+        sendFbMessage(params);
+    } else {
+        sendFbMessageWithImage(params, temporaryGetFile());
+    }
 }
 // var h = sendFbMessageToUser('zwarte pieten', 100001293926477);
 
