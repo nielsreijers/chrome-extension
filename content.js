@@ -254,30 +254,35 @@ function newsGuardDataToEvaluation(data, url) {
     if (data.rank == null) {
         return {
             icon:iconImgQuestionmark,
+            unicodeSymbol:"❔",
             alt:"not found",
             text:`${url} is not in NewsGuard's database.`
         };
     } else if (data.rank == 'P' && data.score == 0) {
         return {
             icon:iconImgGrey,
+            unicodeSymbol:"➗",
             alt:"not rated",
             text:`${url} is in NewsGuard's database, but does not get a score since it publishes content from its users that it does not vet.`
         };
     } else if (data.rank == 'T') {
         return {
             icon:iconImgGreen,
+            unicodeSymbol:"✔",
             alt:"safe",
             text:`${url} gets a score of ${data.score} in NewsGuard's database. It should be safe.`
         };
     } else if (data.rank == 'N') {
         return {
             icon:iconImgRed,
+            unicodeSymbol:"⚠",
             alt:"unsafe",
             text:`${url} gets a score of ${data.score} in NewsGuard's database. Proceed with caution.`
         };
     } else {
         return {
             icon:iconImgQuestionmark,
+            unicodeSymbol:"❔",
             alt:"unsure",
             text:`${url} gets rank ${data.rank} and a score of ${data.score} in NewsGuard's database.`
         };
@@ -300,7 +305,7 @@ function getContentDiv(image, alt, text) {
 }
 
 function evaluationToMessageText(evaluation) {
-    return "my plugin found that: " + evaluation.text;
+    return evaluation.unicodeSymbol + " my plugin found that: " + evaluation.text;
 }
 
 function getSendReplyButton(linkdata) {
