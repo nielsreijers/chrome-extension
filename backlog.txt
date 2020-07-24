@@ -15,6 +15,7 @@ X add button to send reply to single group chat
 - layout: redesign popup
 - layout: find better placing for icon
 - i18n
+- add confirmation dialog before sending reply
 - link to prof li's api?
 - include image in reply
 - use FB's "reply to" feature to reply to a specific earlier message

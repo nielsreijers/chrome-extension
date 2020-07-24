@@ -52,21 +52,24 @@ function getUnmarkedConversationLinksAndMark(parent) {
 }
 
 function elementToLinkData(e) {
-    var reply_to_type=null;
-    var reply_to_id=findFacebookUserId(e);
-    if (reply_to_id != null) {
-        reply_to_type = 'user';
+    var reply_to_type = null;
+    var reply_to_id = findFacebookUserId(e);
+    if (reply_to_id!=null) {
+        reply_to_type='user';
     } else {
-        reply_to_id=findFacebookGroupId(e);
-        if (reply_to_id != null) {
-            reply_to_type = 'group';
+        reply_to_id = findFacebookGroupId(e);
+        if (reply_to_id!=null) {
+            reply_to_type='group';
         }
     }
+    url = e.innerText;
+    evaluationPromise = getURLEvaluationPromise(url);
     return {
         element:e,
-        url:e.innerText,
+        url:url,
         reply_to_type:reply_to_type,
-        reply_to_id:reply_to_id
+        reply_to_id:reply_to_id,
+        evaluationPromise:evaluationPromise
     };
 }
 
@@ -206,11 +209,11 @@ function setPopupContentForUrl(linkdata) {
     contentDiv.innerText = "";
     contentDiv.appendChild(getContentDiv(iconImgEmpty, "loading", `loading ${linkdata.url}....`));
     
-    getNewsGuardContentPromiseForURL(linkdata.url).then(content => {
+    linkdata.evaluationPromise.then(evaluation => {
         if (current_url == linkdata.url) {
             // Only set the content if this is still the URL we want to show the data for.
             contentDiv.innerText = "";
-            contentDiv.appendChild(content);
+            contentDiv.appendChild(getContentDiv(evaluation.icon, evaluation.alt, evaluation.text));
             contentDiv.appendChild(getSendReplyButton(linkdata));
         }
     });
@@ -220,7 +223,7 @@ function setPopupContentForUrl(linkdata) {
 // ----------------- Get popup content -----------------
 var popupContentPerUrl = {}
 var debug_delay = 4000 // to test if we show the right content if it takes a while to fetch data from NewsGuard and the user points at a different link in the meantime
-function getNewsGuardContentPromiseForURL(url) {
+function getURLEvaluationPromise(url) {
     if (popupContentPerUrl[url] == undefined) {
          // popupContentPerUrl[url] = new Promise(resolve => {
          //     let content = document.createElement("div");
@@ -228,27 +231,42 @@ function getNewsGuardContentPromiseForURL(url) {
          //     sleep(debug_delay).then(() => resolve(content));
          //     debug_delay /= 2;
          // });
-         popupContentPerUrl[url] = getNewsGuardDataPromise(url).then(data => newsGuardDataToContent(data, url));
+         popupContentPerUrl[url] = getNewsGuardDataPromise(url).then(data => newsGuardDataToEvaluation(data, url));
     }
     return popupContentPerUrl[url];
 }
 
-function newsGuardDataToContent(data, url) {    
+function newsGuardDataToEvaluation(data, url) {    
     if (data.rank == null) {
-        return getContentDiv(iconImgQuestionmark, "not found",
-                             `${url} is not in NewsGuard's database.`);
+        return {
+            icon:iconImgQuestionmark,
+            alt:"not found",
+            text:`${url} is not in NewsGuard's database.`
+        };
     } else if (data.rank == 'P' && data.score == 0) {
-        return getContentDiv(iconImgGrey, "not rated",
-                             `${data.identifier} is in NewsGuard's database, but does not get a score since it publishes content from its users that it does not vet.`);
+        return {
+            icon:iconImgGrey,
+            alt:"not rated",
+            text:`${data.identifier} is in NewsGuard's database, but does not get a score since it publishes content from its users that it does not vet.`
+        };
     } else if (data.rank == 'T') {
-        return getContentDiv(iconImgGreen, "safe",
-                             `${data.identifier} gets a score of ${data.score} in NewsGuard's database. It should be safe.`);
+        return {
+            icon:iconImgGreen,
+            alt:"safe",
+            text:`${data.identifier} gets a score of ${data.score} in NewsGuard's database. It should be safe.`
+        };
     } else if (data.rank == 'N') {
-        return getContentDiv(iconImgRed, "unsafe",
-                             `${data.identifier} gets a score of ${data.score} in NewsGuard's database. Proceed with caution.`);
+        return {
+            icon:iconImgRed,
+            alt:"unsafe",
+            text:`${data.identifier} gets a score of ${data.score} in NewsGuard's database. Proceed with caution.`
+        };
     } else {
-        return getContentDiv(iconImgQuestionmark, "unsure",
-                             `${data.identifier} gets rank ${data.rank} and a score of ${data.score} in NewsGuard's database.`);
+        return {
+            icon:iconImgQuestionmark,
+            alt:"unsure",
+            text:`${data.identifier} gets rank ${data.rank} and a score of ${data.score} in NewsGuard's database.`
+        };
     }
 }
 
