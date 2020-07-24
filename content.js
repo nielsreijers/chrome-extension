@@ -168,13 +168,14 @@ function handle_close_clicked() {
 // ----------------- Add our icon before links -----------------
 function markLink(linkdata) {
     let elem = document.createElement("img");
-    elem.setAttribute("src", iconImg);
+    elem.setAttribute("src", iconImgEmpty);
     elem.setAttribute("height", "24");
     elem.setAttribute("width", "24");
     elem.setAttribute("alt", "check");
     elem.onclick = () => handle_icon_clicked();
     elem.onmouseenter = () => handle_icon_mouseenter_icon(linkdata);
     elem.onmouseleave = () => handle_icon_mouseleave_icon();
+    linkdata.evaluationPromise.then(evaluation => elem.setAttribute("src", evaluation.icon));
     // TODO: placement needs some tweaking
     linkdata.element.appendChild(elem);
     console.log("added icon to " + linkdata.url);

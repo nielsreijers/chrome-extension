@@ -4,8 +4,8 @@ X lookup the url in NewsGuard like Pennyworth
 X display NewsGuard report card in the popup
 X add button to send reply to single user
 X add button to send reply to single group chat
++ use coloured icons showing the result in chats/feed like newsguard instead of only when the popup opens
 - add NewsGuard score in reply text and improve text (use vliegtuig as placeholder name)
-- use coloured icons showing the result in chats/feed like newsguard instead of only when the popup opens
 - modal isn't really modal... :-(
 
 - add icon to links other than <a href> (there are different flavours in FB messages) in chats
