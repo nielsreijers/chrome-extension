@@ -6,7 +6,7 @@ X add button to send reply to single user
 X add button to send reply to single group chat
 X use coloured icons showing the result in chats/feed like newsguard instead of only when the popup opens
 X add NewsGuard score in reply text and improve text (use vliegtuig as placeholder name)
-- modal isn't really modal... :-(
+X fix: popover doesn't really popover everything
 
 - add icon to links other than <a href> (there are different flavours in FB messages) in chats
 - add icon to feed items
