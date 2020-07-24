@@ -237,7 +237,20 @@ function getURLEvaluationPromise(url) {
     return popupContentPerUrl[url];
 }
 
-function newsGuardDataToEvaluation(data, url) {    
+function newsGuardDataToEvaluation(data, url) {   
+    if (data.identifier != null) {
+        var url = data.identifier;
+    } else {
+        var url = url;
+    }
+    let trim = (s, prefix) => { if (s.startsWith(prefix)) { return s.substring(prefix.length); } else { return s; } };
+    url = trim(url, 'https://');
+    url = trim(url, 'http://');
+    url = trim(url, 'www.');
+    if (url.endsWith('/')) {
+        url = url.substring(0, url.length - 1);
+    }
+
     if (data.rank == null) {
         return {
             icon:iconImgQuestionmark,
@@ -248,25 +261,25 @@ function newsGuardDataToEvaluation(data, url) {
         return {
             icon:iconImgGrey,
             alt:"not rated",
-            text:`${data.identifier} is in NewsGuard's database, but does not get a score since it publishes content from its users that it does not vet.`
+            text:`${url} is in NewsGuard's database, but does not get a score since it publishes content from its users that it does not vet.`
         };
     } else if (data.rank == 'T') {
         return {
             icon:iconImgGreen,
             alt:"safe",
-            text:`${data.identifier} gets a score of ${data.score} in NewsGuard's database. It should be safe.`
+            text:`${url} gets a score of ${data.score} in NewsGuard's database. It should be safe.`
         };
     } else if (data.rank == 'N') {
         return {
             icon:iconImgRed,
             alt:"unsafe",
-            text:`${data.identifier} gets a score of ${data.score} in NewsGuard's database. Proceed with caution.`
+            text:`${url} gets a score of ${data.score} in NewsGuard's database. Proceed with caution.`
         };
     } else {
         return {
             icon:iconImgQuestionmark,
             alt:"unsure",
-            text:`${data.identifier} gets rank ${data.rank} and a score of ${data.score} in NewsGuard's database.`
+            text:`${url} gets rank ${data.rank} and a score of ${data.score} in NewsGuard's database.`
         };
     }
 }
@@ -286,19 +299,23 @@ function getContentDiv(image, alt, text) {
     return content;
 }
 
+function evaluationToMessageText(evaluation) {
+    return "my plugin found that: " + evaluation.text;
+}
+
 function getSendReplyButton(linkdata) {
     if (linkdata.reply_to_type == 'user') {
         b = document.createElement("button");
         b.innerText = "send reply to user with id " + linkdata.reply_to_id;
         b.onclick = () => {
-            sendFbMessageToUser("reply to " + linkdata.url, linkdata.reply_to_id);
+            linkdata.evaluationPromise.then(evaluation => sendFbMessageToUser(evaluationToMessageText(evaluation), linkdata.reply_to_id));
         };
         return b;
     } else if (linkdata.reply_to_type == 'group') {
         b = document.createElement("button");
         b.innerText = "send reply to group with id " + linkdata.reply_to_id;
         b.onclick = () => {
-            sendFbMessageToGroup("reply to " + linkdata.url, linkdata.reply_to_id);
+            linkdata.evaluationPromise.then(evaluation => sendFbMessageToGroup(evaluationToMessageText(evaluation), linkdata.reply_to_id));
         };
         return b;
     } else {
