@@ -1,28 +1,19 @@
 body {font-family: Arial, Helvetica, sans-serif;}
 
-/* The Modal (background) */
-.vliegtuig-modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 100000; /* Sit on top */
-  padding-top: 100px; /* Location of the box */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-}
-
 /* Modal Container */
-.vliegtuig-modal-container {
+.vliegtuig-modal {
   background-color: #fefefe;
   margin: auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 80%;
   display: table;
+  position: fixed; 
+  left: 0; 
+  right: 0; 
+  margin-left: auto; 
+  margin-right: auto;
+  width: 80%; /* Need a specific value to work */
+  z-index: 100000; /* Sit on top */
 }
 
 /* Modal Content */

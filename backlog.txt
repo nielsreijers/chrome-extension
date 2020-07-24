@@ -8,16 +8,17 @@ X use coloured icons showing the result in chats/feed like newsguard instead of 
 X add NewsGuard score in reply text and improve text (use vliegtuig as placeholder name)
 X fix: popover doesn't really popover everything
 
+- don't show icon for links to facebook.com (@user links)
 - add icon to links other than <a href> (there are different flavours in FB messages) in chats
+- layout: redesign popup
+- include image in reply
+- i18n
+- show user name of person/group we will send the message to in the popup, and a preview of the message that will be sent
+- layout: find better placing for icon
 - add icon to feed items
 - add auto comment button in the popover for feed items
-- don't show icon for links to facebook.com (@user links)
-- layout: redesign popup
-- layout: find better placing for icon
-- i18n
 - add confirmation dialog before sending reply
 - link to prof li's api?
-- include image in reply
 - use FB's "reply to" feature to reply to a specific earlier message
 - support other FB message interfaces:
     - message box in facebook feed

@@ -80,20 +80,17 @@ function getPopoverElement() {
         popover = document.createElement("div");
         popover.setAttribute("id", POPOVER_ID)
         popover.setAttribute("class", "vliegtuig-modal");
-            let popover_outer_content = document.createElement("div");
-            popover_outer_content.setAttribute("class", "vliegtuig-modal-container");
-            popover_outer_content.onmouseenter = handle_icon_mouseenter_content;
-            popover_outer_content.onmouseleave = handle_icon_mouseleave_content;
-                let closebutton = document.createElement("span");
-                closebutton.setAttribute("class", "vliegtuig-close");
-                closebutton.setAttribute("id", POPOVER_CLOSE_BUTTON_ID);
-                closebutton.onclick = handle_close_clicked;
-                popover_outer_content.prepend(closebutton);
-                let popover_inner_content = document.createElement("div");
-                popover_inner_content.setAttribute("id", POPOVER_CONTENT_ID);
-                popover_inner_content.setAttribute("class", "vliegtuig-modal-content");
-                popover_outer_content.prepend(popover_inner_content);
-            popover.prepend(popover_outer_content);
+        popover.onmouseenter = handle_icon_mouseenter_content;
+        popover.onmouseleave = handle_icon_mouseleave_content;
+            let closebutton = document.createElement("span");
+            closebutton.setAttribute("class", "vliegtuig-close");
+            closebutton.setAttribute("id", POPOVER_CLOSE_BUTTON_ID);
+            closebutton.onclick = handle_close_clicked;
+            popover.prepend(closebutton);
+            let popover_content = document.createElement("div");
+            popover_content.setAttribute("id", POPOVER_CONTENT_ID);
+            popover_content.setAttribute("class", "vliegtuig-modal-content");
+            popover.prepend(popover_content);
         document.body.prepend(popover);
     }
     return popover;
