@@ -1,10 +1,8 @@
-FB_CLASS_MESSAGE_SPAN = "_5yl5"
-MARKED_LINK_ATTRIBUTE = "VLIEGTUIG_MARKED"
-POPOVER_ID = "VLIEGTUIG_POPOVER"
-POPOVER_CONTENT_ID = "VLIEGTUIG_POPOVER_CONTENT"
-POPOVER_CLOSE_BUTTON_ID = "VLIEGTUIG_POPOVER_CLOSE_BUTTON"
-
-TEMPORARY_FILE_INPUT_ID = "VLIEGTUIG_FILE_INPUT"
+FB_CLASS_MESSAGE_SPAN = "_5yl5";
+MARKED_LINK_ATTRIBUTE = "VLIEGTUIG_MARKED";
+POPOVER_ID = "VLIEGTUIG_POPOVER";
+POPOVER_CONTENT_ID = "VLIEGTUIG_POPOVER_CONTENT";
+POPOVER_CLOSE_BUTTON_ID = "VLIEGTUIG_POPOVER_CLOSE_BUTTON";
 
 let iconImg = chrome.runtime.getURL('images/check-t.png');
 let iconImgGreen = chrome.runtime.getURL('images/check-t-green.png');
@@ -13,7 +11,9 @@ let iconImgQuestionmark = chrome.runtime.getURL('images/check-t-questionmark.png
 let iconImgGrey = chrome.runtime.getURL('images/check-t-grey.png');
 let iconImgEmpty = chrome.runtime.getURL('images/check-t-empty.png');
 
-
+let URL_WARNINGSIGN_IMAGE = 'https://media.gettyimages.com/vectors/warning-icon-vector-id925721224?s=612x612';
+let URL_OK_IMAGE = 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTF4UpQQkRAzFSpRipVhixbKx4VxdEHZp-hBw&usqp=CAU';
+let URL_QUESTIONMARK_IMAGE = 'https://lh3.googleusercontent.com/proxy/tBkVisJiVQg59DNEaVVVAfWEeL6C_FKdeiYT3Bs3tpJnbRUBH97hm9Yld1_Hiu_8g2iWZISua9jwAyR2X4U5GvFWilW0KiVQmzYgVMRKwnqOPd_KMJET7WLIYjs4Apjs';
 
 // ----------------- debug stuff -----------------
 function sleep (time) {
@@ -252,10 +252,12 @@ function newsGuardDataToEvaluation(data, url) {
         url = url.substring(0, url.length - 1);
     }
 
+
     if (data.rank == null) {
         return {
             icon:iconImgQuestionmark,
             unicodeSymbol:"❔",
+            imageUrl: URL_QUESTIONMARK_IMAGE,
             alt:"not found",
             text:`${url} is not in NewsGuard's database.`
         };
@@ -263,6 +265,7 @@ function newsGuardDataToEvaluation(data, url) {
         return {
             icon:iconImgGrey,
             unicodeSymbol:"➗",
+            imageUrl: URL_QUESTIONMARK_IMAGE,
             alt:"not rated",
             text:`${url} is in NewsGuard's database, but does not get a score since it publishes content from its users that it does not vet.`
         };
@@ -270,6 +273,7 @@ function newsGuardDataToEvaluation(data, url) {
         return {
             icon:iconImgGreen,
             unicodeSymbol:"✔",
+            imageUrl: URL_OK_IMAGE,
             alt:"safe",
             text:`${url} gets a score of ${data.score} in NewsGuard's database. It should be safe.`
         };
@@ -277,6 +281,7 @@ function newsGuardDataToEvaluation(data, url) {
         return {
             icon:iconImgRed,
             unicodeSymbol:"⚠",
+            imageUrl: URL_WARNINGSIGN_IMAGE,
             alt:"unsafe",
             text:`${url} gets a score of ${data.score} in NewsGuard's database. Proceed with caution.`
         };
@@ -284,6 +289,7 @@ function newsGuardDataToEvaluation(data, url) {
         return {
             icon:iconImgQuestionmark,
             unicodeSymbol:"❔",
+            imageUrl: URL_QUESTIONMARK_IMAGE,
             alt:"unsure",
             text:`${url} gets rank ${data.rank} and a score of ${data.score} in NewsGuard's database.`
         };
@@ -305,12 +311,10 @@ function getContentDiv(image, alt, text) {
     return content;
 }
 
-function evaluationToMessageText(evaluation) {
-    return evaluation.unicodeSymbol + " my plugin found that: " + evaluation.text;
-}
-
 function getSendReplyButton(linkdata) {
     if (linkdata.reply_to_type == 'user' || linkdata.reply_to_type == 'group') {
+        var d = document.createElement("div");
+
         var b = document.createElement("button");
         if (linkdata.reply_to_type == 'user') {
             var sendFunction = sendFbMessageToUser
@@ -320,17 +324,11 @@ function getSendReplyButton(linkdata) {
             var text = "send reply to group with id " + linkdata.reply_to_id;            
         }
         b.onclick = () => {
-            linkdata.evaluationPromise.then(evaluation => sendFunction(evaluationToMessageText(evaluation), linkdata.reply_to_id));
+            linkdata.evaluationPromise.then(evaluation => sendFunction(evaluation, linkdata.reply_to_id));
         };
         b.innerText = text;
-
-        var i = document.createElement("input");
-        i.setAttribute("type", "file");
-        i.setAttribute("id", TEMPORARY_FILE_INPUT_ID);
-
-        var d = document.createElement("div");
         d.appendChild(b);
-        d.appendChild(i);
+
         return d;
     } else {
         var s = document.createElement("span");
@@ -370,11 +368,6 @@ function sendFbMessage(params) {
     http.open("POST", url);
     http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     http.withCredentials = true;
-    // http.onreadystatechange = e => {
-    //     console.log("VLIEGTUIG");
-    //     console.log(e);
-    //     console.log(http.responseText);
-    // };
     // fb_dtsg is the token that identifies the current user.
     // There are usually 3 elements with a token found in the document, but they all seem to work.
     params['fb_dtsg'] = document.getElementsByName("fb_dtsg")[0].value;
@@ -387,15 +380,14 @@ function sendFbMessage(params) {
     let b = data.join('&');
 
     http.send(b);
-    return http;
 }
 
-function sendFbMessageWithImage(params, image) {
+function sendFbMessageWithImage(params, imageUrl) {
     const http = new XMLHttpRequest();
     const url = 'https://upload.facebook.com/_mupload_/mbasic/messages/attachment/photo/';
     http.open("POST", url);
-    // http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     http.withCredentials = true;
+
     let data = new FormData();
     for (let [key, value] of Object.entries(params)) {
         data.append(key, value);
@@ -404,41 +396,41 @@ function sendFbMessageWithImage(params, image) {
     // There are usually 3 elements with a token found in the document, but they all seem to work.
     data.append('fb_dtsg', document.getElementsByName("fb_dtsg")[0].value);
     data.append('file1', "vliegtuig.jpg");
-    data.append('vliegtuig.jpg', image);
-console.log(data);
-    http.send(data);
-    return http;
+
+    fetch(imageUrl).then(r => r.blob()).then(image => {
+        data.append('vliegtuig.jpg', image);
+        http.send(data);
+    });
 }
 
-function temporaryGetFile() {
-    var i = document.getElementById(TEMPORARY_FILE_INPUT_ID);
-    if (i.files.length == 0) {
-        return null;
-    } else {
-        return i.files[0];
-    }
+function includeImage() {
+    return true;
+}
+function evaluationToMessageText(evaluation) {
+    return evaluation.unicodeSymbol + " my plugin found that: " + evaluation.text;
 }
 
-function sendFbMessageToUser(message, friend_id) {
+function sendFbMessageToUser(evaluation, friend_id) {
     let params = {}
-    params['body'] = message;
+    params['body'] = evaluationToMessageText(evaluation);
     params[`ids[${friend_id}]`] = friend_id;
-
-    if (temporaryGetFile() == null) {
-        sendFbMessage(params);
+    if (includeImage()) {
+        sendFbMessageWithImage(params, evaluation.imageUrl);
     } else {
-        sendFbMessageWithImage(params, temporaryGetFile());
+        sendFbMessage(params);        
     }
 }
-// var h = sendFbMessageToUser('zwarte pieten', 100001293926477);
 
-function sendFbMessageToGroup(message, thread_id) {
+function sendFbMessageToGroup(evaluation, thread_id) {
     let params = {}
-    params['body'] = message;
+    params['body'] = evaluationToMessageText(evaluation);
     params['tids'] = `cid.g.${thread_id}`;
-    sendFbMessage(params);
+    if (includeImage()) {
+        sendFbMessageWithImage(params, evaluation.imageUrl);
+    } else {
+        sendFbMessage(params);        
+    }
 }
-// var h = sendFbMessageToGroup('zwarte pieten', 3217309048308227);
 
 function findFantaTab(tabType, messageElement) {
     re = new RegExp(`fantaTabMain-${tabType}:([0-9]+)`);

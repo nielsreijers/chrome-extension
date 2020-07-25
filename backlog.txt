@@ -7,11 +7,11 @@ X add button to send reply to single group chat
 X use coloured icons showing the result in chats/feed like newsguard instead of only when the popup opens
 X add NewsGuard score in reply text and improve text (use vliegtuig as placeholder name)
 X fix: popover doesn't really popover everything
+X include image in reply
 
 - don't show icon for links to facebook.com (@user links)
 - add icon to links other than <a href> (there are different flavours in FB messages) in chats
 - layout: redesign popup
-- include image in reply
 - i18n
 - show user name of person/group we will send the message to in the popup, and a preview of the message that will be sent
 - layout: find better placing for icon
