@@ -37,3 +37,8 @@ body {font-family: Arial, Helvetica, sans-serif;}
   text-decoration: none;
   cursor: pointer;
 }
+
+.vliegtuig-icon-div {
+  background-color: #ffffff;
+  height: 100%;
+}

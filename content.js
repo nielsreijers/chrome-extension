@@ -1,4 +1,9 @@
-FB_CLASS_MESSAGE_SPAN = "_5yl5";
+FB_QUERY_MESSAGE_SPAN = "._5yl5 > span";
+FB_QUERY_MESSAGE_LINK = "._5yl5 > span > a";
+FB_QUERY_MESSAGE_A_WITH_PICTURE_BOX = "._5rw4";
+FB_QUERY_TO_APPEND_ICON_CHILD = "._2u_d";
+FB_CLASS_TO_APPEND_ICON_PARENT = "_5wd4";
+
 MARKED_LINK_ATTRIBUTE = "VLIEGTUIG_MARKED";
 POPOVER_ID = "VLIEGTUIG_POPOVER";
 POPOVER_CONTENT_ID = "VLIEGTUIG_POPOVER_CONTENT";
@@ -28,12 +33,21 @@ function sleep (time) {
 
 
 // ----------------- get texts and links from conversations found in (a subtree of) the DOM -----------------
+function stripFbLinkRedirect(url) {
+    if (url.startsWith('https://l.facebook.com/l.php?u')) {
+        let params = new URLSearchParams(url.substr(url.indexOf('?')+1));
+        return decodeURIComponent(params.get('u'));
+    } else {
+        return url;
+    }
+}
+
 function getConversationTexts(parent) {
     if (parent.querySelectorAll == undefined) {
         // not an html node (probably text)
         return []
     } else {
-        return parent.querySelectorAll(`.${FB_CLASS_MESSAGE_SPAN} > span`)        
+        return parent.querySelectorAll(FB_QUERY_MESSAGE_SPAN);
     }
 }
 
@@ -42,13 +56,18 @@ function getConversationLinks(parent) {
         // not an html node (probably text)
         return []
     } else {
-        return parent.querySelectorAll(`.${FB_CLASS_MESSAGE_SPAN} > span > a`)
+        let links = Array.from(parent.querySelectorAll(FB_QUERY_MESSAGE_LINK))
+                        .concat(Array.from(parent.querySelectorAll(FB_QUERY_MESSAGE_A_WITH_PICTURE_BOX)))
+        return links.filter(e => (!e.href.includes('https://www.facebook.com')       // Filter out links to facebook
+                                   && e.href.startsWith('http')                      // Filter out local links like "/<facebook id>"
+                                   && stripFbLinkRedirect(e.href).startsWith('http') // 
+                                   ));;
     }
 }
 
 function getUnmarkedConversationLinksAndMark(parent) {
     let linkElements = getConversationLinks(parent);
-    let unmarkedElements = Array.prototype.filter.call(linkElements, e => e.getAttribute(MARKED_LINK_ATTRIBUTE) == null);
+    let unmarkedElements = linkElements.filter(e => e.getAttribute(MARKED_LINK_ATTRIBUTE) == null);
     unmarkedElements.forEach(e => e.setAttribute(MARKED_LINK_ATTRIBUTE, true));
     return unmarkedElements.map(elementToLinkData);
 }
@@ -64,7 +83,7 @@ function elementToLinkData(e) {
             reply_to_type='group';
         }
     }
-    url = e.innerText;
+    url = stripFbLinkRedirect(e.href);
     evaluationPromise = getURLEvaluationPromise(url);
     return {
         element:e,
@@ -167,18 +186,44 @@ function handle_close_clicked() {
 
 
 // ----------------- Add our icon before links -----------------
+function appendIcon(icon, e) {
+    while (e != null) {
+        c = e.className
+        // Search up to find the top level of this message
+        if (c != undefined && c.includes(FB_CLASS_TO_APPEND_ICON_PARENT)) {
+            // Then for messages I sent, there should be a child with this class,
+            // which contains the more (three dots), and forward buttons.
+            if (e.querySelector(FB_QUERY_TO_APPEND_ICON_CHILD) != null) {
+                e = e.querySelector(FB_QUERY_TO_APPEND_ICON_CHILD);
+            }
+            if (e.querySelector(".vliegtuig-icon-div") == null) {
+                // Don't add an icon if it's already there. This happens for links that
+                // show both the url as a text, and the box with a preview and title.
+                e.prepend(icon);
+            }
+            return;
+        }
+        e = e.parentElement;
+    }
+}
+
 function markLink(linkdata) {
-    let elem = document.createElement("img");
-    elem.setAttribute("src", iconImgEmpty);
-    elem.setAttribute("height", "24");
-    elem.setAttribute("width", "24");
-    elem.setAttribute("alt", "check");
-    elem.onclick = () => handle_icon_clicked();
-    elem.onmouseenter = () => handle_icon_mouseenter_icon(linkdata);
-    elem.onmouseleave = () => handle_icon_mouseleave_icon();
-    linkdata.evaluationPromise.then(evaluation => elem.setAttribute("src", evaluation.icon));
+    let icon = document.createElement("img");
+    icon.setAttribute("src", iconImgEmpty);
+    icon.setAttribute("height", "24");
+    icon.setAttribute("width", "24");
+    icon.setAttribute("alt", "check");
+    icon.onclick = () => handle_icon_clicked();
+    icon.onmouseenter = () => handle_icon_mouseenter_icon(linkdata);
+    icon.onmouseleave = () => handle_icon_mouseleave_icon();
+    linkdata.evaluationPromise.then(evaluation => icon.setAttribute("src", evaluation.icon));
     // TODO: placement needs some tweaking
-    linkdata.element.parentElement.appendChild(elem);
+
+    let d = document.createElement("div");
+    d.setAttribute("class", "vliegtuig-icon-div");
+    d.appendChild(icon);
+
+    appendIcon(d, linkdata.element);
     console.log("added icon to " + linkdata.url);
 }
 
@@ -453,3 +498,7 @@ function findFacebookUserId(messageElement) {
 function findFacebookGroupId(messageElement) {
     return findFantaTab('thread', messageElement);
 }
+
+
+
+
