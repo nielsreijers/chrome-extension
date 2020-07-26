@@ -1,0 +1,33 @@
+<div id="VLIEGTUIG_POPOVER" class="vliegtuig-modal" style="display: block;">
+
+    <span id="VLIEGTUIG_POPOVER_CLOSE_BUTTON" class="vliegtuig-close-button">×</span>
+
+    <div class="vliegtuig-modal-content">
+        <div class="vliegtuig-title">
+            <span id="VLIEGTUIG_POPOVER_TITLE" >Title</span>
+        </div>
+
+        <table><tr>
+            <td>
+                <img id="VLIEGTUIG_EVAL_ICON" width=64 height=64 src="" alt="">
+                <!-- use this for debugging the popup, but don't include it in the final version
+                     because it results in a 404 when loaded by the extension: -->
+                <!-- <img id="VLIEGTUIG_EVAL_ICON" width=64 height=64 src="images/check-t-questionmark.png" alt=""> -->
+            </td>
+            <td>
+                <span id="VLIEGTUIG_EVAL_TEXT" class="vliegtuig-eval-text">Evaluation text goes here..</span>                
+            </td>
+        </tr></table>
+
+        <hr>
+
+        <div id="VLIEGTUIG_SEND_REPLY_DIV" style="display: block;">
+            <span id="VLIEGTUIG_SEND_REPLY_TEXT">Send a message:</span><br>
+            <button id="VLIEGTUIG_SEND_REPLY_BUTTON">Send</button>
+            <input id="VLIEGTUIG_SEND_REPLY_CHECKBOX" type="checkbox">include picture (for debugging)</input>
+        </div>
+
+    </div>
+</div>
+
+<link rel="stylesheet" type="text/css" href="content.css">

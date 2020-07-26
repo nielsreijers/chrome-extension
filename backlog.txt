@@ -11,8 +11,8 @@ X include image in reply
 X don't show icon for links to facebook.com (@user links)
 X add icon to links other than <a href> (there are different flavours in FB messages) in chats
 X layout: find better placing for icon
+X layout: redesign popup
 
-- layout: redesign popup
 - i18n
 - show user name of person/group we will send the message to in the popup, and a preview of the message that will be sent
 - add icon to feed items

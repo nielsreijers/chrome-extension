@@ -1,12 +1,10 @@
 body {font-family: Arial, Helvetica, sans-serif;}
 
-/* Modal Container */
 .vliegtuig-modal {
   background-color: #fefefe;
   margin: auto;
   padding: 20px;
   border: 1px solid #888;
-  display: table;
   position: fixed; 
   left: 0; 
   right: 0; 
@@ -16,26 +14,34 @@ body {font-family: Arial, Helvetica, sans-serif;}
   z-index: 100000; /* Sit on top */
 }
 
-/* Modal Content */
-.vliegtuig-modal-content {
-  display: table-cell;
-  vertical-align: top;
-}
-
-/* The Close Button */
-.vliegtuig-close {
+.vliegtuig-close-button {
+  position: absolute;
+  top: 5px;
+  right: 10px;
   color: #aaaaaa;
   float: right;
   font-size: 28px;
   font-weight: bold;
-  display: table-cell;
-  vertical-align: top;
 }
-.vliegtuig-close:hover,
-.vliegtuig-close:focus {
+.vliegtuig-close-button:hover,
+.vliegtuig-close-button:focus {
   color: #000;
   text-decoration: none;
   cursor: pointer;
+}
+
+.vliegtuig-modal-content {
+  vertical-align: top;
+}
+
+.vliegtuig-title {
+  text-align: center;
+  font-size: 200%;
+}
+
+.vliegtuig-eval-text {
+  display: table-cell;
+  vertical-align: middle;
 }
 
 .vliegtuig-icon-div {

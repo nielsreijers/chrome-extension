@@ -37,6 +37,7 @@
         "images/check-t-green.png",
         "images/check-t-grey.png",
         "images/check-t-questionmark.png",
-        "images/check-t-red.png"
+        "images/check-t-red.png",
+        "popover-template.html"
     ]
 }

@@ -6,8 +6,14 @@ FB_CLASS_TO_APPEND_ICON_PARENT = "_5wd4";
 
 MARKED_LINK_ATTRIBUTE = "VLIEGTUIG_MARKED";
 POPOVER_ID = "VLIEGTUIG_POPOVER";
-POPOVER_CONTENT_ID = "VLIEGTUIG_POPOVER_CONTENT";
 POPOVER_CLOSE_BUTTON_ID = "VLIEGTUIG_POPOVER_CLOSE_BUTTON";
+POPOVER_TITLE_ID = "VLIEGTUIG_POPOVER_TITLE";
+POPOVER_EVAL_ICON_ID = "VLIEGTUIG_EVAL_ICON";
+POPOVER_EVAL_TEXT_ID = "VLIEGTUIG_EVAL_TEXT";
+POPOVER_SEND_REPLY_DIV_ID = "VLIEGTUIG_SEND_REPLY_DIV";
+POPOVER_SEND_REPLY_TEXT_ID = "VLIEGTUIG_SEND_REPLY_TEXT";
+POPOVER_SEND_REPLY_BUTTON_ID = "VLIEGTUIG_SEND_REPLY_BUTTON";
+POPOVER_SEND_REPLY_CHECKBOX_ID = "VLIEGTUIG_SEND_REPLY_CHECKBOX";
 
 let iconImg = chrome.runtime.getURL('images/check-t.png');
 let iconImgGreen = chrome.runtime.getURL('images/check-t-green.png');
@@ -97,35 +103,13 @@ function elementToLinkData(e) {
 
 
 // ----------------- Manage popover -----------------
-function getPopoverElement() {
-    var popover = document.getElementById(POPOVER_ID);
-    if (popover == null) {
-        popover = document.createElement("div");
-        popover.setAttribute("id", POPOVER_ID)
-        popover.setAttribute("class", "vliegtuig-modal");
-        popover.onmouseenter = handle_icon_mouseenter_content;
-        popover.onmouseleave = handle_icon_mouseleave_content;
-            let closebutton = document.createElement("span");
-            closebutton.setAttribute("class", "vliegtuig-close");
-            closebutton.setAttribute("id", POPOVER_CLOSE_BUTTON_ID);
-            closebutton.onclick = handle_close_clicked;
-            popover.prepend(closebutton);
-            let popover_content = document.createElement("div");
-            popover_content.setAttribute("id", POPOVER_CONTENT_ID);
-            popover_content.setAttribute("class", "vliegtuig-modal-content");
-            popover.prepend(popover_content);
-        document.body.prepend(popover);
-    }
-    return popover;
-}
-
 function openPopover(linkdata) {
-    getPopoverElement().style.display = "block";
-    setPopupContentForUrl(linkdata);
+    myPopover.mainDiv.style.display = "block";
+    setPopupContentForLink(linkdata);
 }
 
 function hidePopover() {
-    getPopoverElement().style.display = "none";
+    myPopover.mainDiv.style.display = "none";
 }
 
 var hidePopoverTimer = null;
@@ -153,7 +137,7 @@ function handle_icon_mouseenter_icon(linkdata) {
 
 function handle_icon_clicked() {
     popoverPinned = true;
-    document.getElementById(POPOVER_CLOSE_BUTTON_ID).innerText = "×";
+    myPopover.closeButton.innerText = "×";
 }
 
 function handle_icon_mouseleave_icon() {
@@ -162,7 +146,7 @@ function handle_icon_mouseleave_icon() {
     }    
 }
 
-function handle_icon_mouseenter_content() {
+function handle_icon_mouseenter_popover() {
     if (!popoverPinned) {
         if (hidePopoverTimer != null) {
             clearTimeout(hidePopoverTimer);
@@ -171,7 +155,7 @@ function handle_icon_mouseenter_content() {
     }
 }
 
-function handle_icon_mouseleave_content() {
+function handle_icon_mouseleave_popover() {
     if (!popoverPinned) {
         startHidePopoverTimer();
     }    
@@ -180,7 +164,7 @@ function handle_icon_mouseleave_content() {
 function handle_close_clicked() {
     hidePopover();
     popoverPinned = false;
-    document.getElementById(POPOVER_CLOSE_BUTTON_ID).innerText = "";
+    myPopover.closeButton.innerText = "";
 }
 
 
@@ -231,43 +215,76 @@ function markLinks(parent) {
     getUnmarkedConversationLinksAndMark(parent).forEach(markLink);
 }
 
-// Observer to monitor DOM changes and add our icon to any links found in conversations
-let domObserver = new MutationObserver(mutations => {
-    for(let mutation of mutations) {
-        for(let addedNode of mutation.addedNodes) {
-            markLinks(addedNode);
-        }
-    }
-});
-domObserver.observe(document, { childList: true, subtree: true });
-
 
 
 // ----------------- Put content in popup -----------------
 var current_url = ""
-function setPopupContentForUrl(linkdata) {
+function setPopupContentForLink(linkdata) {
     if (current_url == linkdata.url) {
         // already set for this URL. skipping.
         return;
     }
 
     current_url = linkdata.url;
-    let contentDiv = document.getElementById(POPOVER_CONTENT_ID);
-    contentDiv.innerText = "";
-    contentDiv.appendChild(getContentDiv(iconImgEmpty, "loading", `loading ${linkdata.url}....`));
-    
-    linkdata.evaluationPromise.then(evaluation => {
-        if (current_url == linkdata.url) {
-            // Only set the content if this is still the URL we want to show the data for.
-            contentDiv.innerText = "";
-            contentDiv.appendChild(getContentDiv(evaluation.icon, evaluation.alt, evaluation.text));
-            contentDiv.appendChild(getSendReplyButton(linkdata));
+    setPopupContentInner(linkdata, null);
+    linkdata.evaluationPromise.then(evaluation => { setPopupContentInner(linkdata, evaluation); });
+}
+
+function setPopupContentInner(linkdata, evaluation) {
+    if (evaluation == null) {
+        myPopover.title.innerText = "Loading...";
+        myPopover.evalIcon.src = iconImgQuestionmark;
+        myPopover.evalIcon.alt = "loading";
+        myPopover.evalText.innerText = linkdata.url;
+        myPopover.sendReplyDiv.style.display = "none";
+    } else {
+        myPopover.title.innerText = evaluation.site;
+        myPopover.evalIcon.src = evaluation.icon;
+        myPopover.evalIcon.alt = evaluation.alt;
+        myPopover.evalText.innerText = "We found that " + evaluation.text;
+        myPopover.sendReplyDiv.style.display = "block";
+
+        if (linkdata.reply_to_type == 'user' || linkdata.reply_to_type == 'group') {
+            if (linkdata.reply_to_type == 'user') {
+                var sendFunction = sendFbMessageToUser
+                var text = `Send this rating as a reply to user with id ${linkdata.reply_to_id}.`;
+            } else {
+                var sendFunction = sendFbMessageToGroup
+                var text = `Send this rating as a reply to group with id ${linkdata.reply_to_id}.`;            
+            }
+            myPopover.sendReplyText.innerText = text;
+            myPopover.sendReplyButton.onclick = () => {
+                linkdata.evaluationPromise.then(evaluation => sendFunction(evaluation, linkdata.reply_to_id));
+            };
+        } else {
+            myPopover.sendReplyText.innerText = "user not found";
+            myPopover.sendReplyButton.onclick = () => { };
         }
-    });
+    }
 }
 
 
-// ----------------- Get popup content -----------------
+
+// ----------------- Get data from Newsguard -----------------
+function getNewsGuardDataPromise(url) {
+    return fetch(`https://api.newsguardtech.com/check?url=${encodeURIComponent(url)}`).then(r => r.json());
+}
+
+function getSiteFromUrl(url) {
+    let trim = (s, prefix) => { if (s.startsWith(prefix)) { return s.substring(prefix.length); } else { return s; } };
+    url = trim(url, 'https://');
+    url = trim(url, 'http://');
+    url = trim(url, 'www.');
+    if (url.endsWith('/')) {
+        url = url.substring(0, url.length - 1);
+    }
+    if (url.indexOf('/', url.indexOf('.')) != -1) {
+        // strip anything after the hostname
+        url = url.substring(0, url.indexOf('/', url.indexOf('.')));
+    }
+    return url;
+}
+
 var popupContentPerUrl = {}
 var debug_delay = 4000 // to test if we show the right content if it takes a while to fetch data from NewsGuard and the user points at a different link in the meantime
 function getURLEvaluationPromise(url) {
@@ -289,14 +306,7 @@ function newsGuardDataToEvaluation(data, url) {
     } else {
         var url = url;
     }
-    let trim = (s, prefix) => { if (s.startsWith(prefix)) { return s.substring(prefix.length); } else { return s; } };
-    url = trim(url, 'https://');
-    url = trim(url, 'http://');
-    url = trim(url, 'www.');
-    if (url.endsWith('/')) {
-        url = url.substring(0, url.length - 1);
-    }
-
+    site = getSiteFromUrl(url);
 
     if (data.rank == null) {
         return {
@@ -304,7 +314,8 @@ function newsGuardDataToEvaluation(data, url) {
             unicodeSymbol:"❔",
             imageUrl: URL_QUESTIONMARK_IMAGE,
             alt:"not found",
-            text:`${url} is not in NewsGuard's database.`
+            text:`${url} is not in NewsGuard's database.`,
+            site:site
         };
     } else if (data.rank == 'P' && data.score == 0) {
         return {
@@ -312,7 +323,8 @@ function newsGuardDataToEvaluation(data, url) {
             unicodeSymbol:"➗",
             imageUrl: URL_QUESTIONMARK_IMAGE,
             alt:"not rated",
-            text:`${url} is in NewsGuard's database, but does not get a score since it publishes content from its users that it does not vet.`
+            text:`${url} is in NewsGuard's database, but does not get a score since it publishes content from its users that it does not vet.`,
+            site:site
         };
     } else if (data.rank == 'T') {
         return {
@@ -320,7 +332,8 @@ function newsGuardDataToEvaluation(data, url) {
             unicodeSymbol:"✔",
             imageUrl: URL_OK_IMAGE,
             alt:"safe",
-            text:`${url} gets a score of ${data.score} in NewsGuard's database. It should be safe.`
+            text:`${url} gets a score of ${data.score} in NewsGuard's database. It should be safe.`,
+            site:site
         };
     } else if (data.rank == 'N') {
         return {
@@ -328,7 +341,8 @@ function newsGuardDataToEvaluation(data, url) {
             unicodeSymbol:"⚠",
             imageUrl: URL_WARNINGSIGN_IMAGE,
             alt:"unsafe",
-            text:`${url} gets a score of ${data.score} in NewsGuard's database. Proceed with caution.`
+            text:`${url} gets a score of ${data.score} in NewsGuard's database. Proceed with caution.`,
+            site:site
         };
     } else {
         return {
@@ -336,73 +350,11 @@ function newsGuardDataToEvaluation(data, url) {
             unicodeSymbol:"❔",
             imageUrl: URL_QUESTIONMARK_IMAGE,
             alt:"unsure",
-            text:`${url} gets rank ${data.rank} and a score of ${data.score} in NewsGuard's database.`
+            text:`${url} gets rank ${data.rank} and a score of ${data.score} in NewsGuard's database.`,
+            site:site
         };
     }
 }
-
-function getContentDiv(image, alt, text) {
-    let content = document.createElement("div");
-
-    let img = document.createElement("img");
-    img.setAttribute("src", image);
-    img.setAttribute("alt", alt);
-    content.appendChild(img);
-
-    let span = document.createElement("span");
-    span.innerText = text;
-    content.appendChild(span);
-
-    return content;
-}
-
-function getSendReplyButton(linkdata) {
-    if (linkdata.reply_to_type == 'user' || linkdata.reply_to_type == 'group') {
-        var d = document.createElement("div");
-
-        var b = document.createElement("button");
-        if (linkdata.reply_to_type == 'user') {
-            var sendFunction = sendFbMessageToUser
-            var text = "send reply to user with id " + linkdata.reply_to_id;
-        } else {
-            var sendFunction = sendFbMessageToGroup
-            var text = "send reply to group with id " + linkdata.reply_to_id;            
-        }
-        b.onclick = () => {
-            linkdata.evaluationPromise.then(evaluation => sendFunction(evaluation, linkdata.reply_to_id));
-        };
-        b.innerText = text;
-        d.appendChild(b);
-
-        return d;
-    } else {
-        var s = document.createElement("span");
-        s.innerText = "user not found";
-        return s;
-    }
-}
-
-// ----------------- Get data from Newsguard -----------------
-function getNewsGuardDataPromise(url) {
-    return fetch(`https://api.newsguardtech.com/check?url=${encodeURIComponent(url)}`).then(r => r.json());
-}
-
-
-
-// ----------------- Listener to communicate with extension popup -----------------
-chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
-    if (request.action == "getTexts") {
-        sendResponse(Array.prototype.map.call(getConversationTexts(document)), x => x.innerText);
-    } else if (request.action == "getLinks") {
-        sendResponse(Array.prototype.map.call(getConversationLinks(document), x => x.href));
-    } else if (request.action == "markLinks") {
-        markLinks(document);
-    } else {
-        sendResponse({}); // Send nothing..
-    }
-});
-
-
 
 
 
@@ -449,10 +401,15 @@ function sendFbMessageWithImage(params, imageUrl) {
 }
 
 function includeImage() {
-    return true;
+    return myPopover.sendReplyCheckbox.checked;
 }
 function evaluationToMessageText(evaluation) {
-    return evaluation.unicodeSymbol + " my plugin found that: " + evaluation.text;
+    text = "My extension found that " + evaluation.text;
+    if (!includeImage()) {
+        // Include either unicode icon or a real image (which may later be replaced by an image of our score card).
+        text += " " + evaluation.unicodeSymbol;
+    }
+    return text;
 }
 
 function sendFbMessageToUser(evaluation, friend_id) {
@@ -502,3 +459,55 @@ function findFacebookGroupId(messageElement) {
 
 
 
+// ----------------- Initialisation -----------------
+
+// Add the popover to the DOM and connect its events.
+var myPopover = null
+fetch(chrome.extension.getURL("popover-template.html")).then(r => r.text()).then(t => {
+    var tmp = document.createElement('div');
+    tmp.innerHTML = t;
+
+    let popOverDiv = tmp.firstChild
+    popOverDiv.style.display = 'none';
+    document.body.prepend(popOverDiv); // Don't include the <link> tag in popover-template.html since it's already loaded.
+
+    myPopover = {
+        mainDiv: popOverDiv,
+        closeButton: document.getElementById(POPOVER_CLOSE_BUTTON_ID),
+        title: document.getElementById(POPOVER_TITLE_ID),
+        evalIcon: document.getElementById(POPOVER_EVAL_ICON_ID),
+        evalText: document.getElementById(POPOVER_EVAL_TEXT_ID),
+        sendReplyDiv: document.getElementById(POPOVER_SEND_REPLY_DIV_ID),
+        sendReplyText: document.getElementById(POPOVER_SEND_REPLY_TEXT_ID),
+        sendReplyButton: document.getElementById(POPOVER_SEND_REPLY_BUTTON_ID),
+        sendReplyCheckbox: document.getElementById(POPOVER_SEND_REPLY_CHECKBOX_ID)
+    };
+    myPopover.mainDiv.onmouseenter = handle_icon_mouseenter_popover;
+    myPopover.mainDiv.onmouseleave = handle_icon_mouseleave_popover;
+    myPopover.closeButton.onclick = handle_close_clicked;
+    myPopover.closeButton.innerText = '';
+});
+
+// Listener to communicate with extension popup (not really using it right now, but may be useful later)
+chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
+    if (request.action == "getTexts") {
+        sendResponse(Array.prototype.map.call(getConversationTexts(document)), x => x.innerText);
+    } else if (request.action == "getLinks") {
+        sendResponse(Array.prototype.map.call(getConversationLinks(document), x => x.href));
+    } else if (request.action == "markLinks") {
+        markLinks(document);
+    } else {
+        sendResponse({}); // Send nothing..
+    }
+});
+
+
+// Create an Observer to monitor DOM changes and add our icon to any links found in conversations
+let domObserver = new MutationObserver(mutations => {
+    for(let mutation of mutations) {
+        for(let addedNode of mutation.addedNodes) {
+            markLinks(addedNode);
+        }
+    }
+});
+domObserver.observe(document, { childList: true, subtree: true });
