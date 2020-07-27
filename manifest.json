@@ -21,7 +21,13 @@
        {
          "matches": ["*://*.facebook.com/*"],
          "css": ["content.css"],
-         "js": ["content.js"]
+         "js": ["content.js",
+                "content-resources.js",
+                "content-popover.js",
+                "content-taglinks.js",                
+                "content-evaluation.js",
+                "content-fb.js",
+                "content-fb-messagebox-handler.js"]
        }
     ],
     "icons": {
