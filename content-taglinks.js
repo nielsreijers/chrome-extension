@@ -26,17 +26,26 @@ function makeLinkTag(linkdata) {
     return d;
 }
 
-function tagLinks(parent) {
-    handlers = [contentFbMessageboxHandler];
+function urlFilter(linkdata) {
+    url = linkdata.url;
+    return url.startsWith('http')                          // Filter out local links like "/<facebook id>"
+           && !url.startsWith('https://www.facebook.com')  // Filter out links to facebook
+           ;
+}
+
+function tagLinks(addedNode) {
+    handlers = [facebookFeedMessageboxHandler,
+                facebookMessengerHandler];
     handlers.forEach(h => {
-        elements = h.findLinkElements(parent);
+        elements = h.findLinkElements(addedNode);
         elements = getUnmarkedElementsAndMark(elements);
-        linkdatas = elements.map(h.elementToLinkData);
-        linkdatas.forEach(l => {
-            tag = makeLinkTag(l);
-            h.addTagToElement(tag, l.element);
-            console.log("added tag for " + l.url);
-        });
+        elements.map(h.elementToLinkData)
+                .filter(urlFilter)
+                .forEach(l => {
+                    tag = makeLinkTag(l);
+                    h.addTagToElement(tag, l.element);
+                    console.log("added tag for " + l.url);
+                });
     });
 }
 

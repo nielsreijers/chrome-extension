@@ -1,33 +1,26 @@
-let FB_QUERY_MESSAGE_LINK = "._5yl5 > span > a";
-let FB_QUERY_MESSAGE_A_WITH_PICTURE_BOX = "._5rw4";
-let FB_QUERY_TO_APPEND_ICON_CHILD = "._2u_d";
-let FB_CLASS_TO_APPEND_ICON_PARENT = "_5wd4";
-
-contentFbMessageboxHandler = {
+facebookFeedMessageboxHandler = {
     findLinkElements:
-        function (parent) {
-            if (parent.querySelectorAll == undefined) {
+        function (addedNode) {
+            if (addedNode.querySelectorAll == undefined) {
                 // not an html node (probably text)
                 return []
             } else {
-                let links = Array.from(parent.querySelectorAll(FB_QUERY_MESSAGE_LINK))
-                                .concat(Array.from(parent.querySelectorAll(FB_QUERY_MESSAGE_A_WITH_PICTURE_BOX)))
-                return links.filter(e => (!e.href.includes('https://www.facebook.com')       // Filter out links to facebook
-                                           && e.href.startsWith('http')                      // Filter out local links like "/<facebook id>"
-                                           && stripFbLinkRedirect(e.href).startsWith('http') // 
-                                           ));;
+                let FB_QUERY_MESSAGE_LINK = "._5yl5 > span > a";
+                let FB_QUERY_MESSAGE_A_WITH_PICTURE_BOX = "._5rw4";
+                return (Array.from(addedNode.querySelectorAll(FB_QUERY_MESSAGE_LINK)).concat
+                       (Array.from(addedNode.querySelectorAll(FB_QUERY_MESSAGE_A_WITH_PICTURE_BOX))))
             }
         },
     elementToLinkData:
         function (e) {
             var reply_to_type = null;
-            var reply_to_id = findFacebookUserId(e);
+            var reply_to_id = findFantaTab('user', e);
             if (reply_to_id!=null) {
-                reply_to_type='user';
+                reply_to_type = 'user';
             } else {
-                reply_to_id = findFacebookGroupId(e);
+                reply_to_id = findFantaTab('thread', e);
                 if (reply_to_id!=null) {
-                    reply_to_type='group';
+                    reply_to_type = 'group';
                 }
             }
             url = stripFbLinkRedirect(e.href);
@@ -42,6 +35,8 @@ contentFbMessageboxHandler = {
         },
     addTagToElement:
         function (tag, e) {
+            let FB_CLASS_TO_APPEND_ICON_PARENT = "_5wd4";
+            let FB_QUERY_TO_APPEND_ICON_CHILD = "._2u_d";
             while (e != null) {
                 c = e.className
                 // Search up to find the top level of this message
@@ -62,4 +57,18 @@ contentFbMessageboxHandler = {
             }
         }
 };
+
+function findFantaTab(tabType, messageElement) {
+    let re = new RegExp(`fantaTabMain-${tabType}:([0-9]+)`);
+    var e = messageElement;
+    while (e != null) {
+        let c = e.getAttribute("class");
+        let match = re.exec(c);
+        if (match != null) {
+            return match[1];
+        }
+        e = e.parentElement;
+    }
+    return null;    
+}
 

@@ -19,7 +19,8 @@
     },
      "content_scripts": [
        {
-         "matches": ["*://*.facebook.com/*"],
+         "matches": ["*://*.facebook.com/*",
+                     "*://*.messenger.com/*"],
          "css": ["content.css"],
          "js": ["content.js",
                 "content-resources.js",
@@ -27,7 +28,8 @@
                 "content-taglinks.js",                
                 "content-evaluation.js",
                 "content-fb.js",
-                "content-fb-messagebox-handler.js"]
+                "content-fb-feed-messagebox-handler.js",
+                "content-fb-messenger-handler.js"]
        }
     ],
     "icons": {
@@ -44,6 +46,9 @@
         "images/check-t-grey.png",
         "images/check-t-questionmark.png",
         "images/check-t-red.png",
+        "images/green-check-mark.jpg",
+        "images/red-warning.jpg",
+        "images/big-questionmark.png",
         "popover-template.html"
     ]
 }

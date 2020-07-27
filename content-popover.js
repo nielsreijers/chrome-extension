@@ -105,11 +105,13 @@ function setPopupContentInner(linkdata, evaluation) {
                 var text = `Send this rating as a reply to group with id ${linkdata.reply_to_id}.`;            
             }
             myPopover.sendReplyText.innerText = text;
+            myPopover.sendReplyControls.style.display = "block";
             myPopover.sendReplyButton.onclick = () => {
                 linkdata.evaluationPromise.then(evaluation => sendReply(linkdata, evaluation));
             };
         } else {
-            myPopover.sendReplyText.innerText = "user not found";
+            myPopover.sendReplyText.innerText = "Can't auto-reply because the id to reply to could not be found.";
+            myPopover.sendReplyControls.style.display = "none";
             myPopover.sendReplyButton.onclick = () => { };
         }
     }
@@ -152,6 +154,7 @@ fetch(chrome.extension.getURL("popover-template.html")).then(r => r.text()).then
         evalText: document.getElementById("VLIEGTUIG_EVAL_TEXT"),
         sendReplyDiv: document.getElementById("VLIEGTUIG_SEND_REPLY_DIV"),
         sendReplyText: document.getElementById("VLIEGTUIG_SEND_REPLY_TEXT"),
+        sendReplyControls: document.getElementById("VLIEGTUIG_SEND_REPLY_CONTROLS"),
         sendReplyButton: document.getElementById("VLIEGTUIG_SEND_REPLY_BUTTON"),
         sendReplyCheckbox: document.getElementById("VLIEGTUIG_SEND_REPLY_CHECKBOX")
     };

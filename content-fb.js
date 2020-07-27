@@ -6,7 +6,7 @@ function sendFbMessage(params) {
     http.withCredentials = true;
     // fb_dtsg is the token that identifies the current user.
     // There are usually 3 elements with a token found in the document, but they all seem to work.
-    params['fb_dtsg'] = document.getElementsByName("fb_dtsg")[0].value;
+    params['fb_dtsg'] = getDtsgToken();
 
     // convert object to list -- to enable .map
     let data = Object.entries(params);
@@ -30,7 +30,7 @@ function sendFbMessageWithImage(params, imageUrl) {
     }
     // fb_dtsg is the token that identifies the current user.
     // There are usually 3 elements with a token found in the document, but they all seem to work.
-    data.append('fb_dtsg', document.getElementsByName("fb_dtsg")[0].value);
+    data.append('fb_dtsg', getDtsgToken());
     data.append('file1', "vliegtuig.jpg");
 
     fetch(imageUrl).then(r => r.blob()).then(image => {
@@ -61,33 +61,35 @@ function sendFbMessageToGroup(message, imageUrl, thread_id) {
     }
 }
 
-function findFantaTab(tabType, messageElement) {
-    re = new RegExp(`fantaTabMain-${tabType}:([0-9]+)`);
-    e = messageElement;
-    while (e != null) {
-        c = e.getAttribute("class");
-        match = re.exec(c);
-        if (match != null) {
-            return match[1];
-        }
-        e = e.parentElement;
-    }
-    return null;    
-}
-
-function findFacebookUserId(messageElement) {
-    return findFantaTab('user', messageElement);
-}
-
-function findFacebookGroupId(messageElement) {
-    return findFantaTab('thread', messageElement);
-}
-
 function stripFbLinkRedirect(url) {
-    if (url.startsWith('https://l.facebook.com/l.php?u')) {
+    if (url.startsWith('https://l.facebook.com/l.php?u')
+        || url.startsWith('https://l.messenger.com/l.php?u')) {
         let params = new URLSearchParams(url.substr(url.indexOf('?')+1));
         return decodeURIComponent(params.get('u'));
     } else {
         return url;
     }
 }
+
+var dtsgToken = null
+function getDtsgToken() {
+    // This works on facebook.com
+    if (dtsgToken == null) {
+        var dtsgElement = document.getElementsByName("fb_dtsg")[0];
+        if (dtsgElement != undefined) {
+            dtsgToken = dtsgElement.value;
+        }
+    }
+    // This works on messenger.com
+    if (dtsgToken == null) {
+        var headtext = document.head.innerText;
+        let re = new RegExp(`\{\"token\":\"([^"]*)`);
+        let match = re.exec(headtext);
+        if (match != null) {
+            dtsgToken = match[1];
+        }
+
+    }
+    return dtsgToken;
+}
+

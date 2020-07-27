@@ -13,6 +13,7 @@ X add icon to links other than <a href> (there are different flavours in FB mess
 X layout: find better placing for icon
 X layout: redesign popup
 
+- check why Winni's link doesn't get tagged
 - i18n
 - show user name of person/group we will send the message to in the popup, and a preview of the message that will be sent
 - add icon to feed items
