@@ -47,7 +47,7 @@ function newsGuardDataToEvaluation(data, url) {
             unicodeSymbol:"❔",
             imageUrl: URL_QUESTIONMARK_IMAGE,
             alt:"not found",
-            text:`${url} is not in NewsGuard's database.`,
+            text:`${site} is not in NewsGuard's database.`,
             site:site
         };
     } else if (data.rank == 'P' && data.score == 0) {
@@ -56,7 +56,7 @@ function newsGuardDataToEvaluation(data, url) {
             unicodeSymbol:"➗",
             imageUrl: URL_QUESTIONMARK_IMAGE,
             alt:"not rated",
-            text:`${url} is in NewsGuard's database, but does not get a score since it publishes content from its users that it does not vet.`,
+            text:`${site} is in NewsGuard's database, but does not get a score since it publishes content from its users that it does not vet.`,
             site:site
         };
     } else if (data.rank == 'T') {
@@ -65,7 +65,7 @@ function newsGuardDataToEvaluation(data, url) {
             unicodeSymbol:"✔",
             imageUrl: URL_OK_IMAGE,
             alt:"safe",
-            text:`${url} gets a score of ${data.score} in NewsGuard's database. It should be safe.`,
+            text:`${site} gets a score of ${data.score} in NewsGuard's database. It should be safe.`,
             site:site
         };
     } else if (data.rank == 'N') {
@@ -74,7 +74,7 @@ function newsGuardDataToEvaluation(data, url) {
             unicodeSymbol:"⚠",
             imageUrl: URL_WARNINGSIGN_IMAGE,
             alt:"unsafe",
-            text:`${url} gets a score of ${data.score} in NewsGuard's database. Proceed with caution.`,
+            text:`${site} gets a score of ${data.score} in NewsGuard's database. Proceed with caution.`,
             site:site
         };
     } else {
@@ -83,7 +83,7 @@ function newsGuardDataToEvaluation(data, url) {
             unicodeSymbol:"❔",
             imageUrl: URL_QUESTIONMARK_IMAGE,
             alt:"unsure",
-            text:`${url} gets rank ${data.rank} and a score of ${data.score} in NewsGuard's database.`,
+            text:`${site} gets rank ${data.rank} and a score of ${data.score} in NewsGuard's database.`,
             site:site
         };
     }
