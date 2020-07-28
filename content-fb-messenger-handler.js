@@ -26,10 +26,6 @@ facebookMessengerHandler = {
             var reply_to_type = null;
             var reply_to_id = null;
             let FB_LOCATION_PREFIX = "https://www.messenger.com/t/";
-            console.log("aap")
-            console.log(isMessengerGroupChat())
-            console.log(window.location.href)
-            console.log(window.location.href.startsWith(FB_LOCATION_PREFIX))
             if (isMessengerGroupChat() && window.location.href.startsWith(FB_LOCATION_PREFIX)) {
                 reply_to_type = 'group';
                 reply_to_id = window.location.href.substr(FB_LOCATION_PREFIX.length);
@@ -54,23 +50,21 @@ facebookMessengerHandler = {
         function (tag, e) {
             let FB_CLASS_TO_APPEND_ICON_PARENT = "_o46";
             let FB_QUERY_TO_APPEND_ICON_CHILD = "._2u_d";
-            while (e != null) {
-                c = e.className
-                // Search up to find the top level of this message
-                if (c != undefined && c.includes(FB_CLASS_TO_APPEND_ICON_PARENT)) {
-                    // Then for messages I sent, there should be a child with this class,
-                    // which contains the more (three dots), and forward buttons.
-                    if (e.querySelector(FB_QUERY_TO_APPEND_ICON_CHILD) != null) {
-                        e = e.querySelector(FB_QUERY_TO_APPEND_ICON_CHILD);
+
+            // Search up to find the top level of this message
+            var parent = findParentElementWithClass(e, FB_CLASS_TO_APPEND_ICON_PARENT);
+
+            // Then there should be a child with this class,
+            // which contains the more (three dots), and forward buttons.
+            var child = null;
+            if (parent != null) {
+                if ((child = parent.querySelector(FB_QUERY_TO_APPEND_ICON_CHILD)) != null) {
+                    // Don't add an icon if it's already there. This happens for links that
+                    // show both the url as a text, and the box with a preview and title.
+                    if (child.querySelector(".vliegtuig-icon-div") == null) {
+                        child.prepend(tag);
                     }
-                    if (e.querySelector(".vliegtuig-icon-div") == null) {
-                        // Don't add an icon if it's already there. This happens for links that
-                        // show both the url as a text, and the box with a preview and title.
-                        e.prepend(tag);
-                    }
-                    return;
                 }
-                e = e.parentElement;
             }
         }
 };

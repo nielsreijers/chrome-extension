@@ -1,5 +1,3 @@
-
-
 // ----------------- debug stuff -----------------
 function sleep (time) {
   return new Promise((resolve) => setTimeout(resolve, time));
@@ -11,6 +9,26 @@ function sleep (time) {
 // });
 
 
+// ----------------- helpers -----------------
+function findParentElementWithClass(e, partialClass) {
+    while (e != null) {
+        c = e.className
+        // Search up to find the top level of this message
+        if (c != undefined && c.includes(partialClass)) {
+            return e;
+        }
+        e = e.parentElement;
+    }
+    return null;
+}
+
+function urlFilter(url) {
+    url = stripFbLinkRedirect(url);
+    return url.startsWith('http')                          // Filter out local links like "/<facebook id>"
+           && !url.startsWith('https://www.facebook.com')  // Filter out links to facebook
+           && !url.startsWith('https://www.messenger.com')  // Filter out links to facebook
+           ;
+}
 
 
 // ----------------- Initialisation -----------------

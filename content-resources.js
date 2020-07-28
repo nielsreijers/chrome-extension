@@ -1,4 +1,3 @@
-
 let iconImgGreen = chrome.runtime.getURL('images/check-t-green.png');
 let iconImgRed = chrome.runtime.getURL('images/check-t-red.png');
 let iconImgQuestionmark = chrome.runtime.getURL('images/check-t-questionmark.png');

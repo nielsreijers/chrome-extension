@@ -29,6 +29,7 @@
                 "content-evaluation.js",
                 "content-fb.js",
                 "content-fb-feed-messagebox-handler.js",
+                "content-fb-feed-post-handler.js",
                 "content-fb-messenger-handler.js"]
        }
     ],

@@ -16,3 +16,12 @@ AQGJ35zUNDGG:AQFBJBCG9WcU
 
 bernadette fantaTabMain-user:100001293926477
 group prof li fantaTabMain-thread:4062935763748221
+
+
+icon = document.createElement('img')
+icon.setAttribute('src', 'chrome-extension://mkcaknhibjajkommkgjilchogbllhkbp/images/check-t-grey.png');
+icon.setAttribute('width', 16);
+icon.setAttribute('height', 16);
+
+postElement=findParentElementWithClass(temp1, '_5pcb');
+formElement=postElement.querySelector('.commentable_item');

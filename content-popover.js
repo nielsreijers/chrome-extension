@@ -98,39 +98,38 @@ function setPopupContentInner(linkdata, evaluation) {
         myPopover.evalText.innerText = "We found that " + evaluation.text;
         myPopover.sendReplyDiv.style.display = "block";
 
-        if (linkdata.reply_to_type == 'user' || linkdata.reply_to_type == 'group') {
+        if (linkdata.reply_to_type == null) {
+            myPopover.sendReplyText.innerText = "Can't auto-reply because the id to reply to could not be found.";
+            myPopover.sendReplyControls.style.display = "none";
+            myPopover.sendReplyButton.onclick = () => { };
+        } else {
             if (linkdata.reply_to_type == 'user') {
                 var text = `Send this rating as a reply to user with id ${linkdata.reply_to_id}.`;
+            } else if (linkdata.reply_to_type == 'group') {
+                var text = `Send this rating as a reply to group with id ${linkdata.reply_to_id}.`;
+            } else if (linkdata.reply_to_type == 'feedpost') {
+                var text = `Post this rating as a comment to post with id ${linkdata.reply_to_id}.`;
             } else {
-                var text = `Send this rating as a reply to group with id ${linkdata.reply_to_id}.`;            
+                var text = "Something went wrong...";
             }
             myPopover.sendReplyText.innerText = text;
             myPopover.sendReplyControls.style.display = "block";
             myPopover.sendReplyButton.onclick = () => {
                 linkdata.evaluationPromise.then(evaluation => sendReply(linkdata, evaluation));
             };
-        } else {
-            myPopover.sendReplyText.innerText = "Can't auto-reply because the id to reply to could not be found.";
-            myPopover.sendReplyControls.style.display = "none";
-            myPopover.sendReplyButton.onclick = () => { };
         }
     }
 }
 
 function sendReply(linkdata, evaluation) {
-    if (linkdata.reply_to_type == 'user') {
-        var sendFunction = sendFbMessageToUser
-    } else {
-        var sendFunction = sendFbMessageToGroup
-    }
-
     includeImage = myPopover.sendReplyCheckbox.checked;
     messageText = "My extension found that " + evaluation.text;
-    if (includeImage) {
-        sendFunction(messageText, evaluation.imageUrl, linkdata.reply_to_id);
-    } else {
-        sendFunction(messageText + " " + evaluation.unicodeSymbol, null, linkdata.reply_to_id);
-    }
+
+    facebookSendOrPostReply (
+        messageText,
+        includeImage ? evaluation.imageUrl : null,
+        linkdata.reply_to_type,
+        linkdata.reply_to_id);
 }
 
 

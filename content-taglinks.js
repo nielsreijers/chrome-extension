@@ -10,8 +10,8 @@ function getUnmarkedElementsAndMark(elements) {
 function makeLinkTag(linkdata) {
     let icon = document.createElement("img");
     icon.setAttribute("src", iconImgEmpty);
-    icon.setAttribute("height", "24");
-    icon.setAttribute("width", "24");
+    icon.setAttribute("height", "16");
+    icon.setAttribute("width", "16");
     icon.setAttribute("alt", "check");
     icon.onclick = () => handle_icon_clicked();
     icon.onmouseenter = () => handle_icon_mouseenter_icon(linkdata);
@@ -26,25 +26,32 @@ function makeLinkTag(linkdata) {
     return d;
 }
 
-function urlFilter(linkdata) {
-    url = linkdata.url;
-    return url.startsWith('http')                          // Filter out local links like "/<facebook id>"
-           && !url.startsWith('https://www.facebook.com')  // Filter out links to facebook
-           ;
+var handlers = null;
+function getHandlers() {
+    // Lazy load because the handlers may not have been loaded when this file is run.
+    if (handlers == null) {
+        if (window.location.href.startsWith('https://www.facebook.com')) {
+            handlers = [facebookFeedMessageboxHandler,
+                        facebookFeedPostHandler];
+        } else if (window.location.href.startsWith('https://www.messenger.com')) {
+            handlers = [facebookMessengerHandler];
+        } else {
+            handlers = [];
+        }        
+    }
+    return handlers;
 }
 
 function tagLinks(addedNode) {
-    handlers = [facebookFeedMessageboxHandler,
-                facebookMessengerHandler];
-    handlers.forEach(h => {
+    getHandlers().forEach(h => {
         elements = h.findLinkElements(addedNode);
         elements = getUnmarkedElementsAndMark(elements);
         elements.map(h.elementToLinkData)
-                .filter(urlFilter)
+                .filter(linkdata => urlFilter(linkdata.url))
                 .forEach(l => {
+                    console.log("adding tag for " + l.url);
                     tag = makeLinkTag(l);
                     h.addTagToElement(tag, l.element);
-                    console.log("added tag for " + l.url);
                 });
     });
 }
