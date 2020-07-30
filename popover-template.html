@@ -2,33 +2,35 @@
 
     <span id="VLIEGTUIG_POPOVER_CLOSE_BUTTON" class="vliegtuig-close-button">×</span>
 
+    <header class="vliegtuig-header">
+        <span id="VLIEGTUIG_POPOVER_TITLE">Title</span>            
+    </header>
+
     <div class="vliegtuig-modal-content">
-        <div class="vliegtuig-title">
-            <span id="VLIEGTUIG_POPOVER_TITLE" >Title</span>
+        <div class="vliegtuig-horizontal">
+            <img id="VLIEGTUIG_EVAL_ICON" width=64 height=64 src="" alt="">
+            <!-- <img id="VLIEGTUIG_EVAL_ICON" width=64 height=64 src="images/check-t-questionmark.png" alt=""> -->
+            <span id="VLIEGTUIG_EVAL_TEXT" class="vliegtuig-eval-text">Evaluation text goes here..</span>                
         </div>
 
-        <table><tr>
-            <td>
-                <img id="VLIEGTUIG_EVAL_ICON" width=64 height=64 src="" alt="">
-                <!-- use this for debugging the popup, but don't include it in the final version
-                     because it results in a 404 when loaded by the extension: -->
-                <!-- <img id="VLIEGTUIG_EVAL_ICON" width=64 height=64 src="images/check-t-questionmark.png" alt=""> -->
-            </td>
-            <td>
-                <span id="VLIEGTUIG_EVAL_TEXT" class="vliegtuig-eval-text">Evaluation text goes here..</span>                
-            </td>
-        </tr></table>
 
         <div id="VLIEGTUIG_SEND_REPLY_DIV" style="display: block;">
-            <hr>
+            <hr style="margin-top: 20px; margin-bottom: 20px;">
 
             <span id="VLIEGTUIG_SEND_REPLY_TEXT">Send a message:</span>
-            <div id="VLIEGTUIG_SEND_REPLY_CONTROLS" style="display: block;">
+            <div id="VLIEGTUIG_SEND_REPLY_CONTROLS" style="display: block; margin-top: 10px;">
                 <button id="VLIEGTUIG_SEND_REPLY_BUTTON">Send</button>
                 <input id="VLIEGTUIG_SEND_REPLY_CHECKBOX" type="checkbox">include picture (for debugging)</input>
             </div>
         </div>
 
+
+    </div>
+    <div class="vliegtuig-twisc">
+        <a href="https://www.twisc.org">
+            <img id="VLIEGTUIG_TWISC_LOGO" src="" alt="twisc-logo" width=90 height=25>
+            <!-- <img  src="images/twisc.png" alt="twisc-logo" width=90 height=25> -->
+        </a>
     </div>
 </div>
 

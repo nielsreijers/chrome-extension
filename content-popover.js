@@ -155,8 +155,10 @@ fetch(chrome.extension.getURL("popover-template.html")).then(r => r.text()).then
         sendReplyText: document.getElementById("VLIEGTUIG_SEND_REPLY_TEXT"),
         sendReplyControls: document.getElementById("VLIEGTUIG_SEND_REPLY_CONTROLS"),
         sendReplyButton: document.getElementById("VLIEGTUIG_SEND_REPLY_BUTTON"),
-        sendReplyCheckbox: document.getElementById("VLIEGTUIG_SEND_REPLY_CHECKBOX")
+        sendReplyCheckbox: document.getElementById("VLIEGTUIG_SEND_REPLY_CHECKBOX"),
+        twiscLogo: document.getElementById("VLIEGTUIG_TWISC_LOGO")
     };
+    myPopover.twiscLogo.src = chrome.extension.getURL("images/twisc.png");
     myPopover.mainDiv.onmouseenter = handle_icon_mouseenter_popover;
     myPopover.mainDiv.onmouseleave = handle_icon_mouseleave_popover;
     myPopover.closeButton.onclick = handle_close_clicked;
