@@ -59,11 +59,13 @@ function tagLinks(addedNode) {
 // ----------------- Initialisation -----------------
 // Create an Observer to monitor DOM changes and add
 // our icon to any links found in conversations.
-let domObserver = new MutationObserver(mutations => {
-    for(let mutation of mutations) {
-        for(let addedNode of mutation.addedNodes) {
-            tagLinks(addedNode);
+loadSettings().then(() => {
+    let domObserver = new MutationObserver(mutations => {
+        for(let mutation of mutations) {
+            for(let addedNode of mutation.addedNodes) {
+                tagLinks(addedNode);
+            }
         }
-    }
+    });
+    domObserver.observe(document, { childList: true, subtree: true });
 });
-domObserver.observe(document, { childList: true, subtree: true });
