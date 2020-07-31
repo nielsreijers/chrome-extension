@@ -1,36 +1,42 @@
-addTextsList = function(parent, list) {
-    parent.innerHTML = "";
-    ul = document.createElement("ul");
-    parent.appendChild(ul);
-
-    list.forEach(t => {
-        var li = document.createElement("li");
-        var textnode = document.createTextNode(t);
-        li.appendChild(textnode);
-        ul.appendChild(li);
-    });
+document.getElementById('settingsButton').onclick = function(element) {
+    url = chrome.runtime.getURL('options.html');
+    window.open(url);
 }
 
-document.getElementById('scanButton').onclick = function(element) {
-    chrome.tabs.getSelected(null, function(tab) {
-        textsDiv = document.getElementById('textsList');
-        linksDiv = document.getElementById('linksList');
+// Old code but may be useful later.
+// addTextsList = function(parent, list) {
+//     parent.innerHTML = "";
+//     ul = document.createElement("ul");
+//     parent.appendChild(ul);
 
-        // Send a request to the content script.
-        chrome.tabs.sendMessage(tab.id, {action: "getTexts"}, null, function(response) {
-            addTextsList(textsDiv, response);
-        });
-        chrome.tabs.sendMessage(tab.id, {action: "getLinks"}, null, function(response) {
-            addTextsList(linksDiv, response);
-        });
-    });
-};
+//     list.forEach(t => {
+//         var li = document.createElement("li");
+//         var textnode = document.createTextNode(t);
+//         li.appendChild(textnode);
+//         ul.appendChild(li);
+//     });
+// }
 
-document.getElementById('markButton').onclick = function(element) {
-    chrome.tabs.getSelected(null, function(tab) {
+// document.getElementById('scanButton').onclick = function(element) {
+//     chrome.tabs.getSelected(null, function(tab) {
+//         textsDiv = document.getElementById('textsList');
+//         linksDiv = document.getElementById('linksList');
 
-        // Send a request to the content script.
-        chrome.tabs.sendMessage(tab.id, {action: "markLinks"}, null, null);
-    });
-}
+//         // Send a request to the content script.
+//         chrome.tabs.sendMessage(tab.id, {action: "getTexts"}, null, function(response) {
+//             addTextsList(textsDiv, response);
+//         });
+//         chrome.tabs.sendMessage(tab.id, {action: "getLinks"}, null, function(response) {
+//             addTextsList(linksDiv, response);
+//         });
+//     });
+// };
+
+// document.getElementById('markButton').onclick = function(element) {
+//     chrome.tabs.getSelected(null, function(tab) {
+
+//         // Send a request to the content script.
+//         chrome.tabs.sendMessage(tab.id, {action: "markLinks"}, null, null);
+//     });
+// }
 

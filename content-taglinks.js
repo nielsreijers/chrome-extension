@@ -35,15 +35,11 @@ function makeLinkTag(linkdata) {
 }
 
 function showOrHideIconDiv(iconDiv) {
-    icons.forEach(i => {
+    tagIcons.forEach(i => {
         if (iconDiv.classList.contains(i.cssClass)) {
-            iconDiv.style.display = settings[i.settingName] ? "block" : "none";
+            iconDiv.style.display = getSetting(i.settingName) ? "block" : "none";
         }
     });
-}
-
-function onSettingsChanged() {
-    Array.from(document.getElementsByClassName("vliegtuig-icon-div")).forEach(showOrHideIconDiv);
 }
 
 var handlers = null;
@@ -88,4 +84,15 @@ loadSettings().then(() => {
         }
     });
     domObserver.observe(document, { childList: true, subtree: true });
+});
+
+// Update icon visibility if settings change
+chrome.storage.sync.onChanged.addListener(function(changes, namespace) {
+    for (var key in changes) {
+        if (isSettingsKey(key)) {
+            reloadSettings().then(() => {
+                Array.from(document.getElementsByClassName("vliegtuig-icon-div")).forEach(showOrHideIconDiv);
+            });
+        }
+    }
 });

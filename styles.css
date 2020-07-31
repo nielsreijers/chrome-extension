@@ -92,3 +92,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
 }
+
+.vliegtuig-checkbox {
+  margin: 10px;
+}

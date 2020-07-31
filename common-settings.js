@@ -1,4 +1,4 @@
-var settings;
+var __settings;
 
 function loadSettings() {
     return loadSettingsPromise;
@@ -8,18 +8,24 @@ var loadSettingsPromise;
 function reloadSettings() {
     loadSettingsPromise = new Promise((resolve) => {
             chrome.storage.sync.get("VLIEGTUIG_SETTINGS", function(data) {
-                console.log("sync.get callback")
-                console.log(data.VLIEGTUIG_SETTINGS)
-                settings = data.VLIEGTUIG_SETTINGS;
-                if (settings == undefined || settings.__proto__ != {}.__proto__) {
-                    settings = {}
+                __settings = data.VLIEGTUIG_SETTINGS;
+                if (__settings == undefined || __settings.__proto__ != {}.__proto__) {
+                    __settings = {}
                 }
-                settings = defaultSettingsWhereEmpty(settings);
-                console.log(settings)
-                console.log("sync.get callback done")
-                resolve(settings);
+                __settings = defaultSettingsWhereEmpty(__settings);
+                resolve();
         });
-    });    
+    });
+    return loadSettingsPromise;
+}
+
+function getSetting(settingName) {
+    return __settings[settingName];
+}
+
+function setSetting(settingName, value) {
+    __settings[settingName] = value;
+    saveSettings();
 }
 
 // Fill in defaults if some settings have not been set yet.
@@ -43,7 +49,11 @@ function defaultSettingsWhereEmpty(s) {
 }
 
 function saveSettings() {
-    chrome.storage.sync.set({ VLIEGTUIG_SETTINGS: settings });
+    chrome.storage.sync.set({ VLIEGTUIG_SETTINGS: __settings });
+}
+
+function isSettingsKey(key) {
+    return key == 'VLIEGTUIG_SETTINGS';
 }
 
 

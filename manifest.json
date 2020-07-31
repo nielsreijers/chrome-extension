@@ -21,10 +21,10 @@
        {
          "matches": ["*://*.facebook.com/*",
                      "*://*.messenger.com/*"],
-         "css": ["content.css"],
-         "js": ["common-settings.js",
+         "css": ["styles.css"],
+         "js": ["common-resources.js",
+                "common-settings.js",
                 "content.js",
-                "content-resources.js",
                 "content-popover.js",
                 "content-taglinks.js",                
                 "content-evaluation.js",

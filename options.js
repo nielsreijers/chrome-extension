@@ -1,26 +1,32 @@
-// let icons = document.getElementById('VLIEGTUIG_SETTINGS_ICONS_TO_ADD');
+function addInput(imgSrc, settingName, txt) {
+    let iconsDiv = document.getElementById('VLIEGTUIG_SETTINGS_ICONS_TO_ADD');
 
-// function addInput(imgSrc, txt, settingName) {
-//     checkbox = document.createElement("input");
-//     checkbox.setAttribute("type", "checkbox");
-//     checkbox.innerHTML = `<img src="${imgSrc}" width=16 height=16>${txt}`;
-//     icons.appendChild(c);
-// }
+    let div = document.createElement("div");
 
-// addInput('images/check-t-green.png', 'Links marked safe', "mark-green");
+    let checkbox = document.createElement("input");
+    checkbox.setAttribute("type", "checkbox");
+    checkbox.setAttribute("class", "vliegtuig-checkbox");
+    checkbox.checked = getSetting(settingName);
+    checkbox.onchange = () => {
+        setSetting(settingName, checkbox.checked);
+    };
 
+    let icon = document.createElement("img");
+    icon.setAttribute("src", imgSrc);
+    icon.setAttribute("width", 16);
+    icon.setAttribute("height", 16);
 
-// const kButtonColors = ['#3aa757', '#e8453c', '#f9bb2d', '#4688f1'];
-// function constructOptions(kButtonColors) {
-//     for (let item of kButtonColors) {
-//         let button = document.createElement('button');
-//         button.style.backgroundColor = item;
-//         button.addEventListener('click', function () {
-//             chrome.storage.sync.set({color: item}, function() {
-//                 console.log('color is ' + item);
-//             });
-//         });
-//         page.appendChild(button);
-//     }
-// }
-// constructOptions(kButtonColors);
+    let span = document.createElement("span");
+    span.innerText = txt;
+
+    div.append(checkbox, icon, span);
+    iconsDiv.append(div);
+}
+
+loadSettings().then(() => {
+    addInput(iconGreen.url, iconGreen.settingName, ': links rated as safe');
+    addInput(iconRed.url, iconRed.settingName, ': links rated as potentially unsafe');
+    addInput(iconQuestionmark.url, iconQuestionmark.settingName, ': links for which no information is available');
+    addInput(iconGrey.url, iconGrey.settingName, ': links that are not rated because it publishes content from its users that it does not vet');
+    addInput(iconEmpty.url, iconEmpty.settingName, ': shown while the rating is being determined');
+});

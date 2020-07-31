@@ -12,19 +12,19 @@ X don't show icon for links to facebook.com (@user links)
 X add icon to links other than <a href> (there are different flavours in FB messages) in chats
 X layout: find better placing for icon
 X layout: redesign popup
+X add icon to feed items
+X add auto comment button in the popover for feed items
+X support other FB message interfaces:
+    X message box in facebook feed
+    X www.facebook.com/messages
+    X www.messenger.com
+X add a settings page to control which icons are shown
 
 - check why Winni's link doesn't get tagged
 - i18n
 - show user name of person/group we will send the message to in the popup, and a preview of the message that will be sent
-- add icon to feed items
-- add auto comment button in the popover for feed items
 - add confirmation dialog before sending reply
 - link to prof li's api?
 - use FB's "reply to" feature to reply to a specific earlier message
-- support other FB message interfaces:
-    - message box in facebook feed
-    - www.facebook.com/messages
-    - www.messenger.com
-    - mbasic.facebook.com
 - research good, non-confrontational message texts
 - close popover after sending message

@@ -24,8 +24,10 @@ let iconEmpty = {
     settingName: 'show-icon-empty'
 };
 
-icons = [iconGreen, iconRed, iconQuestionmark, iconGrey, iconEmpty]
+tagIcons = [iconGreen, iconRed, iconQuestionmark, iconGrey, iconEmpty]
 
 let URL_WARNINGSIGN_IMAGE = chrome.runtime.getURL('images/red-warning.jpg');
 let URL_OK_IMAGE = chrome.runtime.getURL('images/green-check-mark.jpg');
 let URL_QUESTIONMARK_IMAGE = chrome.runtime.getURL('images/big-questionmark.png');
+
+let MESSAGE_SETTINGS_CHANGED = 'vliegtuig-settings-changed';
