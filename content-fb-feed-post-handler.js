@@ -5,9 +5,11 @@ facebookFeedPostHandler = {
                 // not an html node (probably text)
                 return []
             } else {
-                let FB_QUERY_FEED_POST_WITH_LINK = "._3ekx > a"
+                let FB_QUERY_FEED_POST_WITH_LINK_A = "._3ekx > a"
+                let FB_QUERY_FEED_POST_WITH_LINK_B = "._58jw > p > a"
 
-                return Array.from(addedNode.parentElement.querySelectorAll(FB_QUERY_FEED_POST_WITH_LINK));
+                return Array.from(addedNode.parentElement.querySelectorAll(FB_QUERY_FEED_POST_WITH_LINK_A)).concat(
+                       Array.from(addedNode.parentElement.querySelectorAll(FB_QUERY_FEED_POST_WITH_LINK_B)));
             }
         },
     elementToLinkData:
