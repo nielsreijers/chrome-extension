@@ -87,13 +87,13 @@ function setPopupContentForLink(linkdata) {
 function setPopupContentInner(linkdata, evaluation) {
     if (evaluation == null) {
         myPopover.title.innerText = "Loading...";
-        myPopover.evalIcon.src = iconImgQuestionmark;
+        myPopover.evalIcon.src = iconQuestionmark;
         myPopover.evalIcon.alt = "loading";
         myPopover.evalText.innerText = linkdata.url;
         myPopover.sendReplyDiv.style.display = "none";
     } else {
         myPopover.title.innerText = evaluation.site;
-        myPopover.evalIcon.src = evaluation.icon;
+        myPopover.evalIcon.src = evaluation.icon.url;
         myPopover.evalIcon.alt = evaluation.alt;
         myPopover.evalText.innerText = "We found that " + evaluation.text;
         myPopover.sendReplyDiv.style.display = "block";

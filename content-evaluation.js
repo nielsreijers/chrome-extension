@@ -43,7 +43,7 @@ function newsGuardDataToEvaluation(data, url) {
 
     if (data.rank == null) {
         return {
-            icon:iconImgQuestionmark,
+            icon:iconQuestionmark,
             unicodeSymbol:"❔",
             imageUrl: URL_QUESTIONMARK_IMAGE,
             alt:"not found",
@@ -52,7 +52,7 @@ function newsGuardDataToEvaluation(data, url) {
         };
     } else if (data.rank == 'P' && data.score == 0) {
         return {
-            icon:iconImgGrey,
+            icon:iconGrey,
             unicodeSymbol:"➗",
             imageUrl: URL_QUESTIONMARK_IMAGE,
             alt:"not rated",
@@ -61,7 +61,7 @@ function newsGuardDataToEvaluation(data, url) {
         };
     } else if (data.rank == 'T') {
         return {
-            icon:iconImgGreen,
+            icon:iconGreen,
             unicodeSymbol:"✔",
             imageUrl: URL_OK_IMAGE,
             alt:"safe",
@@ -70,7 +70,7 @@ function newsGuardDataToEvaluation(data, url) {
         };
     } else if (data.rank == 'N') {
         return {
-            icon:iconImgRed,
+            icon:iconRed,
             unicodeSymbol:"⚠",
             imageUrl: URL_WARNINGSIGN_IMAGE,
             alt:"unsafe",
@@ -79,7 +79,7 @@ function newsGuardDataToEvaluation(data, url) {
         };
     } else {
         return {
-            icon:iconImgQuestionmark,
+            icon:iconQuestionmark,
             unicodeSymbol:"❔",
             imageUrl: URL_QUESTIONMARK_IMAGE,
             alt:"unsure",

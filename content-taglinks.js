@@ -9,21 +9,41 @@ function getUnmarkedElementsAndMark(elements) {
 
 function makeLinkTag(linkdata) {
     let icon = document.createElement("img");
-    icon.setAttribute("src", iconImgEmpty);
+    icon.setAttribute("src", iconEmpty.url);
     icon.setAttribute("height", "16");
     icon.setAttribute("width", "16");
     icon.setAttribute("alt", "check");
     icon.onclick = () => handle_icon_clicked();
     icon.onmouseenter = () => handle_icon_mouseenter_icon(linkdata);
     icon.onmouseleave = () => handle_icon_mouseleave_icon();
-    linkdata.evaluationPromise.then(evaluation => icon.setAttribute("src", evaluation.icon));
     // TODO: placement needs some tweaking
 
     let d = document.createElement("div");
-    d.setAttribute("class", "vliegtuig-icon-div");
     d.appendChild(icon);
 
+    d.classList.add("vliegtuig-icon-div");
+    d.classList.add(iconEmpty.cssClass);
+    showOrHideIconDiv(d);
+    linkdata.evaluationPromise.then(evaluation => { 
+        icon.setAttribute("src", evaluation.icon.url);
+        d.classList.remove(iconEmpty.cssClass);
+        d.classList.add(evaluation.icon.cssClass);
+        showOrHideIconDiv(d);
+    });
+
     return d;
+}
+
+function showOrHideIconDiv(iconDiv) {
+    icons.forEach(i => {
+        if (iconDiv.classList.contains(i.cssClass)) {
+            iconDiv.style.display = settings[i.settingName] ? "block" : "none";
+        }
+    });
+}
+
+function onSettingsChanged() {
+    Array.from(document.getElementsByClassName("vliegtuig-icon-div")).forEach(showOrHideIconDiv);
 }
 
 var handlers = null;
