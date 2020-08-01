@@ -92,7 +92,7 @@ function _setPopupContentInner(linkdata, evaluation) {
         myPopover.evalText.innerText = linkdata.url;
         myPopover.sendReplyDiv.style.display = "none";
     } else {
-        myPopover.title.innerText = evaluation.site;
+        myPopover.title.innerText = evaluation.dataFoundFor;
         myPopover.evalIcon.src = evaluation.icon.url;
         myPopover.evalIcon.alt = evaluation.alt;
         myPopover.evalText.innerText = "We found that " + evaluation.text;

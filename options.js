@@ -29,7 +29,6 @@ function handleEvaluatorClick(e) {
             setSetting(SETTING_EVALUATOR, e.value);
         }
     }
-    console.log(getSetting(SETTING_EVALUATOR))
 }
 
 loadSettings().then(() => {
