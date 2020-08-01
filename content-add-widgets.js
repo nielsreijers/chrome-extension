@@ -23,6 +23,8 @@ function _makeWidget(linkdata) {
         d.classList.remove(iconEmpty.cssClass);
         d.classList.add(evaluation.icon.cssClass);
         _showOrHideIconDiv(d);
+    }).catch(error => {
+        icon.setAttribute("src", iconError.url);
     });
 
     return d;

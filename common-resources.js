@@ -23,7 +23,9 @@ let iconEmpty = {
     cssClass: 'vliegtuig-icon-empty',
     settingName: 'show-icon-empty'
 };
-
+let iconError = {
+    url: chrome.runtime.getURL('images/check-t-error.svg')
+};
 widgetIcons = [iconGreen, iconRed, iconQuestionmark, iconGrey, iconEmpty]
 
 // These are just here to test sending images.

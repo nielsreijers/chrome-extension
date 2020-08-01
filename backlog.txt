@@ -20,9 +20,11 @@ X support other FB message interfaces:
     X www.messenger.com
 X add a settings page to control which icons are shown
 X check why Winni's link doesn't get tagged
+X connect to https://cofacts-api.g0v.tw/
 
-- connect to https://cofacts-api.g0v.tw/
+- show link with extra information (the article on cofacts.g0v.tw)
 - replace https://cors-anywhere.herokuapp.com/ in cofacts code with our own server
+- modify gql query to only get the data we need
 - test article similarity instead of just using the first
 - add yellow icon for opinionated articles in cofacts
 - i18n

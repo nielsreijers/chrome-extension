@@ -75,19 +75,27 @@ function _setPopupContentForLink(linkdata) {
 
     _current_url = linkdata.url;
     _setPopupContentInner(linkdata, null);
-    linkdata.evaluationPromise.then(evaluation => {
-        if (_current_url == linkdata.url) {
-            // only set if this is still the url we want to see
-            // (user may have selected a different one while the eval was loading)
-            _setPopupContentInner(linkdata, evaluation);            
-        } 
-    });
+    linkdata.evaluationPromise
+        .then(evaluation => {
+            if (_current_url == linkdata.url) {
+                // only set if this is still the url we want to see
+                // (user may have selected a different one while the eval was loading)
+                _setPopupContentInner(linkdata, evaluation);            
+            } 
+        }).catch(error => {
+            myPopover.title.innerText = "Something went wrong...";
+            myPopover.evalIcon.src = iconError.url;
+            myPopover.evalIcon.alt = "error";
+            myPopover.evalText.innerText = error;
+            myPopover.evalInfoLinkDiv.style.display = "none";
+            myPopover.sendReplyDiv.style.display = "none";
+        });
 }
 
 function _setPopupContentInner(linkdata, evaluation) {
     if (evaluation == null) {
         myPopover.title.innerText = "Loading...";
-        myPopover.evalIcon.src = iconQuestionmark;
+        myPopover.evalIcon.src = iconQuestionmark.url;
         myPopover.evalIcon.alt = "loading";
         myPopover.evalText.innerText = linkdata.url;
         myPopover.sendReplyDiv.style.display = "none";
