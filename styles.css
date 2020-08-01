@@ -68,6 +68,14 @@ body {font-family: Arial, Helvetica, sans-serif;}
   padding: 5px;
 }
 
+.vliegtuig-eval-infolink-text {
+  font-size: 12px !important;
+}
+
+.vliegtuig-eval-infolink-div {
+  margin-top: 10px;
+}
+
 .vliegtuig-twisc {
   position: absolute;
   bottom: 5px;

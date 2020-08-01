@@ -98,6 +98,7 @@ function _setPopupContentInner(linkdata, evaluation) {
         myPopover.evalIcon.src = iconQuestionmark.url;
         myPopover.evalIcon.alt = "loading";
         myPopover.evalText.innerText = linkdata.url;
+        myPopover.evalInfoLinkDiv.style.display = "none";
         myPopover.sendReplyDiv.style.display = "none";
     } else {
         myPopover.title.innerText = evaluation.dataFoundFor;
@@ -105,6 +106,13 @@ function _setPopupContentInner(linkdata, evaluation) {
         myPopover.evalIcon.alt = evaluation.alt;
         myPopover.evalText.innerText = "We found that " + evaluation.text;
         myPopover.sendReplyDiv.style.display = "block";
+
+        if (evaluation.infoLink == null) {
+            myPopover.evalInfoLinkDiv.style.display = "none";
+        } else {
+            myPopover.evalInfoLinkDiv.style.display = "block";     
+            myPopover.evalInfoLinkA.href = evaluation.infoLink;       
+        }
 
         if (linkdata.reply_to_type == null) {
             myPopover.sendReplyText.innerText = "Can't auto-reply because the id to reply to could not be found.";
@@ -159,6 +167,8 @@ fetch(chrome.extension.getURL("popover-template.html")).then(r => r.text()).then
         title: document.getElementById("VLIEGTUIG_POPOVER_TITLE"),
         evalIcon: document.getElementById("VLIEGTUIG_EVAL_ICON"),
         evalText: document.getElementById("VLIEGTUIG_EVAL_TEXT"),
+        evalInfoLinkDiv: document.getElementById("VLIEGTUIG_EVAL_INFOLINK_DIV"),
+        evalInfoLinkA: document.getElementById("VLIEGTUIG_EVAL_INFOLINK_A"),
         sendReplyDiv: document.getElementById("VLIEGTUIG_SEND_REPLY_DIV"),
         sendReplyText: document.getElementById("VLIEGTUIG_SEND_REPLY_TEXT"),
         sendReplyControls: document.getElementById("VLIEGTUIG_SEND_REPLY_CONTROLS"),
