@@ -1,4 +1,23 @@
 function getURLEvaluationPromise(url) {
     // TODO: use newsguard or cofact based on settings.
-    return newsguardGetURLEvaluationPromise(url);
+    if (getSetting(SETTING_EVALUATOR) == 'cofacts') {
+        return cofactsGetURLEvaluationPromise(url);
+    } else {
+        return newsguardGetURLEvaluationPromise(url);
+    }
+}
+
+function getSiteFromUrl(url) {
+    let trim = (s, prefix) => { if (s.startsWith(prefix)) { return s.substring(prefix.length); } else { return s; } };
+    url = trim(url, 'https://');
+    url = trim(url, 'http://');
+    url = trim(url, 'www.');
+    if (url.endsWith('/')) {
+        url = url.substring(0, url.length - 1);
+    }
+    if (url.indexOf('/', url.indexOf('.')) != -1) {
+        // strip anything after the hostname
+        url = url.substring(0, url.indexOf('/', url.indexOf('.')));
+    }
+    return url;
 }

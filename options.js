@@ -1,4 +1,4 @@
-function addInput(imgSrc, settingName, txt) {
+function _addInput(imgSrc, settingName, txt) {
     let iconsDiv = document.getElementById('VLIEGTUIG_SETTINGS_ICONS_TO_ADD');
 
     let div = document.createElement("div");
@@ -23,10 +23,27 @@ function addInput(imgSrc, settingName, txt) {
     iconsDiv.append(div);
 }
 
+function handleEvaluatorClick(e) {
+    for (var e of document.getElementsByName("evaluator")) {
+        if (e.checked == true) {
+            setSetting(SETTING_EVALUATOR, e.value);
+        }
+    }
+    console.log(getSetting(SETTING_EVALUATOR))
+}
+
 loadSettings().then(() => {
-    addInput(iconGreen.url, iconGreen.settingName, ': links rated as safe');
-    addInput(iconRed.url, iconRed.settingName, ': links rated as potentially unsafe');
-    addInput(iconQuestionmark.url, iconQuestionmark.settingName, ': links for which no information is available');
-    addInput(iconGrey.url, iconGrey.settingName, ': links that are not rated because it publishes content from its users that it does not vet');
-    addInput(iconEmpty.url, iconEmpty.settingName, ': shown while the rating is being determined');
+    _addInput(iconGreen.url, iconGreen.settingName, ': links rated as safe');
+    _addInput(iconRed.url, iconRed.settingName, ': links rated as potentially unsafe');
+    _addInput(iconQuestionmark.url, iconQuestionmark.settingName, ': links for which no information is available');
+    _addInput(iconGrey.url, iconGrey.settingName, ': links that are not rated because it publishes content from its users that it does not vet');
+    _addInput(iconEmpty.url, iconEmpty.settingName, ': shown while the rating is being determined');
+
+    // Set currently selected evaluator
+    for (var e of document.getElementsByName("evaluator")) {
+        if (getSetting(SETTING_EVALUATOR) == e.value) {
+            e.checked = true;
+        }
+        e.onclick = () => handleEvaluatorClick();
+    }
 });

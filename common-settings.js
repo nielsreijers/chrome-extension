@@ -1,5 +1,7 @@
 var _settings;
 
+let SETTING_EVALUATOR = "evaluator"
+
 function loadSettings() {
     return _loadSettingsPromise;
 }
@@ -44,6 +46,9 @@ function _defaultSettingsWhereEmpty(s) {
     }
     if (!s.hasOwnProperty('show-icon-questionmark')) {
         s['show-icon-questionmark'] = true;
+    }
+    if (!s.hasOwnProperty(SETTING_EVALUATOR)) {
+        s[SETTING_EVALUATOR] = 'newsguard';
     }
     return s;
 }

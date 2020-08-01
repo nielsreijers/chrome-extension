@@ -29,6 +29,7 @@
                 "content-add-widgets.js",                
                 "content-evaluation.js",
                 "content-evaluator-newsguard.js",
+                "content-evaluator-cofacts.js",
                 "content-fb.js",
                 "content-handler-fb-feed-messagebox.js",
                 "content-handler-fb-feed-post.js",

@@ -12,28 +12,13 @@ function _getNewsGuardDataPromise(url) {
     return fetch(`https://api.newsguardtech.com/check?url=${encodeURIComponent(url)}`).then(r => r.json());
 }
 
-function _getSiteFromUrl(url) {
-    let trim = (s, prefix) => { if (s.startsWith(prefix)) { return s.substring(prefix.length); } else { return s; } };
-    url = trim(url, 'https://');
-    url = trim(url, 'http://');
-    url = trim(url, 'www.');
-    if (url.endsWith('/')) {
-        url = url.substring(0, url.length - 1);
-    }
-    if (url.indexOf('/', url.indexOf('.')) != -1) {
-        // strip anything after the hostname
-        url = url.substring(0, url.indexOf('/', url.indexOf('.')));
-    }
-    return url;
-}
-
 function _newsGuardDataToEvaluation(data, url) {   
     if (data.identifier != null) {
         var url = data.identifier;
     } else {
         var url = url;
     }
-    site = _getSiteFromUrl(url);
+    site = getSiteFromUrl(url);
 
     if (data.rank == null) {
         return {
