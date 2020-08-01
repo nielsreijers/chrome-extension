@@ -1,4 +1,4 @@
-function sendFbMessage(params) {
+function _sendFbMessage(params) {
     let http = new XMLHttpRequest();
     let url = 'https://mbasic.facebook.com/messages/send/';
     http.open("POST", url);
@@ -6,14 +6,14 @@ function sendFbMessage(params) {
     http.withCredentials = true;
     // fb_dtsg is the token that identifies the current user.
     // There are usually 3 elements with a token found in the document, but they all seem to work.
-    params['fb_dtsg'] = getDtsgToken();
+    params['fb_dtsg'] = _getDtsgToken();
 
-    b = queryFormatParams(params);
+    b = _queryFormatParams(params);
 
     http.send(b);
 }
 
-function sendFbMessageWithImage(params, imageUrl) {
+function _sendFbMessageWithImage(params, imageUrl) {
     let http = new XMLHttpRequest();
     let url = 'https://upload.facebook.com/_mupload_/mbasic/messages/attachment/photo/';
     http.open("POST", url);
@@ -25,7 +25,7 @@ function sendFbMessageWithImage(params, imageUrl) {
     }
     // fb_dtsg is the token that identifies the current user.
     // There are usually 3 elements with a token found in the document, but they all seem to work.
-    data.append('fb_dtsg', getDtsgToken());
+    data.append('fb_dtsg', _getDtsgToken());
     data.append('file1', "vliegtuig.jpg");
 
     fetch(imageUrl).then(r => r.blob()).then(image => {
@@ -34,38 +34,38 @@ function sendFbMessageWithImage(params, imageUrl) {
     });
 }
 
-function postFbComment(message, post_id) {
+function _postFbComment(message, post_id) {
     let queryParams = {}
     queryParams['ft_ent_identifier'] = post_id;
 
     let http = new XMLHttpRequest();
-    let url = `https://mbasic.facebook.com/a/comment.php?${queryFormatParams(queryParams)}`;
+    let url = `https://mbasic.facebook.com/a/comment.php?${_queryFormatParams(queryParams)}`;
     http.open("POST", url);
     http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     http.withCredentials = true;
 
     let bodyParams = {}
-    bodyParams['fb_dtsg'] = getDtsgToken();
+    bodyParams['fb_dtsg'] = _getDtsgToken();
     bodyParams['comment_text'] = message;
 
-    b = queryFormatParams(bodyParams);
+    b = _queryFormatParams(bodyParams);
 
     http.send(b);
 }
 
-function postFbCommentWithImage(message, imageUrl, post_id) {
+function _postFbCommentWithImage(message, imageUrl, post_id) {
     let queryParams = {}
     queryParams['ft_ent_identifier'] = post_id;
 
     let http = new XMLHttpRequest();
-    let url = `https://upload.facebook.com/_mupload_/ufi/mbasic/advanced/?${queryFormatParams(queryParams)}`;
+    let url = `https://upload.facebook.com/_mupload_/ufi/mbasic/advanced/?${_queryFormatParams(queryParams)}`;
     http.open("POST", url);
     http.withCredentials = true;
 
     let data = new FormData();
     // fb_dtsg is the token that identifies the current user.
     // There are usually 3 elements with a token found in the document, but they all seem to work.
-    data.append('fb_dtsg', getDtsgToken());
+    data.append('fb_dtsg', _getDtsgToken());
     data.append('photo', "vliegtuig.jpg");
     data.append('comment_text', message);
 
@@ -81,29 +81,29 @@ function facebookSendOrPostReply(message, imageUrl, id_type, id) {
         params['body'] = message;
         params[`ids[${id}]`] = id;
         if (imageUrl != null) {
-            sendFbMessageWithImage(params, imageUrl);
+            _sendFbMessageWithImage(params, imageUrl);
         } else {
-            sendFbMessage(params);        
+            _sendFbMessage(params);        
         }
     } else if (id_type == 'group') {
         let params = {}
         params['body'] = message;
         params['tids'] = `cid.g.${id}`;
         if (imageUrl != null) {
-            sendFbMessageWithImage(params, imageUrl);
+            _sendFbMessageWithImage(params, imageUrl);
         } else {
-            sendFbMessage(params);        
+            _sendFbMessage(params);        
         }
     } else if (id_type == 'feedpost') {
         if (imageUrl != null) {
-            postFbCommentWithImage(message, imageUrl, id);
+            _postFbCommentWithImage(message, imageUrl, id);
         } else {
-            postFbComment(message, id);
+            _postFbComment(message, id);
         }
     }
 }
 
-function queryFormatParams(params) {
+function _queryFormatParams(params) {
     // convert object to list -- to enable .map
     let data = Object.entries(params);
     // encode every parameter (unpack list into 2 variables)
@@ -124,24 +124,24 @@ function stripFbLinkRedirect(url) {
     }
 }
 
-var dtsgToken = null
-function getDtsgToken() {
+var _dtsgToken = null
+function _getDtsgToken() {
     // This works on facebook.com
-    if (dtsgToken == null) {
+    if (_dtsgToken == null) {
         var dtsgElement = document.getElementsByName("fb_dtsg")[0];
         if (dtsgElement != undefined) {
-            dtsgToken = dtsgElement.value;
+            _dtsgToken = dtsgElement.value;
         }
     }
     // This works on messenger.com
-    if (dtsgToken == null) {
+    if (_dtsgToken == null) {
         var headtext = document.head.innerText;
         let re = new RegExp(`\{\"token\":\"([^"]*)`);
         let match = re.exec(headtext);
         if (match != null) {
-            dtsgToken = match[1];
+            _dtsgToken = match[1];
         }
 
     }
-    return dtsgToken;
+    return _dtsgToken;
 }

@@ -25,3 +25,10 @@ icon.setAttribute('height', 16);
 
 postElement=findParentElementWithClass(temp1, '_5pcb');
 formElement=postElement.querySelector('.commentable_item');
+
+
+COFACT API:
+
+curl 'https://cofacts-api.g0v.tw/graphql' -H 'Accept-Encoding: gzip, deflate, br' -H 'Content-Type: application/json' -H 'Accept: application/json' -H 'Connection: keep-alive' -H 'DNT: 1' -H 'Origin: https://cofacts-api.g0v.tw' --data-binary '{"query":"query($text: String) {\n  ListArticles(\n    filter: { moreLikeThis: { like: $text } }\n    orderBy: [{ _score: DESC }]\n    first: 4\n  ) {\n    edges {\n      node {\n        id\n        text\n        hyperlinks {\n          url\n        }\n        articleReplies {\n          reply {\n            id\n            text\n            type\n            reference\n          }\n        }\n      }\n    }\n  }\n}","variables":{"text":"一個非常不妙的消息，美國頂尖「斯克里普斯研究中心」一項研究證明：Covid-19 已經有一部份的病毒"}}' --compressed
+
+

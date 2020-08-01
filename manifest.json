@@ -26,12 +26,13 @@
                 "common-settings.js",
                 "content.js",
                 "content-popover.js",
-                "content-taglinks.js",                
+                "content-add-widgets.js",                
                 "content-evaluation.js",
+                "content-evaluator-newsguard.js",
                 "content-fb.js",
-                "content-fb-feed-messagebox-handler.js",
-                "content-fb-feed-post-handler.js",
-                "content-fb-messenger-handler.js"]
+                "content-handler-fb-feed-messagebox.js",
+                "content-handler-fb-feed-post.js",
+                "content-handler-fb-messenger.js"]
        }
     ],
     "icons": {

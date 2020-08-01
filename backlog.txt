@@ -21,6 +21,7 @@ X support other FB message interfaces:
 X add a settings page to control which icons are shown
 X check why Winni's link doesn't get tagged
 
+- connect to https://cofacts-api.g0v.tw/
 - i18n
 - show user name of person/group we will send the message to in the popup, and a preview of the message that will be sent
 - add confirmation dialog before sending reply

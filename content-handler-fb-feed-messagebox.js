@@ -14,11 +14,11 @@ facebookFeedMessageboxHandler = {
     elementToLinkData:
         function (e) {
             var reply_to_type = null;
-            var reply_to_id = findFantaTab('user', e);
+            var reply_to_id = _findFantaTab('user', e);
             if (reply_to_id!=null) {
                 reply_to_type = 'user';
             } else {
-                reply_to_id = findFantaTab('thread', e);
+                reply_to_id = _findFantaTab('thread', e);
                 if (reply_to_id!=null) {
                     reply_to_type = 'group';
                 }
@@ -48,7 +48,7 @@ facebookFeedMessageboxHandler = {
                 if ((child = parent.querySelector(FB_QUERY_TO_APPEND_ICON_CHILD)) != null) {
                     // Don't add an icon if it's already there. This happens for links that
                     // show both the url as a text, and the box with a preview and title.
-                    if (child.querySelector(".vliegtuig-icon-div") == null) {
+                    if (child.querySelector(".vliegtuig-widget-div") == null) {
                         child.prepend(tag);
                     }
                 }
@@ -56,7 +56,7 @@ facebookFeedMessageboxHandler = {
         }
 };
 
-function findFantaTab(tabType, messageElement) {
+function _findFantaTab(tabType, messageElement) {
     let re = new RegExp(`fantaTabMain-${tabType}:([0-9]+)`);
     var e = messageElement;
 

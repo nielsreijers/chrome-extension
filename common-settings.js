@@ -1,35 +1,35 @@
-var __settings;
+var _settings;
 
 function loadSettings() {
-    return loadSettingsPromise;
+    return _loadSettingsPromise;
 }
 
-var loadSettingsPromise;
+var _loadSettingsPromise;
 function reloadSettings() {
-    loadSettingsPromise = new Promise((resolve) => {
+    _loadSettingsPromise = new Promise((resolve) => {
             chrome.storage.sync.get("VLIEGTUIG_SETTINGS", function(data) {
-                __settings = data.VLIEGTUIG_SETTINGS;
-                if (__settings == undefined || __settings.__proto__ != {}.__proto__) {
-                    __settings = {}
+                _settings = data.VLIEGTUIG_SETTINGS;
+                if (_settings == undefined || _settings.__proto__ != {}.__proto__) {
+                    _settings = {}
                 }
-                __settings = defaultSettingsWhereEmpty(__settings);
+                _settings = _defaultSettingsWhereEmpty(_settings);
                 resolve();
         });
     });
-    return loadSettingsPromise;
+    return _loadSettingsPromise;
 }
 
 function getSetting(settingName) {
-    return __settings[settingName];
+    return _settings[settingName];
 }
 
 function setSetting(settingName, value) {
-    __settings[settingName] = value;
-    saveSettings();
+    _settings[settingName] = value;
+    _saveSettings();
 }
 
 // Fill in defaults if some settings have not been set yet.
-function defaultSettingsWhereEmpty(s) {
+function _defaultSettingsWhereEmpty(s) {
     if (!s.hasOwnProperty('show-icon-empty')) {
         s['show-icon-empty'] = true;
     }
@@ -48,8 +48,8 @@ function defaultSettingsWhereEmpty(s) {
     return s;
 }
 
-function saveSettings() {
-    chrome.storage.sync.set({ VLIEGTUIG_SETTINGS: __settings });
+function _saveSettings() {
+    chrome.storage.sync.set({ VLIEGTUIG_SETTINGS: _settings });
 }
 
 function isSettingsKey(key) {

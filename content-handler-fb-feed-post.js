@@ -15,7 +15,7 @@ facebookFeedPostHandler = {
     elementToLinkData:
         function (e) {
             var reply_to_type = null;
-            var reply_to_id = findFeedPostId(e);
+            var reply_to_id = _findFeedPostId(e);
             if (reply_to_id != null) {
                 reply_to_type = 'feedpost';
             };
@@ -35,7 +35,7 @@ facebookFeedPostHandler = {
         }
 };
 
-function findFeedPostId(e) {
+function _findFeedPostId(e) {
     let FB_CLASS_FEEDPOST = '_5pcb';
     let FB_QUERY_COMMENT_FORM_IN_FEEDPORT = '.commentable_item';
 

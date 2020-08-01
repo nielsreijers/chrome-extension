@@ -24,10 +24,10 @@ let iconEmpty = {
     settingName: 'show-icon-empty'
 };
 
-tagIcons = [iconGreen, iconRed, iconQuestionmark, iconGrey, iconEmpty]
+widgetIcons = [iconGreen, iconRed, iconQuestionmark, iconGrey, iconEmpty]
 
+// These are just here to test sending images.
+// Should use some more informative graphic in the final version.
 let URL_WARNINGSIGN_IMAGE = chrome.runtime.getURL('images/red-warning.jpg');
 let URL_OK_IMAGE = chrome.runtime.getURL('images/green-check-mark.jpg');
 let URL_QUESTIONMARK_IMAGE = chrome.runtime.getURL('images/big-questionmark.png');
-
-let MESSAGE_SETTINGS_CHANGED = 'vliegtuig-settings-changed';

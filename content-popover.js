@@ -1,90 +1,90 @@
 // ----------------- Manage popover -----------------
-function openPopover(linkdata) {
+function _openPopover(linkdata) {
     myPopover.mainDiv.style.display = "block";
-    setPopupContentForLink(linkdata);
+    _setPopupContentForLink(linkdata);
 }
 
-function hidePopover() {
+function _hidePopover() {
     myPopover.mainDiv.style.display = "none";
 }
 
-var hidePopoverTimer = null;
-function startHidePopoverTimer() {
-    hidePopoverTimer = setTimeout(function() {
-        hidePopover();
-        hidePopoverTimer = null;
+var _hidePopoverTimer = null;
+function _startHidePopoverTimer() {
+    _hidePopoverTimer = setTimeout(function() {
+        _hidePopover();
+        _hidePopoverTimer = null;
     }, 500);
 }
 
-function stopHidePopoverTimer() {
-    if (hidePopoverTimer != null) {
-        clearTimeout(hidePopoverTimer);
-        hidePopoverTimer = null;
+function _stopHidePopoverTimer() {
+    if (_hidePopoverTimer != null) {
+        clearTimeout(_hidePopoverTimer);
+        _hidePopoverTimer = null;
     }    
 }
 
 var popoverPinned = false;
-function handle_icon_mouseenter_icon(linkdata) {
+function handle_widget_mouseenter(linkdata) {
     if (!popoverPinned) {
-        stopHidePopoverTimer();
-        openPopover(linkdata);
+        _stopHidePopoverTimer();
+        _openPopover(linkdata);
     }
 }
 
-function handle_icon_clicked() {
+function handle_widget_clicked() {
     popoverPinned = true;
     myPopover.closeButton.innerText = "×";
 }
 
-function handle_icon_mouseleave_icon() {
+function handle_widget_mouseleave() {
     if (!popoverPinned) {
-        startHidePopoverTimer();
+        _startHidePopoverTimer();
     }    
 }
 
-function handle_icon_mouseenter_popover() {
+function _handle_popover_mouseenter() {
     if (!popoverPinned) {
-        if (hidePopoverTimer != null) {
-            clearTimeout(hidePopoverTimer);
-            hidePopoverTimer = null;
+        if (_hidePopoverTimer != null) {
+            clearTimeout(_hidePopoverTimer);
+            _hidePopoverTimer = null;
         }
     }
 }
 
-function handle_icon_mouseleave_popover() {
+function _handle_popover_mouseleave() {
     if (!popoverPinned) {
-        startHidePopoverTimer();
+        _startHidePopoverTimer();
     }    
 }
 
-function handle_close_clicked() {
-    hidePopover();
+function _handle_close_clicked() {
+    _hidePopover();
     popoverPinned = false;
     myPopover.closeButton.innerText = "";
 }
 
 
 
-// ----------------- Show url evaluation in popover -----------------
-var current_url = ""
-function setPopupContentForLink(linkdata) {
-    if (current_url == linkdata.url) {
+// ----------------- Show evaluation in popover -----------------
+var _current_url = ""
+function _setPopupContentForLink(linkdata) {
+    if (_current_url == linkdata.url) {
         // already set for this URL. skipping.
         return;
     }
 
-    current_url = linkdata.url;
-    setPopupContentInner(linkdata, null);
+    _current_url = linkdata.url;
+    _setPopupContentInner(linkdata, null);
     linkdata.evaluationPromise.then(evaluation => {
-        if (current_url == linkdata.url) {
+        if (_current_url == linkdata.url) {
             // only set if this is still the url we want to see
             // (user may have selected a different one while the eval was loading)
-            setPopupContentInner(linkdata, evaluation);            
+            _setPopupContentInner(linkdata, evaluation);            
         } 
     });
 }
 
-function setPopupContentInner(linkdata, evaluation) {
+function _setPopupContentInner(linkdata, evaluation) {
     if (evaluation == null) {
         myPopover.title.innerText = "Loading...";
         myPopover.evalIcon.src = iconQuestionmark;
@@ -115,13 +115,13 @@ function setPopupContentInner(linkdata, evaluation) {
             myPopover.sendReplyText.innerText = text;
             myPopover.sendReplyControls.style.display = "block";
             myPopover.sendReplyButton.onclick = () => {
-                linkdata.evaluationPromise.then(evaluation => sendReply(linkdata, evaluation));
+                linkdata.evaluationPromise.then(evaluation => _sendReply(linkdata, evaluation));
             };
         }
     }
 }
 
-function sendReply(linkdata, evaluation) {
+function _sendReply(linkdata, evaluation) {
     includeImage = myPopover.sendReplyCheckbox.checked;
     messageText = "My extension found that " + evaluation.text;
 
@@ -159,9 +159,9 @@ fetch(chrome.extension.getURL("popover-template.html")).then(r => r.text()).then
         twiscLogo: document.getElementById("VLIEGTUIG_TWISC_LOGO")
     };
     myPopover.twiscLogo.src = chrome.extension.getURL("images/twisc.png");
-    myPopover.mainDiv.onmouseenter = handle_icon_mouseenter_popover;
-    myPopover.mainDiv.onmouseleave = handle_icon_mouseleave_popover;
-    myPopover.closeButton.onclick = handle_close_clicked;
+    myPopover.mainDiv.onmouseenter = _handle_popover_mouseenter;
+    myPopover.mainDiv.onmouseleave = _handle_popover_mouseleave;
+    myPopover.closeButton.onclick = _handle_close_clicked;
     myPopover.closeButton.innerText = '';
 });
 
