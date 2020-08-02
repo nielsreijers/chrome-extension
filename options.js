@@ -33,6 +33,7 @@ function handleEvaluatorClick(e) {
 
 loadSettings().then(() => {
     _addInput(iconGreen.url, iconGreen.settingName, ': links rated as safe');
+    _addInput(iconOpinion.url, iconOpinion.settingName, ': links rated as containing a personal perspective');
     _addInput(iconRed.url, iconRed.settingName, ': links rated as potentially unsafe');
     _addInput(iconQuestionmark.url, iconQuestionmark.settingName, ': links for which no information is available');
     _addInput(iconGrey.url, iconGrey.settingName, ': links that are not rated because it publishes content from its users that it does not vet');

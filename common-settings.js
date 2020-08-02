@@ -36,29 +36,16 @@ function setSetting(settingName, value) {
 
 // Fill in defaults if some settings have not been set yet.
 function _defaultSettingsWhereEmpty(s) {
-    if (!s.hasOwnProperty('show-icon-empty')) {
-        s['show-icon-empty'] = true;
-    }
-    if (!s.hasOwnProperty('show-icon-green')) {
-        s['show-icon-green'] = true;
-    }
-    if (!s.hasOwnProperty('show-icon-red')) {
-        s['show-icon-red'] = true;
-    }
-    if (!s.hasOwnProperty('show-icon-grey')) {
-        s['show-icon-grey'] = true;
-    }
-    if (!s.hasOwnProperty('show-icon-questionmark')) {
-        s['show-icon-questionmark'] = true;
-    }
-    if (!s.hasOwnProperty('show-icon-error')) {
-        s['show-icon-error'] = true;
-    }
-    if (!s.hasOwnProperty('debug')) {
-        s['debug'] = false;
-    }
+    widgetIcons.forEach(icon => {
+        if (!s.hasOwnProperty(icon.settingName)) {
+            s[icon.settingName] = true;
+        }        
+    });
     if (!s.hasOwnProperty(SETTING_EVALUATOR)) {
         s[SETTING_EVALUATOR] = 'newsguard';
+    }
+    if (!s.hasOwnProperty(SETTING_DEBUG)) {
+        s[SETTING_DEBUG] = false;
     }
     return s;
 }

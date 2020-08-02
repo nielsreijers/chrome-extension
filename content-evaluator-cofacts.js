@@ -51,8 +51,8 @@ function _cofactsDataToEvaluation(data, url) {
         };       
     } else if (opinionatedCount > 0) {
         return {
-            icon:iconRed,
-            unicodeSymbol:"⚠",
+            icon:iconOpinion,
+            unicodeSymbol:"💬",
             imageUrl: URL_WARNINGSIGN_IMAGE,
             alt:"unsafe",
             text:`this article is marked as containing a personal perspective in Cofacts. Proceed with caution.`,

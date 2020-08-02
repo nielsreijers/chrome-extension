@@ -3,6 +3,11 @@ let iconGreen = {
     cssClass: 'vliegtuig-icon-green',
     settingName: 'show-icon-green'
 };
+let iconOpinion = {
+    url: chrome.runtime.getURL('images/check-t-opinion.png'),
+    cssClass: 'vliegtuig-icon-opinion',
+    settingName: 'show-icon-opinion'
+};
 let iconRed = {
     url: chrome.runtime.getURL('images/check-t-red.png'),
     cssClass: 'vliegtuig-icon-red',
@@ -28,7 +33,7 @@ let iconError = {
     cssClass: 'vliegtuig-icon-error',
     settingName: 'show-icon-error'
 };
-widgetIcons = [iconGreen, iconRed, iconQuestionmark, iconGrey, iconEmpty, iconError]
+widgetIcons = [iconGreen, iconOpinion, iconRed, iconQuestionmark, iconGrey, iconEmpty, iconError]
 
 // These are just here to test sending images.
 // Should use some more informative graphic in the final version.
