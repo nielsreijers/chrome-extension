@@ -25,8 +25,8 @@ X replace https://cors-anywhere.herokuapp.com/ in cofacts code with our own serv
 X add some simple client side caching to prevent too many requests to Heroku (what's the limit for free accounts? need to check.)
 X show link with extra information (the article on cofacts.g0v.tw), also add this to the auto-reply message/post
 X show a preview of the message that will be sent
+X show confirmation and remove send button after sending the reply
 
-- show confirmation and remove send button after sending the reply
 - why does my historiek.net link not get a widget?
 - modify gql query to only get the data we need
 - test article similarity instead of just using the first

@@ -117,6 +117,7 @@ function _setPopupContentInner(linkdata, evaluation) {
         if (linkdata.reply_to_type == null) {
             myPopover.sendReplyText.innerText = "Can't auto-reply because the id to reply to could not be found.";
             myPopover.sendReplyControls.style.display = "none";
+            myPopover.sendReplyPreview.style.display = "none";
             myPopover.sendReplyButton.onclick = () => { };
         } else {
             if (linkdata.reply_to_type == 'user') {
@@ -132,8 +133,8 @@ function _setPopupContentInner(linkdata, evaluation) {
                 var text = "Something went wrong...";
             }
             myPopover.sendReplyText.innerText = text;
-            let preview = evaluationToMessageText(evaluation);
-            myPopover.sendReplyPreview.innerText = `"${preview}"`;
+            myPopover.sendReplyPreview.style.display = "block";
+            myPopover.sendReplyPreview.innerText = `"${evaluationToMessageText(evaluation)}"`;
             myPopover.sendReplyControls.style.display = "block";
             myPopover.sendReplyImageCheckbox.parentElement.style.display = isDebugMode() ? "inline-block" : "none";
             myPopover.sendReplyButton.onclick = () => {
@@ -146,6 +147,10 @@ function _setPopupContentInner(linkdata, evaluation) {
 function _sendReply(linkdata, evaluation) {
     includeImage = myPopover.sendReplyImageCheckbox.checked;
     facebookSendOrPostReply (linkdata, evaluation, includeImage);
+    myPopover.sendReplyText.innerText = linkdata.reply_to_type == 'feedpost'
+                                            ? "This message was posted:"
+                                            : "This message was sent:";
+    myPopover.sendReplyControls.style.display = "none";
 }
 
 
