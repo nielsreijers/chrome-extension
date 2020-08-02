@@ -34,3 +34,12 @@ curl 'https://cofacts-api.g0v.tw/graphql' -H 'Accept-Encoding: gzip, deflate, br
 
 _getCofactsDataPromise("https://www.chainnews.com/zh-hant/articles/097444081308.htm").then(d => dataTwoReplies = d);
 _getCofactsDataPromise("https://nu.nl").then(d => dataNuNl = d);
+
+
+Creating app... done, ⬢ pure-meadow-03854
+https://pure-meadow-03854.herokuapp.com/ | https://git.heroku.com/pure-meadow-03854.git
+
+
+https://pure-meadow-03854.herokuapp.com/cofacts?noot=mies&text=https%3A%2F%2Fwww.nytimes.com%2F2020%2F07%2F30%2Fworld%2Fasia%2Flee-teng-hui-dead.html%3Ffbclid%3DIwAR0GjEjYU3dX0R9dD46qnxnzzTl08LreaTNZ_P3mhK8uVMWMc6mCUupKAIg
+
+https://pure-meadow-03854.herokuapp.com/cofacts?noot=mies&text=https%3A%2F%2Fwww.dailywire.com%2F%3Ffbclid%3DIwAR2z0tCQAAStUJ-sfb5evp9CqmuzSw_q4slb4ImaLiV-UdOOKGxguR9Bydc

@@ -8,47 +8,8 @@ function cofactsGetURLEvaluationPromise(url) {
 }
 
 function _getCofactsDataPromise(url) {
-    // Borrowed from Aunt Meiyu.
-    let gql = `
-    query($text: String) {
-      ListArticles(
-        filter: { moreLikeThis: { like: $text } }
-        orderBy: [{ _score: DESC }]
-        first: 4
-      ) {
-        edges {
-          node {
-            id
-            text
-            hyperlinks {
-              url
-            }
-            articleReplies {
-              reply {
-                id
-                text
-                type
-                reference
-              }
-            }
-          }
-        }
-      }
-    }`
-    let data = {
-        query:gql,
-        variables:{
-            text: url
-        }
-    };
-
-    return fetch('https://cors-anywhere.herokuapp.com/https://cofacts-api.g0v.tw/graphql', {
-        method: 'POST',
-        headers: {
-            'content-type': 'application/json',
-        },
-        body: JSON.stringify(data)
-    }).then(response => response.json()).then(data => data.data);
+    // Use a temporary Heroku app as a proxy to avoid CORS errors
+    return fetch(`https://pure-meadow-03854.herokuapp.com/cofacts?text=${encodeURIComponent(url)}`).then(r => r.json()).then(d => d.data);
 }
 
 function _cofactsDataToEvaluation(data, url) {   
