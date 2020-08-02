@@ -21,3 +21,11 @@ function getSiteFromUrl(url) {
     }
     return url;
 }
+
+function evaluationToMessageText(evaluation) {
+    var message = "My extension found that " + evaluation.text;
+    if (evaluation.infoLink) {
+        message += `\nMore information can be found here: ${evaluation.infoLink}`;
+    }
+    return message;
+}

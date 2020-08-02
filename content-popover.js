@@ -120,18 +120,20 @@ function _setPopupContentInner(linkdata, evaluation) {
             myPopover.sendReplyButton.onclick = () => { };
         } else {
             if (linkdata.reply_to_type == 'user') {
-                var text = isDebugMode() ? `Send this rating as a reply to user with id ${linkdata.reply_to_id}.`
-                                       : `Send this rating as a reply.`;
+                var text = isDebugMode() ? `Send this as a reply to user with id ${linkdata.reply_to_id}:`
+                                       : `Send this as a reply:`;
             } else if (linkdata.reply_to_type == 'group') {
-                var text = isDebugMode() ? `Send this rating as a reply to group with id ${linkdata.reply_to_id}.`
-                                       : `Send this rating as a reply.`;
+                var text = isDebugMode() ? `Send this as a reply to group with id ${linkdata.reply_to_id}:`
+                                       : `Send this as a reply:`;
             } else if (linkdata.reply_to_type == 'feedpost') {
-                var text = isDebugMode() ? `Post this rating as a comment to post with id ${linkdata.reply_to_id}.`
-                                       : `Post this rating as a comment.`;
+                var text = isDebugMode() ? `Post this as a comment to post with id ${linkdata.reply_to_id}:`
+                                       : `Post this as a comment:`;
             } else {
                 var text = "Something went wrong...";
             }
             myPopover.sendReplyText.innerText = text;
+            let preview = evaluationToMessageText(evaluation);
+            myPopover.sendReplyPreview.innerText = `"${preview}"`;
             myPopover.sendReplyControls.style.display = "block";
             myPopover.sendReplyImageCheckbox.parentElement.style.display = isDebugMode() ? "inline-block" : "none";
             myPopover.sendReplyButton.onclick = () => {
@@ -143,13 +145,7 @@ function _setPopupContentInner(linkdata, evaluation) {
 
 function _sendReply(linkdata, evaluation) {
     includeImage = myPopover.sendReplyImageCheckbox.checked;
-    messageText = "My extension found that " + evaluation.text;
-
-    facebookSendOrPostReply (
-        messageText,
-        includeImage ? evaluation.imageUrl : null,
-        linkdata.reply_to_type,
-        linkdata.reply_to_id);
+    facebookSendOrPostReply (linkdata, evaluation, includeImage);
 }
 
 
@@ -175,6 +171,7 @@ fetch(chrome.extension.getURL("popover-template.html")).then(r => r.text()).then
         evalInfoLinkA: document.getElementById("VLIEGTUIG_EVAL_INFOLINK_A"),
         sendReplyDiv: document.getElementById("VLIEGTUIG_SEND_REPLY_DIV"),
         sendReplyText: document.getElementById("VLIEGTUIG_SEND_REPLY_TEXT"),
+        sendReplyPreview: document.getElementById("VLIEGTUIG_SEND_REPLY_PREVIEW"),
         sendReplyControls: document.getElementById("VLIEGTUIG_SEND_REPLY_CONTROLS"),
         sendReplyButton: document.getElementById("VLIEGTUIG_SEND_REPLY_BUTTON"),
         sendReplyImageCheckbox: document.getElementById("VLIEGTUIG_SEND_REPLY_CHECKBOX"),

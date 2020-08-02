@@ -21,20 +21,21 @@ X support other FB message interfaces:
 X add a settings page to control which icons are shown
 X check why Winni's link doesn't get tagged
 X connect to https://cofacts-api.g0v.tw/
+X replace https://cors-anywhere.herokuapp.com/ in cofacts code with our own server
+X add some simple client side caching to prevent too many requests to Heroku (what's the limit for free accounts? need to check.)
+X show link with extra information (the article on cofacts.g0v.tw), also add this to the auto-reply message/post
+X show a preview of the message that will be sent
 
-- add some simple client side caching to prevent too many requests to Heroku (what's the limit for free accounts? need to check.)
+- show confirmation and remove send button after sending the reply
 - why does my historiek.net link not get a widget?
-- show link with extra information (the article on cofacts.g0v.tw), also add this to the auto-reply message/post
-- replace https://cors-anywhere.herokuapp.com/ in cofacts code with our own server
 - modify gql query to only get the data we need
 - test article similarity instead of just using the first
 - add yellow icon for opinionated articles in cofacts
 - i18n
-- show user name of person/group we will send the message to in the popup, and a preview of the message that will be sent
+- show user name of person/group we will send the message to in the popup
 - add confirmation dialog before sending reply
 - link to prof li's api?
 - use FB's "reply to" feature to reply to a specific earlier message
 - research good, non-confrontational message texts
-- close popover after sending message
 - cleanup Heroku app example code
 - tighten CORS security in Heroku app (currently allows all origins)

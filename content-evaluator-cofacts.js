@@ -45,7 +45,7 @@ function _cofactsDataToEvaluation(data, url) {
             unicodeSymbol:"⚠",
             imageUrl: URL_WARNINGSIGN_IMAGE,
             alt:"unsafe",
-            text:`this article is marked as misinformation in Cofacts. Proceed with caution`,
+            text:`this article is marked as misinformation in Cofacts. Proceed with caution.`,
             dataFoundFor:url,
             infoLink: infoLink
         };       
@@ -55,7 +55,7 @@ function _cofactsDataToEvaluation(data, url) {
             unicodeSymbol:"⚠",
             imageUrl: URL_WARNINGSIGN_IMAGE,
             alt:"unsafe",
-            text:`this article is marked as containing a personal perspective in Cofacts. Proceed with caution`,
+            text:`this article is marked as containing a personal perspective in Cofacts. Proceed with caution.`,
             dataFoundFor:url,
             infoLink: infoLink
         };

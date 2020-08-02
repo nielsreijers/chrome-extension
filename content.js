@@ -24,9 +24,10 @@ function findParentElementWithClass(e, partialClass) {
 
 function urlFilter(url) {
     url = stripFacebookExtras(url);
-    return url.startsWith('http')                          // Filter out local links like "/<facebook id>"
-           && !url.startsWith('https://www.facebook.com')  // Filter out links to facebook
-           && !url.startsWith('https://www.messenger.com')  // Filter out links to facebook
+    return url.startsWith('http')                           // Filter out local links like "/<facebook id>"
+           && !url.startsWith('https://www.facebook.com')   // Filter out links to facebook, messenger and cofacts
+           && !url.startsWith('https://www.messenger.com')
+           && !url.startsWith('https://cofacts.g0v.tw')
            ;
 }
 

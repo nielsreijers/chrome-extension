@@ -70,6 +70,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 }
 
 .vliegtuig-eval-text {
+  font-size: 16px !important;
   display: table-cell;
   vertical-align: middle;
   padding: 5px;
@@ -81,6 +82,11 @@ body {font-family: Arial, Helvetica, sans-serif;}
 
 .vliegtuig-eval-infolink-div {
   margin-top: 10px;
+}
+
+.vliegtuig-eval-reply-preview {
+  font-size: 12px !important;
+  font-style: italic;
 }
 
 .vliegtuig-twisc {
