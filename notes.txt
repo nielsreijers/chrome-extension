@@ -43,3 +43,8 @@ https://pure-meadow-03854.herokuapp.com/ | https://git.heroku.com/pure-meadow-03
 https://pure-meadow-03854.herokuapp.com/cofacts?noot=mies&text=https%3A%2F%2Fwww.nytimes.com%2F2020%2F07%2F30%2Fworld%2Fasia%2Flee-teng-hui-dead.html%3Ffbclid%3DIwAR0GjEjYU3dX0R9dD46qnxnzzTl08LreaTNZ_P3mhK8uVMWMc6mCUupKAIg
 
 https://pure-meadow-03854.herokuapp.com/cofacts?noot=mies&text=https%3A%2F%2Fwww.dailywire.com%2F%3Ffbclid%3DIwAR2z0tCQAAStUJ-sfb5evp9CqmuzSw_q4slb4ImaLiV-UdOOKGxguR9Bydc
+
+fetch('http://localhost:5000/cofacts?noot=mies&text=https%3A%2F%2Fwww.dailywire.com%2F%3Ffbclid%3DIwAR2z0tCQAAStUJ-sfb5evp9CqmuzSw_q4slb4ImaLiV-UdOOKGxguR9Bydc').then(r => r.json()).then(r => console.log(r))
+
+
+https://pure-meadow-03854.herokuapp.com/cofacts?text=https%3A%2F%2Fudn.com%2Fnews%2Fstory%2F7266%2F4747659%3Ffrom%3Dudn-relatednews_ch2%26fbclid%3DIwAR3qnnSmKtD0VHffKhyyg9fOEra_hXPuOxaqGb9vRZTGfvKxeVvtfW3VjkI

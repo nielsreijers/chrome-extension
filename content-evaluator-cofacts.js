@@ -1,10 +1,7 @@
 // ----------------- Get data from Cofacts -----------------
 var _cofactsPromisePerUrl = {}
 function cofactsGetURLEvaluationPromise(url) {
-    if (_cofactsPromisePerUrl[url] == undefined) {
-         _cofactsPromisePerUrl[url] = _getCofactsDataPromise(url).then(data => _cofactsDataToEvaluation(data, url));
-    }
-    return _cofactsPromisePerUrl[url];
+    return _getCofactsDataPromise(url).then(data => _cofactsDataToEvaluation(data, url));
 }
 
 function _getCofactsDataPromise(url) {

@@ -36,7 +36,7 @@ facebookMessengerHandler = {
                     reply_to_type = 'user';
                 }
             }
-            url = stripFbLinkRedirect(e.href);
+            url = stripFacebookExtras(e.href);
             evaluationPromise = getURLEvaluationPromise(url);
             return {
                 element:e,

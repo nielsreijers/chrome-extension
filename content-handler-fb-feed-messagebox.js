@@ -23,7 +23,7 @@ facebookFeedMessageboxHandler = {
                     reply_to_type = 'group';
                 }
             }
-            url = stripFbLinkRedirect(e.href);
+            url = stripFacebookExtras(e.href);
             evaluationPromise = getURLEvaluationPromise(url);
             return {
                 element:e,

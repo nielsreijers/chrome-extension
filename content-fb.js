@@ -114,7 +114,11 @@ function _queryFormatParams(params) {
     return b;
 }
 
-function stripFbLinkRedirect(url) {
+function stripFacebookExtras(url) {
+    return _stripFbClid(_stripFbLinkRedirect(url));
+}
+
+function _stripFbLinkRedirect(url) {
     if (url.startsWith('https://l.facebook.com/l.php?u')
         || url.startsWith('https://l.messenger.com/l.php?u')) {
         let params = new URLSearchParams(url.substr(url.indexOf('?')+1));
@@ -122,6 +126,16 @@ function stripFbLinkRedirect(url) {
     } else {
         return url;
     }
+}
+
+function _stripFbClid(url) {
+    console.log("_stripFbClid")
+    console.log(url)
+    if (url.indexOf("fbclid=") != -1) {
+        url = url.substring(0, url.indexOf("fbclid=") - 1); // -1 to also strip the ? or &
+    }
+    console.log(url)
+    return url;
 }
 
 var _dtsgToken = null

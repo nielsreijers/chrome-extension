@@ -19,7 +19,7 @@ facebookFeedPostHandler = {
             if (reply_to_id != null) {
                 reply_to_type = 'feedpost';
             };
-            let url = stripFbLinkRedirect(e.href);
+            let url = stripFacebookExtras(e.href);
             evaluationPromise = getURLEvaluationPromise(url);
             return {
                 element:e,
