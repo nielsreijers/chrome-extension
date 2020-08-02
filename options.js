@@ -37,6 +37,7 @@ loadSettings().then(() => {
     _addInput(iconQuestionmark.url, iconQuestionmark.settingName, ': links for which no information is available');
     _addInput(iconGrey.url, iconGrey.settingName, ': links that are not rated because it publishes content from its users that it does not vet');
     _addInput(iconEmpty.url, iconEmpty.settingName, ': shown while the rating is being determined');
+    _addInput(iconError.url, iconError.settingName, ': shown when an error occurs');
 
     // Set currently selected evaluator
     for (var e of document.getElementsByName("evaluator")) {

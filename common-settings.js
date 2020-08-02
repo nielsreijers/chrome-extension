@@ -22,7 +22,10 @@ function reloadSettings() {
 }
 
 function getSetting(settingName) {
-    return _settings[settingName];
+    if (_settings.hasOwnProperty(settingName)) {
+        return _settings[settingName];
+    }
+    return null;
 }
 
 function setSetting(settingName, value) {
@@ -46,6 +49,9 @@ function _defaultSettingsWhereEmpty(s) {
     }
     if (!s.hasOwnProperty('show-icon-questionmark')) {
         s['show-icon-questionmark'] = true;
+    }
+    if (!s.hasOwnProperty('show-icon-error')) {
+        s['show-icon-error'] = true;
     }
     if (!s.hasOwnProperty(SETTING_EVALUATOR)) {
         s[SETTING_EVALUATOR] = 'newsguard';
