@@ -49,6 +49,13 @@ body {font-family: Arial, Helvetica, sans-serif;}
   margin: 20px;
 }
 
+.vliegtuig-truncate {
+  width: calc(100% - 40px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .vliegtuig-horizontal {
   display: flex;
   flex-direction: row;
@@ -57,9 +64,9 @@ body {font-family: Arial, Helvetica, sans-serif;}
 }
 
 .vliegtuig-header {
-  text-align: center;
   font-size: 24px !important;
-  margin: 20px;
+  margin: auto;
+  padding-top: 20px;
 }
 
 .vliegtuig-eval-text {
