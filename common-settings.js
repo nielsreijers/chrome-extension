@@ -1,6 +1,7 @@
 var _settings;
 
 let SETTING_EVALUATOR = "evaluator"
+let SETTING_DEBUG = "debug"
 
 function loadSettings() {
     return _loadSettingsPromise;
@@ -53,6 +54,9 @@ function _defaultSettingsWhereEmpty(s) {
     if (!s.hasOwnProperty('show-icon-error')) {
         s['show-icon-error'] = true;
     }
+    if (!s.hasOwnProperty('debug')) {
+        s['debug'] = false;
+    }
     if (!s.hasOwnProperty(SETTING_EVALUATOR)) {
         s[SETTING_EVALUATOR] = 'newsguard';
     }
@@ -65,6 +69,10 @@ function _saveSettings() {
 
 function isSettingsKey(key) {
     return key == 'VLIEGTUIG_SETTINGS';
+}
+
+function isDebugMode() {
+    return getSetting(SETTING_DEBUG);
 }
 
 

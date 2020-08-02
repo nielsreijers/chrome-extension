@@ -120,16 +120,20 @@ function _setPopupContentInner(linkdata, evaluation) {
             myPopover.sendReplyButton.onclick = () => { };
         } else {
             if (linkdata.reply_to_type == 'user') {
-                var text = `Send this rating as a reply to user with id ${linkdata.reply_to_id}.`;
+                var text = isDebugMode() ? `Send this rating as a reply to user with id ${linkdata.reply_to_id}.`
+                                       : `Send this rating as a reply.`;
             } else if (linkdata.reply_to_type == 'group') {
-                var text = `Send this rating as a reply to group with id ${linkdata.reply_to_id}.`;
+                var text = isDebugMode() ? `Send this rating as a reply to group with id ${linkdata.reply_to_id}.`
+                                       : `Send this rating as a reply.`;
             } else if (linkdata.reply_to_type == 'feedpost') {
-                var text = `Post this rating as a comment to post with id ${linkdata.reply_to_id}.`;
+                var text = isDebugMode() ? `Post this rating as a comment to post with id ${linkdata.reply_to_id}.`
+                                       : `Post this rating as a comment.`;
             } else {
                 var text = "Something went wrong...";
             }
             myPopover.sendReplyText.innerText = text;
             myPopover.sendReplyControls.style.display = "block";
+            myPopover.sendReplyImageCheckbox.parentElement.style.display = isDebugMode() ? "inline-block" : "none";
             myPopover.sendReplyButton.onclick = () => {
                 linkdata.evaluationPromise.then(evaluation => _sendReply(linkdata, evaluation));
             };
@@ -138,7 +142,7 @@ function _setPopupContentInner(linkdata, evaluation) {
 }
 
 function _sendReply(linkdata, evaluation) {
-    includeImage = myPopover.sendReplyCheckbox.checked;
+    includeImage = myPopover.sendReplyImageCheckbox.checked;
     messageText = "My extension found that " + evaluation.text;
 
     facebookSendOrPostReply (
@@ -173,7 +177,7 @@ fetch(chrome.extension.getURL("popover-template.html")).then(r => r.text()).then
         sendReplyText: document.getElementById("VLIEGTUIG_SEND_REPLY_TEXT"),
         sendReplyControls: document.getElementById("VLIEGTUIG_SEND_REPLY_CONTROLS"),
         sendReplyButton: document.getElementById("VLIEGTUIG_SEND_REPLY_BUTTON"),
-        sendReplyCheckbox: document.getElementById("VLIEGTUIG_SEND_REPLY_CHECKBOX"),
+        sendReplyImageCheckbox: document.getElementById("VLIEGTUIG_SEND_REPLY_CHECKBOX"),
         twiscLogo: document.getElementById("VLIEGTUIG_TWISC_LOGO")
     };
     myPopover.twiscLogo.src = chrome.extension.getURL("images/twisc.png");

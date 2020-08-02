@@ -129,13 +129,11 @@ function _stripFbLinkRedirect(url) {
 }
 
 function _stripFbClid(url) {
-    console.log("_stripFbClid")
-    console.log(url)
     if (url.indexOf("fbclid=") != -1) {
-        url = url.substring(0, url.indexOf("fbclid=") - 1); // -1 to also strip the ? or &
+        return url.substring(0, url.indexOf("fbclid=") - 1); // -1 to also strip the ? or &
+    } else {
+        return url;
     }
-    console.log(url)
-    return url;
 }
 
 var _dtsgToken = null
