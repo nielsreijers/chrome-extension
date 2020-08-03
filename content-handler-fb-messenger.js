@@ -46,7 +46,7 @@ facebookMessengerHandler = {
                 evaluationPromise:evaluationPromise
             }
         },
-    addTagToElement:
+    addWidgetToElement:
         function (tag, e) {
             let FB_CLASS_TO_APPEND_ICON_PARENT = "_o46";
             let FB_QUERY_TO_APPEND_ICON_CHILD = "._2u_d";
@@ -59,7 +59,7 @@ facebookMessengerHandler = {
             var child = null;
             if (parent != null) {
                 if ((child = parent.querySelector(FB_QUERY_TO_APPEND_ICON_CHILD)) != null) {
-                    // Don't add an icon if it's already there. This happens for links that
+                    // Don't add a widget if it's already there. This happens for links that
                     // show both the url as a text, and the box with a preview and title.
                     if (child.querySelector(".vliegtuig-widget-div") == null) {
                         child.prepend(tag);

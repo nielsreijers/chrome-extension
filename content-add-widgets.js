@@ -74,7 +74,7 @@ function _scanDomAndAddWidgets(addedNode) {
                         .forEach(l => {
                             console.log("adding widget for " + l.url);
                             widget = _makeWidget(l);
-                            h.addTagToElement(widget, l.element);
+                            h.addWidgetToElement(widget, l.element);
                         });
         });
     });

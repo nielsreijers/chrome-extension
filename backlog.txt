@@ -28,8 +28,9 @@ X show a preview of the message that will be sent
 X show confirmation and remove send button after sending the reply
 X add yellow icon for opinionated articles in cofacts
 X https://www.facebook.com/messages doesn't work anymore
+X why does my historiek.net link not get a widget?
 
-- why does my historiek.net link not get a widget?
+- refactor CSS to style the popup on ID instead of class
 - use cofacts to search for rumors in text messages (without a link)
 - modify gql query to only get the data we need
 - fix css error when opening settings
