@@ -25,13 +25,17 @@ facebookMessengerHandler = {
         function (e) {
             var reply_to_type = null;
             var reply_to_id = null;
-            let FB_LOCATION_PREFIX = "https://www.messenger.com/t/";
-            if (_isMessengerGroupChat() && window.location.href.startsWith(FB_LOCATION_PREFIX)) {
+
+            let location = window.location.href;
+            // Can be either "https://www.messenger.com/t/<username or group id>"
+            // or            "https://www.facebook.com/messages/t/<username or group id>"
+            let usernameOrGroupId = location.substr(location.lastIndexOf('/')+1);
+
+            if (_isMessengerGroupChat()) {
                 reply_to_type = 'group';
-                reply_to_id = window.location.href.substr(FB_LOCATION_PREFIX.length);
+                reply_to_id = usernameOrGroupId;
             } else {
-                username = window.location.href.substr(FB_LOCATION_PREFIX.length);
-                reply_to_id = _facebookUserNameToId(username)
+                reply_to_id = _facebookUserNameToId(usernameOrGroupId)
                 if (reply_to_id!=null) {
                     reply_to_type = 'user';
                 }
