@@ -1,6 +1,8 @@
 // ----------------- Get data from Cofacts -----------------
 var _cofactsPromisePerUrl = {}
-function cofactsGetURLEvaluationPromise(url) {
+function cofactsGetEvaluationPromise(content, contentType) {
+    let url = content;
+
     return _getCofactsDataPromise(url).then(data => _cofactsDataToEvaluation(data, url));
 }
 

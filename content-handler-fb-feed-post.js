@@ -17,18 +17,20 @@ facebookFeedPostHandler = {
                 return Array.from(addedNode.parentElement.querySelectorAll(query));
             }
         },
-    elementToLinkData:
+    elementToWidgetData:
         function (e) {
             var reply_to_type = null;
             var reply_to_id = _findFeedPostId(e);
             if (reply_to_id != null) {
                 reply_to_type = 'feedpost';
             };
-            let url = stripFacebookExtras(e.href);
-            evaluationPromise = getURLEvaluationPromise(url);
+            let content = stripFacebookExtras(e.href);
+            let contentType = contentTypes.URL;
+            let evaluationPromise = getEvaluationPromise(content, contentType);
             return {
                 element:e,
-                url:url,
+                content:content,
+                contentType:contentType,
                 reply_to_type:reply_to_type,
                 reply_to_id:reply_to_id,
                 evaluationPromise:evaluationPromise

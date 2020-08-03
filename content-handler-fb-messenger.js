@@ -21,7 +21,7 @@ facebookMessengerHandler = {
                 return Array.from(addedNode.querySelectorAll(query));
             }
         },
-    elementToLinkData:
+    elementToWidgetData:
         function (e) {
             var reply_to_type = null;
             var reply_to_id = null;
@@ -36,11 +36,13 @@ facebookMessengerHandler = {
                     reply_to_type = 'user';
                 }
             }
-            url = stripFacebookExtras(e.href);
-            evaluationPromise = getURLEvaluationPromise(url);
+            let content = stripFacebookExtras(e.href);
+            let contentType = contentTypes.URL;
+            let evaluationPromise = getEvaluationPromise(content, contentType);
             return {
                 element:e,
-                url:url,
+                content:content,
+                contentType:contentType,
                 reply_to_type:reply_to_type,
                 reply_to_id:reply_to_id,
                 evaluationPromise:evaluationPromise

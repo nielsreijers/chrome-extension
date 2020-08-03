@@ -1,6 +1,8 @@
 // ----------------- Get data from Newsguard -----------------
 var _newsguardPromisePerUrl = {}
-function newsguardGetURLEvaluationPromise(url) {
+function newsguardGetEvaluationPromise(content, contentType) {
+    let url = content;
+
     if (_newsguardPromisePerUrl[url] == undefined) {
          _newsguardPromisePerUrl[url] = _getNewsGuardDataPromise(url).then(data => _newsGuardDataToEvaluation(data, url));
     }

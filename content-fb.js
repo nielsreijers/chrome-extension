@@ -75,32 +75,32 @@ function _postFbCommentWithImage(message, imageUrl, post_id) {
     });
 }
 
-function facebookSendOrPostReply(linkdata, evaluation, includeImage) { //message, imageUrl, id_type, id) {
-    let message = evaluationToMessageText(evaluation);
+function facebookSendOrPostReply(widgetdata, evaluation, includeImage) { //message, imageUrl, id_type, id) {
+    let message = evaluationToReplyMessageText(evaluation);
 
-    if (linkdata.reply_to_type == 'user') {
+    if (widgetdata.reply_to_type == 'user') {
         let params = {}
         params['body'] = message;
-        params[`ids[${linkdata.reply_to_id}]`] = linkdata.reply_to_id;
+        params[`ids[${widgetdata.reply_to_id}]`] = widgetdata.reply_to_id;
         if (includeImage) {
             _sendFbMessageWithImage(params, evaluation.imageUrl);
         } else {
             _sendFbMessage(params);        
         }
-    } else if (linkdata.reply_to_type == 'group') {
+    } else if (widgetdata.reply_to_type == 'group') {
         let params = {}
         params['body'] = message;
-        params['tids'] = `cid.g.${linkdata.reply_to_id}`;
+        params['tids'] = `cid.g.${widgetdata.reply_to_id}`;
         if (includeImage) {
             _sendFbMessageWithImage(params, evaluation.imageUrl);
         } else {
             _sendFbMessage(params);        
         }
-    } else if (linkdata.reply_to_type == 'feedpost') {
+    } else if (widgetdata.reply_to_type == 'feedpost') {
         if (includeImage) {
-            _postFbCommentWithImage(message, evaluation.imageUrl, linkdata.reply_to_id);
+            _postFbCommentWithImage(message, evaluation.imageUrl, widgetdata.reply_to_id);
         } else {
-            _postFbComment(message, linkdata.reply_to_id);
+            _postFbComment(message, widgetdata.reply_to_id);
         }
     }
 }

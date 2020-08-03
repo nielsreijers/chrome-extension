@@ -1,14 +1,14 @@
 // ----------------- Add our icon before links -----------------
 // handlers for different cases are defined in separate files.
 
-function _makeWidget(linkdata) {
+function _makeWidget(widgetdata) {
     let icon = document.createElement("img");
     icon.setAttribute("src", iconEmpty.url);
     icon.setAttribute("height", "16");
     icon.setAttribute("width", "16");
     icon.setAttribute("alt", "check");
     icon.onclick = () => handle_widget_clicked();
-    icon.onmouseenter = () => handle_widget_mouseenter(linkdata);
+    icon.onmouseenter = () => handle_widget_mouseenter(widgetdata);
     icon.onmouseleave = () => handle_widget_mouseleave();
     // TODO: placement needs some tweaking
 
@@ -18,7 +18,7 @@ function _makeWidget(linkdata) {
     d.classList.add("vliegtuig-widget-div");
     d.classList.add(iconEmpty.cssClass);
     _showOrHideIconDiv(d);
-    linkdata.evaluationPromise.then(evaluation => { 
+    widgetdata.evaluationPromise.then(evaluation => { 
         icon.setAttribute("src", evaluation.icon.url);
         d.classList.remove(iconEmpty.cssClass);
         d.classList.add(evaluation.icon.cssClass);
@@ -69,12 +69,12 @@ function _scanDomAndAddWidgets(addedNode) {
         _getHandlers().forEach(h => {
             elements = h.findLinkElements(addedNode)
                         .filter(_isUnmarkedAndMark)
-                        .map(h.elementToLinkData)
-                        .filter(linkdata => urlFilter(linkdata.url))
-                        .forEach(l => {
-                            console.log("adding widget for " + l.url);
-                            widget = _makeWidget(l);
-                            h.addWidgetToElement(widget, l.element);
+                        .map(h.elementToWidgetData)
+                        .filter(widgetdata => urlFilter(widgetdata.content))
+                        .forEach(widgetdata => {
+                            console.log("adding widget for " + widgetdata.content);
+                            widget = _makeWidget(widgetdata);
+                            h.addWidgetToElement(widget, widgetdata.element);
                         });
         });
     });

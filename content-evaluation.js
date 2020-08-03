@@ -1,9 +1,14 @@
-function getURLEvaluationPromise(url) {
+const contentTypes = {
+    URL: 'url',
+    TEXT: 'text'
+}
+
+function getEvaluationPromise(content, contentType) {
     // TODO: use newsguard or cofact based on settings.
     if (getSetting(SETTING_EVALUATOR) == 'cofacts') {
-        return cofactsGetURLEvaluationPromise(url);
+        return cofactsGetEvaluationPromise(content, contentType);
     } else {
-        return newsguardGetURLEvaluationPromise(url);
+        return newsguardGetEvaluationPromise(content, contentType);
     }
 }
 
@@ -22,7 +27,7 @@ function getSiteFromUrl(url) {
     return url;
 }
 
-function evaluationToMessageText(evaluation) {
+function evaluationToReplyMessageText(evaluation) {
     var message = "My extension found that " + evaluation.text;
     if (evaluation.infoLink) {
         message += `\nMore information can be found here: ${evaluation.infoLink}`;

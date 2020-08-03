@@ -1,7 +1,7 @@
 // ----------------- Manage popover -----------------
-function _openPopover(linkdata) {
+function _openPopover(widgetdata) {
     myPopover.mainDiv.style.display = "block";
-    _setPopupContentForLink(linkdata);
+    _setPopupContentForLink(widgetdata);
 }
 
 function _hidePopover() {
@@ -24,10 +24,10 @@ function _stopHidePopoverTimer() {
 }
 
 var popoverPinned = false;
-function handle_widget_mouseenter(linkdata) {
+function handle_widget_mouseenter(widgetdata) {
     if (!popoverPinned) {
         _stopHidePopoverTimer();
-        _openPopover(linkdata);
+        _openPopover(widgetdata);
     }
 }
 
@@ -67,20 +67,20 @@ function _handle_close_clicked() {
 
 // ----------------- Show evaluation in popover -----------------
 var _current_url = ""
-function _setPopupContentForLink(linkdata) {
-    if (_current_url == linkdata.url) {
+function _setPopupContentForLink(widgetdata) {
+    if (_current_url == widgetdata.content) {
         // already set for this URL. skipping.
         return;
     }
 
-    _current_url = linkdata.url;
-    _setPopupContentInner(linkdata, null);
-    linkdata.evaluationPromise
+    _current_url = widgetdata.content;
+    _setPopupContentInner(widgetdata, null);
+    widgetdata.evaluationPromise
         .then(evaluation => {
-            if (_current_url == linkdata.url) {
+            if (_current_url == widgetdata.content) {
                 // only set if this is still the url we want to see
                 // (user may have selected a different one while the eval was loading)
-                _setPopupContentInner(linkdata, evaluation);            
+                _setPopupContentInner(widgetdata, evaluation);            
             } 
         }).catch(error => {
             myPopover.title.innerText = "Something went wrong...";
@@ -92,12 +92,12 @@ function _setPopupContentForLink(linkdata) {
         });
 }
 
-function _setPopupContentInner(linkdata, evaluation) {
+function _setPopupContentInner(widgetdata, evaluation) {
     if (evaluation == null) {
         myPopover.title.innerText = "Loading...";
         myPopover.evalIcon.src = iconQuestionmark.url;
         myPopover.evalIcon.alt = "loading";
-        myPopover.evalText.innerText = linkdata.url;
+        myPopover.evalText.innerText = widgetdata.content;
         myPopover.evalInfoLinkDiv.style.display = "none";
         myPopover.sendReplyDiv.style.display = "none";
     } else {
@@ -114,40 +114,40 @@ function _setPopupContentInner(linkdata, evaluation) {
             myPopover.evalInfoLinkA.href = evaluation.infoLink;       
         }
 
-        if (linkdata.reply_to_type == null) {
+        if (widgetdata.reply_to_type == null) {
             myPopover.sendReplyText.innerText = "Can't auto-reply because the id to reply to could not be found.";
             myPopover.sendReplyControls.style.display = "none";
             myPopover.sendReplyPreview.style.display = "none";
             myPopover.sendReplyButton.onclick = () => { };
         } else {
-            if (linkdata.reply_to_type == 'user') {
-                var text = isDebugMode() ? `Send this as a reply to user with id ${linkdata.reply_to_id}:`
+            if (widgetdata.reply_to_type == 'user') {
+                var text = isDebugMode() ? `Send this as a reply to user with id ${widgetdata.reply_to_id}:`
                                        : `Send this as a reply:`;
-            } else if (linkdata.reply_to_type == 'group') {
-                var text = isDebugMode() ? `Send this as a reply to group with id ${linkdata.reply_to_id}:`
+            } else if (widgetdata.reply_to_type == 'group') {
+                var text = isDebugMode() ? `Send this as a reply to group with id ${widgetdata.reply_to_id}:`
                                        : `Send this as a reply:`;
-            } else if (linkdata.reply_to_type == 'feedpost') {
-                var text = isDebugMode() ? `Post this as a comment to post with id ${linkdata.reply_to_id}:`
+            } else if (widgetdata.reply_to_type == 'feedpost') {
+                var text = isDebugMode() ? `Post this as a comment to post with id ${widgetdata.reply_to_id}:`
                                        : `Post this as a comment:`;
             } else {
                 var text = "Something went wrong...";
             }
             myPopover.sendReplyText.innerText = text;
             myPopover.sendReplyPreview.style.display = "block";
-            myPopover.sendReplyPreview.innerText = `"${evaluationToMessageText(evaluation)}"`;
+            myPopover.sendReplyPreview.innerText = `"${evaluationToReplyMessageText(evaluation)}"`;
             myPopover.sendReplyControls.style.display = "block";
             myPopover.sendReplyImageCheckbox.parentElement.style.display = isDebugMode() ? "inline-block" : "none";
             myPopover.sendReplyButton.onclick = () => {
-                linkdata.evaluationPromise.then(evaluation => _sendReply(linkdata, evaluation));
+                widgetdata.evaluationPromise.then(evaluation => _sendReply(widgetdata, evaluation));
             };
         }
     }
 }
 
-function _sendReply(linkdata, evaluation) {
+function _sendReply(widgetdata, evaluation) {
     includeImage = myPopover.sendReplyImageCheckbox.checked;
-    facebookSendOrPostReply (linkdata, evaluation, includeImage);
-    myPopover.sendReplyText.innerText = linkdata.reply_to_type == 'feedpost'
+    facebookSendOrPostReply (widgetdata, evaluation, includeImage);
+    myPopover.sendReplyText.innerText = widgetdata.reply_to_type == 'feedpost'
                                             ? "This message was posted:"
                                             : "This message was sent:";
     myPopover.sendReplyControls.style.display = "none";
