@@ -17,8 +17,8 @@ facebookMessengerHandler = {
                     return [addedNode];
                 }
 
-                return (Array.from(addedNode.querySelectorAll(FB_QUERY_MESSAGE_LINK)).concat
-                       (Array.from(addedNode.querySelectorAll(FB_QUERY_MESSAGE_A_WITH_PICTURE_BOX))))
+                let query = [FB_QUERY_MESSAGE_A_WITH_PICTURE_BOX, FB_QUERY_MESSAGE_LINK].join(',');
+                return Array.from(addedNode.querySelectorAll(query));
             }
         },
     elementToLinkData:

@@ -7,8 +7,8 @@ facebookFeedMessageboxHandler = {
             } else {
                 let FB_QUERY_MESSAGE_LINK = "._5yl5 > span > a";
                 let FB_QUERY_MESSAGE_A_WITH_PICTURE_BOX = "._5rw4";
-                return (Array.from(addedNode.querySelectorAll(FB_QUERY_MESSAGE_LINK)).concat
-                       (Array.from(addedNode.querySelectorAll(FB_QUERY_MESSAGE_A_WITH_PICTURE_BOX))))
+                let query = [FB_QUERY_MESSAGE_LINK, FB_QUERY_MESSAGE_A_WITH_PICTURE_BOX].join(',');
+                return Array.from(addedNode.querySelectorAll(query));
             }
         },
     elementToLinkData:

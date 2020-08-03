@@ -13,10 +13,8 @@ facebookFeedPostHandler = {
                 let FB_QUERY_FEED_POST_WITH_LINK_A = "._3ekx > a";
                 let FB_QUERY_FEED_POST_WITH_LINK_B = "._58jw > p > a";
                 let FB_QUERY_FEED_POST_WITH_LINK_C = "._5pbx > p > a";
-
-                return Array.from(addedNode.parentElement.querySelectorAll(FB_QUERY_FEED_POST_WITH_LINK_A)).concat(
-                       Array.from(addedNode.parentElement.querySelectorAll(FB_QUERY_FEED_POST_WITH_LINK_B))).concat(
-                       Array.from(addedNode.parentElement.querySelectorAll(FB_QUERY_FEED_POST_WITH_LINK_C)));
+                let query = [FB_QUERY_FEED_POST_WITH_LINK_A, FB_QUERY_FEED_POST_WITH_LINK_B, FB_QUERY_FEED_POST_WITH_LINK_C].join(',');
+                return Array.from(addedNode.parentElement.querySelectorAll(query));
             }
         },
     elementToLinkData:

@@ -36,10 +36,10 @@ X refactor CSS to style the popup on ID instead of class
 - fix css error when opening settings
 - test article similarity instead of just using the first
 - i18n
-- show user name of person/group we will send the message to in the popup
 - add confirmation dialog before sending reply
-- link to prof li's api?
 - use FB's "reply to" feature to reply to a specific earlier message
 - research good, non-confrontational message texts
 - cleanup Heroku app example code
+- move Heroku app to own server (?)
 - tighten CORS security in Heroku app (currently allows all origins)
+- show user name of person/group we will send the message to in the popup (maybe not necessary anymore, it seems pretty reliable and clear who we're sending to)
