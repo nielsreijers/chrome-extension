@@ -95,16 +95,21 @@ function _setPopupContentForLink(widgetdata) {
 function _setPopupContentInner(widgetdata, evaluation) {
     if (evaluation == null) {
         myPopover.title.innerText = "Loading...";
-        myPopover.evalIcon.src = iconQuestionmark.url;
+        myPopover.evalIcon.src = iconLoading.url;
         myPopover.evalIcon.alt = "loading";
         myPopover.evalText.innerText = widgetdata.content;
         myPopover.evalInfoLinkDiv.style.display = "none";
         myPopover.sendReplyDiv.style.display = "none";
     } else {
-        myPopover.title.innerText = evaluation.dataFoundFor;
+        if (widgetdata.contentType == contentTypes.URL) {
+            myPopover.title.innerText = evaluation.dataFoundFor;
+        } else { // TEXT
+            let title = evaluation.dataFoundFor.replace('\n',' ');
+            myPopover.title.innerText = title;
+        }
         myPopover.evalIcon.src = evaluation.icon.url;
         myPopover.evalIcon.alt = evaluation.alt;
-        myPopover.evalText.innerText = "We found that " + evaluation.text;
+        myPopover.evalText.innerText = evaluation.text;
         myPopover.sendReplyDiv.style.display = "block";
 
         if (evaluation.infoLink == null) {

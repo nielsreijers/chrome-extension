@@ -28,7 +28,7 @@ function getSiteFromUrl(url) {
 }
 
 function evaluationToReplyMessageText(evaluation) {
-    var message = "My extension found that " + evaluation.text;
+    var message = "My extension found that " + uncapitalise(evaluation.text);
     if (evaluation.infoLink) {
         message += `\nMore information can be found here: ${evaluation.infoLink}`;
     }

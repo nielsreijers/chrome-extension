@@ -13,27 +13,28 @@ let iconRed = {
     cssClass: 'vliegtuig-icon-red',
     settingName: 'show-icon-red'
 };
-let iconQuestionmark = {
-    url: chrome.runtime.getURL('images/check-t-questionmark.png'),
-    cssClass: 'vliegtuig-icon-questionmark',
-    settingName: 'show-icon-questionmark'
+let iconUnknown = {
+    url: chrome.runtime.getURL('images/check-t-unknown.png'),
+    cssClass: 'vliegtuig-icon-unknown',
+    settingName: 'show-icon-unknown'
 };
-let iconGrey = {
-    url: chrome.runtime.getURL('images/check-t-grey.png'),
-    cssClass: 'vliegtuig-icon-grey',
-    settingName: 'show-icon-grey'
-};
-let iconEmpty = {
-    url: chrome.runtime.getURL('images/check-t-empty.png'),
-    cssClass: 'vliegtuig-icon-empty',
-    settingName: 'show-icon-empty'
+let iconNotRated = {
+    url: chrome.runtime.getURL('images/check-t-notrated.png'),
+    cssClass: 'vliegtuig-icon-notrated',
+    settingName: 'show-icon-notrated'
 };
 let iconError = {
     url: chrome.runtime.getURL('images/check-t-error.svg'),
     cssClass: 'vliegtuig-icon-error',
     settingName: 'show-icon-error'
 };
-widgetIcons = [iconGreen, iconOpinion, iconRed, iconQuestionmark, iconGrey, iconEmpty, iconError]
+let iconLoading = {
+    url: chrome.runtime.getURL('images/check-t-loading.gif'),
+    cssClass: 'vliegtuig-icon-loading',
+    settingName: 'show-icon-loading'
+};
+
+widgetIcons = [iconGreen, iconOpinion, iconRed, iconUnknown, iconNotRated, iconError, iconLoading]
 
 // These are just here to test sending images.
 // Should use some more informative graphic in the final version.

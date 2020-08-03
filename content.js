@@ -22,13 +22,17 @@ function findParentElementWithClass(e, partialClass) {
     return null;
 }
 
-function urlFilter(url) {
-    url = stripFacebookExtras(url);
-    return url.startsWith('http')                           // Filter out local links like "/<facebook id>"
-           && !url.startsWith('https://www.facebook.com')   // Filter out links to facebook, messenger and cofacts
-           && !url.startsWith('https://www.messenger.com')
-           && !url.startsWith('https://cofacts.g0v.tw')
-           ;
+function isContentToEvaluate(content, contentType) {
+    if (contentType == contentTypes.URL) {
+        url = stripFacebookExtras(content);
+        return url.startsWith('http')                           // Filter out local links like "/<facebook id>"
+               && !url.startsWith('https://www.facebook.com')   // Filter out links to facebook, messenger and cofacts
+               && !url.startsWith('https://www.messenger.com')
+               && !url.startsWith('https://cofacts.g0v.tw')
+               ;        
+    } else {
+        return content.length > 10 && getSetting(SETTING_EVALUATOR) == "cofacts";
+    }
 }
 
 performanceCounters = {};
@@ -46,6 +50,13 @@ function measurePerformance(countername, f) {
     return result;
 }
 
+function capitalise(s) {
+    return s[0].toUpperCase() + s.substr(1)
+}
+
+function uncapitalise(s) {
+    return s[0].toLowerCase() + s.substr(1)
+}
 
 // ----------------- Initialisation -----------------
 

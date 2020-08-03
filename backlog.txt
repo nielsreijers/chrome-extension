@@ -33,6 +33,8 @@ X refactor CSS to style the popup on ID instead of class
 X fix reply in messenger.com handler (can't find user/group id)
 
 - use cofacts to search for rumors in text messages (without a link)
+- widget should be about double size in messenger.com
+- settings popup is not showing in messenger.com
 - modify gql query to only get the data we need
 - fix css error when opening settings
 - test article similarity instead of just using the first

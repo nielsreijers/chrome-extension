@@ -3,7 +3,7 @@
 
 function _makeWidget(widgetdata) {
     let icon = document.createElement("img");
-    icon.setAttribute("src", iconEmpty.url);
+    icon.setAttribute("src", iconLoading.url);
     icon.setAttribute("height", "16");
     icon.setAttribute("width", "16");
     icon.setAttribute("alt", "check");
@@ -16,11 +16,11 @@ function _makeWidget(widgetdata) {
     d.appendChild(icon);
 
     d.classList.add("vliegtuig-widget-div");
-    d.classList.add(iconEmpty.cssClass);
+    d.classList.add(iconLoading.cssClass);
     _showOrHideIconDiv(d);
     widgetdata.evaluationPromise.then(evaluation => { 
         icon.setAttribute("src", evaluation.icon.url);
-        d.classList.remove(iconEmpty.cssClass);
+        d.classList.remove(iconLoading.cssClass);
         d.classList.add(evaluation.icon.cssClass);
         _showOrHideIconDiv(d);
     }).catch(error => {
@@ -70,7 +70,7 @@ function _scanDomAndAddWidgets(addedNode) {
             elements = h.findLinkElements(addedNode)
                         .filter(_isUnmarkedAndMark)
                         .map(h.elementToWidgetData)
-                        .filter(widgetdata => urlFilter(widgetdata.content))
+                        .filter(widgetdata => isContentToEvaluate(widgetdata.content, widgetdata.contentType))
                         .forEach(widgetdata => {
                             console.log("adding widget for " + widgetdata.content);
                             widget = _makeWidget(widgetdata);

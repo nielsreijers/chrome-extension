@@ -19,11 +19,12 @@ function _newsGuardDataToEvaluation(data, url) {
     } else {
         var url = url;
     }
-    let site = getSiteFromUrl(url);
+    var site = getSiteFromUrl(url);
+    site = capitalise(site);
 
     if (data.rank == null) {
         return {
-            icon: iconQuestionmark,
+            icon: iconUnknown,
             unicodeSymbol: "❔",
             imageUrl:  URL_QUESTIONMARK_IMAGE,
             alt: "not found",
@@ -43,7 +44,7 @@ function _newsGuardDataToEvaluation(data, url) {
         };
     } else if (data.rank == 'P' && data.score == 0) {
         return {
-            icon: iconGrey,
+            icon: iconNotRated,
             unicodeSymbol: "➗",
             imageUrl:  URL_QUESTIONMARK_IMAGE,
             alt: "not rated",
@@ -63,7 +64,7 @@ function _newsGuardDataToEvaluation(data, url) {
         };
     } else {
         return {
-            icon: iconQuestionmark,
+            icon: iconNotRated,
             unicodeSymbol: "❔",
             imageUrl:  URL_QUESTIONMARK_IMAGE,
             alt: "unsure",

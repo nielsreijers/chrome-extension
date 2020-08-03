@@ -5,20 +5,16 @@ facebookMessengerHandler = {
                 // not an html node (probably text)
                 return []
             } else {
-                let FB_CLASS_MESSAGE_A_WITH_PICTURE_BOX = "_5rw4";
-                let FB_QUERY_MESSAGE_A_WITH_PICTURE_BOX = "."+FB_CLASS_MESSAGE_A_WITH_PICTURE_BOX;
+                // A message may or may not include a link
+                let FB_QUERY_MESSAGE = "._58nk";
                 let FB_QUERY_MESSAGE_LINK = "._58nk > a";
 
-                // Picture boxes may be the top added node in messenger, and querySelectorAll only finds children,
-                // but we don't want to search addedNode.parentElement because it may be a long list.
-                // So check directly for the class.
-                if (addedNode.getAttribute("class") != null
-                        && addedNode.getAttribute("class").includes(FB_CLASS_MESSAGE_A_WITH_PICTURE_BOX)) {
-                    return [addedNode];
-                }
+                let all_messages = Array.from(addedNode.querySelectorAll(FB_QUERY_MESSAGE));
+                let message_links = Array.from(addedNode.querySelectorAll(FB_QUERY_MESSAGE_LINK));
+                let message_links_parents = message_links.map(l => l.parentElement);
+                let messages_without_link = all_messages.filter(m => !message_links_parents.includes(m));
 
-                let query = [FB_QUERY_MESSAGE_A_WITH_PICTURE_BOX, FB_QUERY_MESSAGE_LINK].join(',');
-                return Array.from(addedNode.querySelectorAll(query));
+                return message_links.concat(messages_without_link);
             }
         },
     elementToWidgetData:
@@ -40,8 +36,16 @@ facebookMessengerHandler = {
                     reply_to_type = 'user';
                 }
             }
-            let content = stripFacebookExtras(e.href);
-            let contentType = contentTypes.URL;
+
+            // The element can be either a <a> link, or text in a <span>
+            if (e.tagName=="A") {
+                var content = stripFacebookExtras(e.href);
+                var contentType = contentTypes.URL;
+            } else {
+                var content = e.textContent;
+                var contentType = contentTypes.TEXT;
+            }
+
             let evaluationPromise = getEvaluationPromise(content, contentType);
             return {
                 element:e,
