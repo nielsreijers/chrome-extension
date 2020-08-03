@@ -27,11 +27,12 @@ X show link with extra information (the article on cofacts.g0v.tw), also add thi
 X show a preview of the message that will be sent
 X show confirmation and remove send button after sending the reply
 X add yellow icon for opinionated articles in cofacts
+X https://www.facebook.com/messages doesn't work anymore
 
-- https://www.facebook.com/messages doesn't work anymore
-- use cofacts to search for rumors in text messages (without a link)
 - why does my historiek.net link not get a widget?
+- use cofacts to search for rumors in text messages (without a link)
 - modify gql query to only get the data we need
+- fix css error when opening settings
 - test article similarity instead of just using the first
 - i18n
 - show user name of person/group we will send the message to in the popup

@@ -65,16 +65,18 @@ function _isUnmarkedAndMark(e) {
 }
 
 function _scanDomAndAddWidgets(addedNode) {
-    _getHandlers().forEach(h => {
-        elements = h.findLinkElements(addedNode)
-                    .filter(_isUnmarkedAndMark)
-                    .map(h.elementToLinkData)
-                    .filter(linkdata => urlFilter(linkdata.url))
-                    .forEach(l => {
-                        console.log("adding widget for " + l.url);
-                        widget = _makeWidget(l);
-                        h.addTagToElement(widget, l.element);
-                    });
+    measurePerformance('_scanDomAndAddWidgets', () => {
+        _getHandlers().forEach(h => {
+            elements = h.findLinkElements(addedNode)
+                        .filter(_isUnmarkedAndMark)
+                        .map(h.elementToLinkData)
+                        .filter(linkdata => urlFilter(linkdata.url))
+                        .forEach(l => {
+                            console.log("adding widget for " + l.url);
+                            widget = _makeWidget(l);
+                            h.addTagToElement(widget, l.element);
+                        });
+        });
     });
 }
 

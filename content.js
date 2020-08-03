@@ -1,6 +1,6 @@
 // ----------------- debug stuff -----------------
 function sleep (time) {
-  return new Promise((resolve) => setTimeout(resolve, time));
+    return new Promise((resolve) => setTimeout(resolve, time));
 }
 
 // // Usage!
@@ -29,6 +29,21 @@ function urlFilter(url) {
            && !url.startsWith('https://www.messenger.com')
            && !url.startsWith('https://cofacts.g0v.tw')
            ;
+}
+
+performanceCounters = {};
+function measurePerformance(countername, f) {
+    let start = performance.now();
+    let result = f();
+    let stop = performance.now();
+
+    if (!performanceCounters.hasOwnProperty(countername)) {
+        performanceCounters[countername] = stop - start;
+    } else {
+        performanceCounters[countername] += stop - start;        
+    }
+
+    return result;
 }
 
 
