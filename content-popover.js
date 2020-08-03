@@ -179,7 +179,7 @@ fetch(chrome.extension.getURL("popover-template.html")).then(r => r.text()).then
         sendReplyPreview: document.getElementById("VLIEGTUIG_SEND_REPLY_PREVIEW"),
         sendReplyControls: document.getElementById("VLIEGTUIG_SEND_REPLY_CONTROLS"),
         sendReplyButton: document.getElementById("VLIEGTUIG_SEND_REPLY_BUTTON"),
-        sendReplyImageCheckbox: document.getElementById("VLIEGTUIG_SEND_REPLY_CHECKBOX"),
+        sendReplyImageCheckbox: document.getElementById("VLIEGTUIG_SEND_REPLY_IMAGE_CHECKBOX"),
         twiscLogo: document.getElementById("VLIEGTUIG_TWISC_LOGO")
     };
     myPopover.twiscLogo.src = chrome.extension.getURL("images/twisc.png");

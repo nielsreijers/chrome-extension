@@ -1,6 +1,6 @@
 body {font-family: Arial, Helvetica, sans-serif;}
 
-.vliegtuig-modal {
+#VLIEGTUIG_POPOVER {
   background-color: #f7f7f9;
   margin: auto;
   border: 2px solid #575757;
@@ -28,7 +28,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
     }
 }
 
-.vliegtuig-close-button {
+#VLIEGTUIG_POPOVER_CLOSE_BUTTON {
   position: absolute;
   top: 5px;
   right: 15px;
@@ -37,16 +37,70 @@ body {font-family: Arial, Helvetica, sans-serif;}
   font-size: 28px;
   font-weight: bold;
 }
-.vliegtuig-close-button:hover,
-.vliegtuig-close-button:focus {
+#VLIEGTUIG_POPOVER_CLOSE_BUTTON:hover,
+#VLIEGTUIG_POPOVER_CLOSE_BUTTON:focus {
   color: #000;
   text-decoration: none;
   cursor: pointer;
 }
 
-.vliegtuig-modal-content {
+#VLIEGTUIG_POPOVER_TITLE {
+  font-size: 24px !important;
+  margin: auto;
+  padding-top: 20px;
+}
+
+#VLIEGTUIG_POPOVER_CONTENT {
   /*background-color: #ffffff;*/
   margin: 20px;
+}
+
+#VLIEGTUIG_EVAL_TEXT {
+  font-size: 16px !important;
+  display: table-cell;
+  vertical-align: middle;
+  padding: 5px;
+}
+
+#VLIEGTUIG_EVAL_INFOLINK_TEXT {
+  font-size: 12px !important;
+}
+
+#VLIEGTUIG_EVAL_INFOLINK_DIV {
+  margin-top: 10px;
+}
+
+#VLIEGTUIG_SEND_REPLY_PREVIEW {
+  font-size: 12px !important;
+  font-style: italic;
+}
+
+#VLIEGTUIG_SEND_REPLY_CONTROLS {
+  margin-top: 10px;
+}
+
+#VLIEGTUIG_TWISC_LOGO_DIV {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  -webkit-filter: invert(1);
+  filter: invert(1);
+  opacity: 0.3;
+}
+#VLIEGTUIG_TWISC_LOGO_DIV:hover {
+  transition: ease 0.5s;
+  -webkit-filter: invert(1);
+  filter: invert(1);
+  opacity: 0.9;
+}
+
+.vliegtuig-widget-div {
+  display: inline-block;
+  position: relative;
+}
+
+.vliegtuig-checkbox {
+  margin: 10px;
 }
 
 .vliegtuig-truncate {
@@ -61,62 +115,4 @@ body {font-family: Arial, Helvetica, sans-serif;}
   flex-direction: row;
   justify-content: left;
   align-items: center;
-}
-
-.vliegtuig-header {
-  font-size: 24px !important;
-  margin: auto;
-  padding-top: 20px;
-}
-
-.vliegtuig-eval-text {
-  font-size: 16px !important;
-  display: table-cell;
-  vertical-align: middle;
-  padding: 5px;
-}
-
-.vliegtuig-eval-infolink-text {
-  font-size: 12px !important;
-}
-
-.vliegtuig-eval-infolink-div {
-  margin-top: 10px;
-}
-
-.vliegtuig-eval-reply-preview {
-  font-size: 12px !important;
-  font-style: italic;
-}
-
-.vliegtuig-twisc {
-  position: absolute;
-  bottom: 5px;
-  right: 5px;
-  -webkit-filter: invert(1);
-  filter: invert(1);
-  opacity: 0.3;
-}
-.vliegtuig-twisc:hover {
-  transition: ease 0.5s;
-  -webkit-filter: invert(1);
-  filter: invert(1);
-  opacity: 0.9;
-}
-
-.vliegtuig-widget-div {
-  display: inline-block;
-  position: relative;
-}
-
-.vliegtuig-vertical-center {
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
-}
-
-.vliegtuig-checkbox {
-  margin: 10px;
 }
