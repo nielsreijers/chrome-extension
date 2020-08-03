@@ -42,11 +42,11 @@ var handlers = null;
 function _getHandlers() {
     // Lazy load because the handlers may not have been loaded when this file is run.
     if (handlers == null) {
-        if (window.location.href.startsWith('https://www.facebook.com')) {
+        if (window.location.href.startsWith('https://www.messenger.com') || window.location.href.startsWith('https://www.facebook.com/messages')) {
+            handlers = [facebookMessengerHandler];
+        } else if (window.location.href.startsWith('https://www.facebook.com')) {
             handlers = [facebookFeedMessageboxHandler,
                         facebookFeedPostHandler];
-        } else if (window.location.href.startsWith('https://www.messenger.com')) {
-            handlers = [facebookMessengerHandler];
         } else {
             handlers = [];
         }        
