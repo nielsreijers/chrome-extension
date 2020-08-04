@@ -22,19 +22,6 @@ function findParentElementWithClass(e, partialClass) {
     return null;
 }
 
-function isContentToEvaluate(content, contentType) {
-    if (contentType == contentTypes.URL) {
-        url = stripFacebookExtras(content);
-        return url.startsWith('http')                           // Filter out local links like "/<facebook id>"
-               && !url.startsWith('https://www.facebook.com')   // Filter out links to facebook, messenger and cofacts
-               && !url.startsWith('https://www.messenger.com')
-               && !url.startsWith('https://cofacts.g0v.tw')
-               ;        
-    } else {
-        return content.length > 10 && getSetting(SETTING_EVALUATOR) == "cofacts";
-    }
-}
-
 performanceCounters = {};
 function measurePerformance(countername, f) {
     let start = performance.now();

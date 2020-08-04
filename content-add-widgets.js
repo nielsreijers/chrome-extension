@@ -70,7 +70,7 @@ function _scanDomAndAddWidgets(addedNode) {
             elements = h.findLinkElements(addedNode)
                         .filter(_isUnmarkedAndMark)
                         .map(h.elementToWidgetData)
-                        .filter(widgetdata => isContentToEvaluate(widgetdata.content, widgetdata.contentType))
+                        .filter(widgetdata => widgetdata.evaluationPromise != null) // promise==null if the element shouldn't be evaluated (trusted site, too short, etc.) This is determined in getEvaluationPromise().
                         .forEach(widgetdata => {
                             console.log("adding widget for " + widgetdata.content);
                             widget = _makeWidget(widgetdata);

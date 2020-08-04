@@ -1,12 +1,17 @@
 // ----------------- Get data from Newsguard -----------------
 var _newsguardPromisePerUrl = {}
 function newsguardGetEvaluationPromise(content, contentType) {
-    let url = content;
+    if (contentType == contentTypes.URL) {
+        let url = content;
 
-    if (_newsguardPromisePerUrl[url] == undefined) {
-         _newsguardPromisePerUrl[url] = _getNewsGuardDataPromise(url).then(data => _newsGuardDataToEvaluation(data, url));
+        if (_newsguardPromisePerUrl[url] == undefined) {
+             _newsguardPromisePerUrl[url] = _getNewsGuardDataPromise(url).then(data => _newsGuardDataToEvaluation(data, url));
+        }
+        return _newsguardPromisePerUrl[url];
+    } else {
+        // NewsGuard only rates urls.
+        return null;
     }
-    return _newsguardPromisePerUrl[url];
 }
 
 function _getNewsGuardDataPromise(url) {

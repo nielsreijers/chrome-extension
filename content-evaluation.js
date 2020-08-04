@@ -3,12 +3,28 @@ const contentTypes = {
     TEXT: 'text'
 }
 
-function getEvaluationPromise(content, contentType) {
-    // TODO: use newsguard or cofact based on settings.
-    if (getSetting(SETTING_EVALUATOR) == 'cofacts') {
-        return cofactsGetEvaluationPromise(content, contentType);
+function _isContentToEvaluate(content, contentType) {
+    if (contentType == contentTypes.URL) {
+        url = stripFacebookExtras(content);
+        return url.startsWith('http')                           // Filter out local links like "/<facebook id>"
+               && !url.startsWith('https://www.facebook.com')   // Filter out links to facebook, messenger and cofacts
+               && !url.startsWith('https://www.messenger.com')
+               && !url.startsWith('https://cofacts.g0v.tw')
+               ;        
     } else {
-        return newsguardGetEvaluationPromise(content, contentType);
+        return content.length > 10;
+    }
+}
+
+function getEvaluationPromise(content, contentType) {
+    if (_isContentToEvaluate(content, contentType)) {
+        if (getSetting(SETTING_EVALUATOR) == 'cofacts') {
+            return cofactsGetEvaluationPromise(content, contentType);
+        } else {
+            return newsguardGetEvaluationPromise(content, contentType);
+        }
+    } else {
+        return null;
     }
 }
 
