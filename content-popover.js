@@ -82,65 +82,87 @@ function _setPopupContentForLink(widgetdata) {
                 // (user may have selected a different one while the eval was loading)
                 _setPopupContentInner(widgetdata, evaluation);            
             } 
-        }).catch(error => {
+        })
+        .catch(error => {
             myPopover.title.innerText = "Something went wrong...";
             myPopover.evalIcon.src = iconError.url;
             myPopover.evalIcon.alt = "error";
-            myPopover.evalText.innerText = error;
+            myPopover.evalShortText.innerText = error;
             myPopover.evalInfoLinkDiv.style.display = "none";
             myPopover.sendReplyDiv.style.display = "none";
         });
 }
 
 function _setPopupContentInner(widgetdata, evaluation) {
+    let searchTerm = widgetdata.content.replace('\n',' ');
     if (evaluation == null) {
         myPopover.title.innerText = "Loading...";
         myPopover.evalIcon.src = iconLoading.url;
         myPopover.evalIcon.alt = "loading";
-        myPopover.evalText.innerText = widgetdata.content;
+        myPopover.evalShortText.innerText = searchTerm;
         myPopover.evalInfoLinkDiv.style.display = "none";
+        myPopover.evalDataFoundForDiv.style.display = "none";
+        myPopover.evalProposedReplyDiv.style.display = "none";
         myPopover.sendReplyDiv.style.display = "none";
     } else {
-        if (widgetdata.contentType == contentTypes.URL) {
-            myPopover.title.innerText = evaluation.dataFoundFor;
-        } else { // TEXT
-            let title = evaluation.dataFoundFor.replace('\n',' ');
-            myPopover.title.innerText = title;
-        }
+        myPopover.title.innerText = searchTerm;
         myPopover.evalIcon.src = evaluation.icon.url;
         myPopover.evalIcon.alt = evaluation.alt;
-        myPopover.evalText.innerText = evaluation.text;
-        myPopover.sendReplyDiv.style.display = "block";
+        myPopover.evalShortText.innerText = evaluation.shortText;
 
+        // Show link for more information if it's available
         if (evaluation.infoLink == null) {
             myPopover.evalInfoLinkDiv.style.display = "none";
         } else {
-            myPopover.evalInfoLinkDiv.style.display = "block";     
+            myPopover.evalInfoLinkDiv.style.display = "inline-block";     
             myPopover.evalInfoLinkA.href = evaluation.infoLink;       
         }
 
-        if (widgetdata.reply_to_type == null) {
-            myPopover.sendReplyText.innerText = "Can't auto-reply because the id to reply to could not be found.";
+        // Show the article we match with.
+        // For NewsGuard it's always correct, but Cofacts may return an unrelated article,
+        // so the user needs to check.
+        if (evaluation.dataFoundFor == widgetdata.content) {
+            myPopover.evalDataFoundForDiv.style.display = "none";
+            myPopover.evalDataFoundForPleaseCheckMessage.style.display = "none";
+        } else {
+            myPopover.evalDataFoundForDiv.style.display = "block";
+            myPopover.evalDataFoundForPleaseCheckMessage.style.display = "inline-block";
+            myPopover.evalDataFoundFor.innerText = evaluation.dataFoundFor;
+        }
+
+        // Show the proposed reply if there is one
+        if (!evaluation.showReplyButton) {
+            myPopover.evalProposedReplyDiv.style.display = "none";
+        } else {
+            myPopover.evalProposedReplyDiv.style.display = "block";
+            let proposedReply = evaluationToReplyMessageText(evaluation);
+            myPopover.evalProposedReply.innerText = proposedReply
+        }
+
+        myPopover.sendReplyDiv.style.display = "block";
+        if (!evaluation.showReplyButton || widgetdata.reply_to_type == null) {
+            if (!evaluation.showReplyButton) {
+                myPopover.sendReplyText.innerText = "Can't auto-reply because no match could not be found.";                
+            } else {
+                myPopover.sendReplyText.innerText = "Can't auto-reply because the id to reply to could not be found.";
+            }
             myPopover.sendReplyControls.style.display = "none";
-            myPopover.sendReplyPreview.style.display = "none";
             myPopover.sendReplyButton.onclick = () => { };
         } else {
             if (widgetdata.reply_to_type == 'user') {
                 var text = isDebugMode() ? `Send this as a reply to user with id ${widgetdata.reply_to_id}:`
-                                       : `Send this as a reply:`;
+                                       : `Send this reply to the user:`;
             } else if (widgetdata.reply_to_type == 'group') {
                 var text = isDebugMode() ? `Send this as a reply to group with id ${widgetdata.reply_to_id}:`
-                                       : `Send this as a reply:`;
+                                       : `Send this reply to the group:`;
             } else if (widgetdata.reply_to_type == 'feedpost') {
                 var text = isDebugMode() ? `Post this as a comment to post with id ${widgetdata.reply_to_id}:`
-                                       : `Post this as a comment:`;
+                                       : `Post this reply as a comment:`;
             } else {
                 var text = "Something went wrong...";
             }
             myPopover.sendReplyText.innerText = text;
-            myPopover.sendReplyPreview.style.display = "block";
-            myPopover.sendReplyPreview.innerText = `"${evaluationToReplyMessageText(evaluation)}"`;
-            myPopover.sendReplyControls.style.display = "block";
+            myPopover.sendReplyControls.style.display = "inline-block";
             myPopover.sendReplyImageCheckbox.parentElement.style.display = isDebugMode() ? "inline-block" : "none";
             myPopover.sendReplyButton.onclick = () => {
                 widgetdata.evaluationPromise.then(evaluation => _sendReply(widgetdata, evaluation));
@@ -153,8 +175,8 @@ function _sendReply(widgetdata, evaluation) {
     includeImage = myPopover.sendReplyImageCheckbox.checked;
     facebookSendOrPostReply (widgetdata, evaluation, includeImage);
     myPopover.sendReplyText.innerText = widgetdata.reply_to_type == 'feedpost'
-                                            ? "This message was posted:"
-                                            : "This message was sent:";
+                                            ? "The reply was posted."
+                                            : "The reply was sent.";
     myPopover.sendReplyControls.style.display = "none";
 }
 
@@ -176,12 +198,16 @@ fetch(chrome.extension.getURL("popover-template.html")).then(r => r.text()).then
         closeButton: document.getElementById("VLIEGTUIG_POPOVER_CLOSE_BUTTON"),
         title: document.getElementById("VLIEGTUIG_POPOVER_TITLE"),
         evalIcon: document.getElementById("VLIEGTUIG_EVAL_ICON"),
-        evalText: document.getElementById("VLIEGTUIG_EVAL_TEXT"),
+        evalShortText: document.getElementById("VLIEGTUIG_EVAL_SHORTTEXT"),
+        evalDataFoundForDiv: document.getElementById("VLIEGTUIG_EVAL_DATAFOUNDFOR_DIV"),
+        evalDataFoundFor: document.getElementById("VLIEGTUIG_EVAL_DATAFOUNDFOR_TEXT"),
+        evalDataFoundForPleaseCheckMessage: document.getElementById("VLIEGTUIG_EVAL_DATAFOUNDFOR_PLEASE_CHECK_MESSAGE"),
+        evalProposedReplyDiv: document.getElementById("VLIEGTUIG_EVAL_PROPOSED_REPLY_DIV"),
+        evalProposedReply: document.getElementById("VLIEGTUIG_EVAL_PROPOSED_REPLY_TEXT"),
         evalInfoLinkDiv: document.getElementById("VLIEGTUIG_EVAL_INFOLINK_DIV"),
         evalInfoLinkA: document.getElementById("VLIEGTUIG_EVAL_INFOLINK_A"),
         sendReplyDiv: document.getElementById("VLIEGTUIG_SEND_REPLY_DIV"),
         sendReplyText: document.getElementById("VLIEGTUIG_SEND_REPLY_TEXT"),
-        sendReplyPreview: document.getElementById("VLIEGTUIG_SEND_REPLY_PREVIEW"),
         sendReplyControls: document.getElementById("VLIEGTUIG_SEND_REPLY_CONTROLS"),
         sendReplyButton: document.getElementById("VLIEGTUIG_SEND_REPLY_BUTTON"),
         sendReplyImageCheckbox: document.getElementById("VLIEGTUIG_SEND_REPLY_IMAGE_CHECKBOX"),

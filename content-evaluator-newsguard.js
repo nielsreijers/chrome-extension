@@ -28,9 +28,11 @@ function _newsGuardDataToEvaluation(data, url) {
             unicodeSymbol: "❔",
             imageUrl:  URL_QUESTIONMARK_IMAGE,
             alt: "not found",
-            text: `${site} is not in NewsGuard's database.`,
+            shortText: `${site} is not in NewsGuard's database.`,
+            longText: null,
             dataFoundFor: site,
-            infoLink: null
+            infoLink: null,
+            showReplyButton: false
         };
     } else if (data.rank == 'N') {
         return {
@@ -38,9 +40,11 @@ function _newsGuardDataToEvaluation(data, url) {
             unicodeSymbol: "⚠",
             imageUrl:  URL_WARNINGSIGN_IMAGE,
             alt: "unsafe",
-            text: `${site} gets a score of ${data.score} in NewsGuard's database. Proceed with caution.`,
+            shortText: `${site} gets a score of ${data.score} in NewsGuard's database. Proceed with caution.`,
+            longText: null,
             dataFoundFor: site,
-            infoLink: null
+            infoLink: null,
+            showReplyButton: true
         };
     } else if (data.rank == 'P' && data.score == 0) {
         return {
@@ -48,9 +52,11 @@ function _newsGuardDataToEvaluation(data, url) {
             unicodeSymbol: "➗",
             imageUrl:  URL_QUESTIONMARK_IMAGE,
             alt: "not rated",
-            text: `${site} is in NewsGuard's database, but does not get a score since it publishes content from its users that it does not vet.`,
+            shortText: `${site} is in NewsGuard's database, but does not get a score since it publishes content from its users that it does not vet.`,
+            longText: null,
             dataFoundFor: site,
-            infoLink: null
+            infoLink: null,
+            showReplyButton: false
         };
     } else if (data.rank == 'T') {
         return {
@@ -58,9 +64,11 @@ function _newsGuardDataToEvaluation(data, url) {
             unicodeSymbol: "✔",
             imageUrl:  URL_OK_IMAGE,
             alt: "safe",
-            text: `${site} gets a score of ${data.score} in NewsGuard's database. It should be safe.`,
+            shortText: `${site} gets a score of ${data.score} in NewsGuard's database. It should be safe.`,
+            longText: null,
             dataFoundFor: site,
-            infoLink: null
+            infoLink: null,
+            showReplyButton: true
         };
     } else {
         return {
@@ -68,9 +76,11 @@ function _newsGuardDataToEvaluation(data, url) {
             unicodeSymbol: "❔",
             imageUrl:  URL_QUESTIONMARK_IMAGE,
             alt: "unsure",
-            text: `${site} gets rank ${data.rank} and a score of ${data.score} in NewsGuard's database.`,
+            shortText: `${site} gets rank ${data.rank} and a score of ${data.score} in NewsGuard's database.`,
+            longText: null,
             dataFoundFor: site,
-            infoLink: null
+            infoLink: null,
+            showReplyButton: false
         };
     }
 }

@@ -8,14 +8,17 @@ body {font-family: Arial, Helvetica, sans-serif;}
   position: fixed; 
   left: 0; 
   right: 0; 
-  top: 6%;
+  top: 50px;
   margin-left: auto; 
   margin-right: auto;
   width: 80%; /* Need a specific value to work */
   z-index: 100000; /* Sit on top */
   font-family: "Verdana", sans-serif;
+  max-height: 80vh;  
 
   animation: opac 0.3s
+  overflow-x: auto;
+  overflow-y: auto;
 }
 
 @keyframes opac {
@@ -44,6 +47,12 @@ body {font-family: Arial, Helvetica, sans-serif;}
   cursor: pointer;
 }
 
+#VLIEGTUIG_EVAL_ICON {
+  padding-top: 15px;
+  padding-left: 15px;
+  padding-right: 5px;
+}
+
 #VLIEGTUIG_POPOVER_TITLE {
   font-size: 24px !important;
   margin: auto;
@@ -55,11 +64,25 @@ body {font-family: Arial, Helvetica, sans-serif;}
   margin: 20px;
 }
 
-#VLIEGTUIG_EVAL_TEXT {
+#VLIEGTUIG_EVAL_SHORTTEXT {
   font-size: 16px !important;
   display: table-cell;
   vertical-align: middle;
-  padding: 5px;
+  padding-bottom: 10px;
+}
+
+#VLIEGTUIG_EVAL_DATAFOUNDFOR_TEXT {
+  max-height: 10vh;
+}
+
+#VLIEGTUIG_EVAL_DATAFOUNDFOR_PLEASE_CHECK_MESSAGE {
+  font-size: 12px !important;  
+}
+
+#VLIEGTUIG_EVAL_PROPOSED_REPLY_TEXT {
+  max-height: 30vh;
+  font-size: 12px !important;
+  font-style: italic;
 }
 
 #VLIEGTUIG_EVAL_INFOLINK_TEXT {
@@ -68,11 +91,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 
 #VLIEGTUIG_EVAL_INFOLINK_DIV {
   margin-top: 10px;
-}
-
-#VLIEGTUIG_SEND_REPLY_PREVIEW {
-  font-size: 12px !important;
-  font-style: italic;
+  margin-bottom: 10px;
 }
 
 #VLIEGTUIG_SEND_REPLY_CONTROLS {
@@ -104,7 +123,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 }
 
 .vliegtuig-truncate {
-  width: calc(100% - 40px);
+  width: calc(100% - 80px);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -115,4 +134,19 @@ body {font-family: Arial, Helvetica, sans-serif;}
   flex-direction: row;
   justify-content: left;
   align-items: center;
+}
+
+.vliegtuig-scroll {
+  overflow-x: auto;
+  overflow-y: auto;
+  font-size: 12px !important;
+  border: 2px solid #d0d0d0;
+  padding-left: 5px;
+  margin-top: 15px;
+}
+
+.vliegtuig-left-header {
+  float: left;
+  font-size: 16px !important;
+  padding-right: 10px;
 }

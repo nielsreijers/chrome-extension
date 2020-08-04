@@ -28,7 +28,12 @@ function getSiteFromUrl(url) {
 }
 
 function evaluationToReplyMessageText(evaluation) {
-    var message = "My extension found that " + uncapitalise(evaluation.text);
+    if (evaluation.longText != null) {
+        var message = evaluation.longText;
+    } else {
+        var message = "My extension found that " + uncapitalise(evaluation.shortText);
+    }
+
     if (evaluation.infoLink) {
         message += `\nMore information can be found here: ${evaluation.infoLink}`;
     }
