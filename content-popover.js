@@ -93,6 +93,10 @@ function _setPopupContentForLink(widgetdata) {
         });
 }
 
+function _removeWhitespace(s) {
+    return s.replace(/\n/g, "").replace(/\r/g, "").replace(/\t/g, "").replace(/ /g, "")
+}
+
 function _setPopupContentInner(widgetdata, evaluation) {
     let searchTerm = widgetdata.content.replace('\n',' ');
     if (evaluation == null) {
@@ -121,7 +125,7 @@ function _setPopupContentInner(widgetdata, evaluation) {
         // Show the article we match with.
         // For NewsGuard it's always correct, but Cofacts may return an unrelated article,
         // so the user needs to check.
-        if (evaluation.dataFoundFor == widgetdata.content) {
+        if (_removeWhitespace(evaluation.dataFoundFor) == _removeWhitespace(widgetdata.content)) {
             myPopover.evalDataFoundForDiv.style.display = "none";
             myPopover.evalDataFoundForPleaseCheckMessage.style.display = "none";
         } else {
@@ -163,7 +167,7 @@ function _setPopupContentInner(widgetdata, evaluation) {
             }
             myPopover.sendReplyText.innerText = text;
             myPopover.sendReplyControls.style.display = "inline-block";
-            myPopover.sendReplyImageCheckbox.parentElement.style.display = isDebugMode() ? "inline-block" : "none";
+            myPopover.sendReplyImageCheckboxSpan.style.display = isDebugMode() ? "inline-block" : "none";
             myPopover.sendReplyButton.onclick = () => {
                 widgetdata.evaluationPromise.then(evaluation => _sendReply(widgetdata, evaluation));
             };
@@ -211,6 +215,7 @@ fetch(chrome.extension.getURL("popover-template.html")).then(r => r.text()).then
         sendReplyControls: document.getElementById("VLIEGTUIG_SEND_REPLY_CONTROLS"),
         sendReplyButton: document.getElementById("VLIEGTUIG_SEND_REPLY_BUTTON"),
         sendReplyImageCheckbox: document.getElementById("VLIEGTUIG_SEND_REPLY_IMAGE_CHECKBOX"),
+        sendReplyImageCheckboxSpan: document.getElementById("VLIEGTUIG_SEND_REPLY_IMAGE_CHECKBOX_SPAN"),
         twiscLogo: document.getElementById("VLIEGTUIG_TWISC_LOGO")
     };
     myPopover.twiscLogo.src = chrome.extension.getURL("images/twisc.png");
