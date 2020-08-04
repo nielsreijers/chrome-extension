@@ -125,7 +125,8 @@ function _setPopupContentInner(widgetdata, evaluation) {
         // Show the article we match with.
         // For NewsGuard it's always correct, but Cofacts may return an unrelated article,
         // so the user needs to check.
-        if (_removeWhitespace(evaluation.dataFoundFor) == _removeWhitespace(widgetdata.content)) {
+        if (_removeWhitespace(evaluation.dataFoundFor) == _removeWhitespace(widgetdata.content)
+                || getSetting(SETTING_EVALUATOR) == 'newsguard') {
             myPopover.evalDataFoundForDiv.style.display = "none";
             myPopover.evalDataFoundForPleaseCheckMessage.style.display = "none";
         } else {
