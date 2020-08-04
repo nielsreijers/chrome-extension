@@ -18,7 +18,7 @@ const _cofactsReplyTypes = {
 }
 
 function _cofactsMakeLongText(reply) {
-    return `My plugin found this on Cofacts.g0v.tw:\n------------------\n${reply.text}\n${reply.reference}\n------------------\n`;
+    return `My plugin found this on Cofacts.g0v.tw:\n------------------\n${reply.text}\n${reply.reference}\n------------------`;
 }
 
 function _cofactsDataToEvaluation(data, content, contentType) {

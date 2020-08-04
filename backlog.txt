@@ -33,9 +33,10 @@ X refactor CSS to style the popup on ID instead of class
 X fix reply in messenger.com handler (can't find user/group id)
 X use cofacts to search for rumors in text messages (without a link) (messenger.com)
 X refactor popup layout: title should be what we searched for, below should be the text from Cofacts, the link to cofacts, and optional reference links. Strip newlines in title
+X use cofacts to search for rumors in text messages (without a link) (facebook message box)
 
-- use cofacts to search for rumors in text messages (without a link) (facebook message box)
 - use TfIdf on server to check query/article similarity
+- use cofacts to search normal facebook feed post texts
 
 - settings popup is not showing in messenger.com
 - widget should be about double size in messenger.com
