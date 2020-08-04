@@ -31,8 +31,13 @@ X https://www.facebook.com/messages doesn't work anymore
 X why does my historiek.net link not get a widget?
 X refactor CSS to style the popup on ID instead of class
 X fix reply in messenger.com handler (can't find user/group id)
+X use cofacts to search for rumors in text messages (without a link) (messenger.com)
 
-- use cofacts to search for rumors in text messages (without a link)
+- refactor popup layout: title should be what we searched for, below should be the text from Cofacts, the link to cofacts, and optional reference links. Strip newlines in title
+- use cofacts to search for rumors in text messages (without a link) (facebook message box)
+- icon alignment in messenger is slightly off
+- use TfIdf on server to check query/article similarity
+
 - widget should be about double size in messenger.com
 - settings popup is not showing in messenger.com
 - modify gql query to only get the data we need

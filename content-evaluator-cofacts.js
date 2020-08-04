@@ -9,20 +9,9 @@ function _getCofactsDataPromise(content) {
     return fetch(`https://pure-meadow-03854.herokuapp.com/cofacts?text=${encodeURIComponent(content)}`).then(r => r.json()).then(d => d.data);
 }
 
-function _cofactsCheckIfRelevant(article, content, contentType) {
-    // For now just check the article is for the same site
-    // Should move these checks to the server and do some TdIdf check (like Aunt Meiyu) for contentTypes.TEXT
-    if (contentType == contentTypes.URL) {
-        if (article.hyperlinks.filter(hyperlink => getSiteFromUrl(hyperlink.url) == getSiteFromUrl(url)).length == 0) {
-            return _cofactsNoMatchFoundEvaluation
-        }
-    }
-    return true;
-}
-
 function _cofactsDataToEvaluation(data, content, contentType) {
     // Todo, find best matching article and test if it's similar enough
-    let edges = data.ListArticles.edges.filter (edge => _cofactsCheckIfRelevant(edge, content, contentType))
+    let edges = data.ListArticles.edges.filter (edge => edge.node.ismatch)
     if (edges.length == 0) {
         return {
             icon:iconUnknown,

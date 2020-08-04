@@ -48,3 +48,12 @@ fetch('http://localhost:5000/cofacts?noot=mies&text=https%3A%2F%2Fwww.dailywire.
 
 
 https://pure-meadow-03854.herokuapp.com/cofacts?text=https%3A%2F%2Fudn.com%2Fnews%2Fstory%2F7266%2F4747659%3Ffrom%3Dudn-relatednews_ch2%26fbclid%3DIwAR3qnnSmKtD0VHffKhyyg9fOEra_hXPuOxaqGb9vRZTGfvKxeVvtfW3VjkI
+
+
+.vliegtuig-vertical-center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
