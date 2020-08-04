@@ -6,7 +6,8 @@ function cofactsGetEvaluationPromise(content, contentType) {
 
 function _getCofactsDataPromise(content) {
     // Use a temporary Heroku app as a proxy to avoid CORS errors
-    return fetch(`https://pure-meadow-03854.herokuapp.com/cofacts?text=${encodeURIComponent(content)}`).then(r => r.json()).then(d => d.data);
+    let truncatedContent = content.substr(0, 512); // No need to send more data, and sending too much results in a http 414.
+    return fetch(`https://pure-meadow-03854.herokuapp.com/cofacts?text=${encodeURIComponent(truncatedContent)}`).then(r => r.json()).then(d => d.data);
 }
 
 const _cofactsReplyTypes = {
@@ -17,7 +18,7 @@ const _cofactsReplyTypes = {
 }
 
 function _cofactsMakeLongText(reply) {
-    return `My plugin found this on Cofacts.g0v.tw: \n------------------\n${reply.text}\n${reply.reference}\n------------------\n`;
+    return `My plugin found this on Cofacts.g0v.tw:\n------------------\n${reply.text}\n${reply.reference}\n------------------\n`;
 }
 
 function _cofactsDataToEvaluation(data, content, contentType) {
