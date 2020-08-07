@@ -33,7 +33,7 @@ function _makeWidget(widgetdata) {
 function _showOrHideIconDiv(iconDiv) {
     widgetIcons.forEach(i => {
         if (iconDiv.classList.contains(i.cssClass)) {
-            iconDiv.style.display = getSetting(i.settingName) ? "block" : "none";
+            iconDiv.style.display = getSetting(i.settingName) ? "inline-block" : "none";
         }
     });
 }
@@ -67,7 +67,7 @@ function _isUnmarkedAndMark(e) {
 function _scanDomAndAddWidgets(addedNode) {
     measurePerformance('_scanDomAndAddWidgets', () => {
         _getHandlers().forEach(h => {
-            elements = h.findLinkElements(addedNode)
+            elements = h.findElements(addedNode)
                         .filter(_isUnmarkedAndMark)
                         .map(h.elementToWidgetData)
                         .filter(widgetdata => widgetdata.evaluationPromise != null) // promise==null if the element shouldn't be evaluated (trusted site, too short, etc.) This is determined in getEvaluationPromise().

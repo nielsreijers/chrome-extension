@@ -31,6 +31,7 @@
                 "content-evaluator-newsguard.js",
                 "content-evaluator-cofacts.js",
                 "content-fb.js",
+                "content-handler-fb.js",
                 "content-handler-fb-feed-messagebox.js",
                 "content-handler-fb-feed-post.js",
                 "content-handler-fb-messenger.js"]

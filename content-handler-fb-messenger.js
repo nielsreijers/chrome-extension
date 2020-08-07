@@ -1,20 +1,19 @@
 facebookMessengerHandler = {
-    findLinkElements:
+    findElements:
         function (addedNode) {
             if (addedNode.querySelectorAll == undefined) {
                 // not an html node (probably text)
                 return []
             } else {
-                // A message may or may not include a link
                 let FB_QUERY_MESSAGE = "._58nk";
                 let FB_QUERY_MESSAGE_LINK = "._58nk > a";
 
-                let all_messages = Array.from(addedNode.querySelectorAll(FB_QUERY_MESSAGE));
-                let message_links = Array.from(addedNode.querySelectorAll(FB_QUERY_MESSAGE_LINK));
-                let message_links_parents = message_links.map(l => l.parentElement);
-                let messages_without_link = all_messages.filter(m => !message_links_parents.includes(m));
+                let textElements = Array.from(addedNode.querySelectorAll(FB_QUERY_MESSAGE));
+                let linkElements = Array.from(addedNode.querySelectorAll(FB_QUERY_MESSAGE_LINK));
 
-                return message_links.concat(messages_without_link);
+                // A message may or may not include a link.
+                // If they do we only want to keep the link, and discard the surrounding element.
+                return filterElementsWithLinks(textElements, linkElements, t => t, l => l.parentElement);
             }
         },
     elementToWidgetData:
