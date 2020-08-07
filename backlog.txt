@@ -34,9 +34,16 @@ X fix reply in messenger.com handler (can't find user/group id)
 X use cofacts to search for rumors in text messages (without a link) (messenger.com)
 X refactor popup layout: title should be what we searched for, below should be the text from Cofacts, the link to cofacts, and optional reference links. Strip newlines in title
 X use cofacts to search for rumors in text messages (without a link) (facebook message box)
+X make suggested reply editable
 
-- use TfIdf on server to check query/article similarity
+2do before send it to Nanyi
+- change GET to POST to avoid logging messages in webserver logs
 - use cofacts to search normal facebook feed post texts
+
+- i18n
+- add option to only check urls (so no message texts will be sent)
+- improve settings page: should have debug mode with all current options, and normal mode showing the option to check urls only or all messages, and maybe later an option to share data with us or not.
+- use TfIdf on server to check query/article similarity
 
 - settings popup is not showing in messenger.com
 - widget should be about double size in messenger.com
@@ -44,7 +51,6 @@ X use cofacts to search for rumors in text messages (without a link) (facebook m
 - modify gql query to only get the data we need
 - fix css error when opening settings
 - test article similarity instead of just using the first
-- i18n
 - add confirmation dialog before sending reply
 - use FB's "reply to" feature to reply to a specific earlier message
 - research good, non-confrontational message texts

@@ -8,13 +8,13 @@ body {font-family: Arial, Helvetica, sans-serif;}
   position: fixed; 
   left: 0; 
   right: 0; 
-  top: 50px;
+  top: 5vh;
   margin-left: auto; 
   margin-right: auto;
   width: 80%; /* Need a specific value to work */
   z-index: 100000; /* Sit on top */
   font-family: "Verdana", sans-serif;
-  max-height: 80vh;  
+  max-height: 95vh;  
 
   animation: opac 0.3s
   overflow-x: auto;
@@ -73,6 +73,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 
 #VLIEGTUIG_EVAL_DATAFOUNDFOR_TEXT {
   max-height: 10vh;
+  font-style: italic;
 }
 
 #VLIEGTUIG_EVAL_DATAFOUNDFOR_PLEASE_CHECK_MESSAGE {
@@ -80,9 +81,11 @@ body {font-family: Arial, Helvetica, sans-serif;}
 }
 
 #VLIEGTUIG_EVAL_PROPOSED_REPLY_TEXT {
-  max-height: 30vh;
+  width: 100%;
+  height: 40vh;
   font-size: 12px !important;
   font-style: italic;
+  resize: none;
 }
 
 #VLIEGTUIG_EVAL_INFOLINK_TEXT {

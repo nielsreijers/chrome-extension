@@ -141,7 +141,7 @@ function _setPopupContentInner(widgetdata, evaluation) {
         } else {
             myPopover.evalProposedReplyDiv.style.display = "block";
             let proposedReply = evaluationToReplyMessageText(evaluation);
-            myPopover.evalProposedReply.innerText = proposedReply
+            myPopover.evalProposedReply.value = proposedReply
         }
 
         myPopover.sendReplyDiv.style.display = "block";
@@ -170,15 +170,20 @@ function _setPopupContentInner(widgetdata, evaluation) {
             myPopover.sendReplyControls.style.display = "inline-block";
             myPopover.sendReplyImageCheckboxSpan.style.display = isDebugMode() ? "inline-block" : "none";
             myPopover.sendReplyButton.onclick = () => {
-                widgetdata.evaluationPromise.then(evaluation => _sendReply(widgetdata, evaluation));
+                widgetdata.evaluationPromise.then(evaluation => _sendReply(widgetdata, myPopover.evalProposedReply.value, evaluation.imageUrl));
             };
         }
     }
 }
 
-function _sendReply(widgetdata, evaluation) {
+function _sendReply(widgetdata, message, imageUrl) {
     includeImage = myPopover.sendReplyImageCheckbox.checked;
-    facebookSendOrPostReply (widgetdata, evaluation, includeImage);
+    if (!includeImage) {
+        // We have no useful images to send yet.
+        // This is just here in case we ever get an evaluator that can produce some nice graphics for an evaluation
+        imageUrl = null;
+    }
+    facebookSendOrPostReply (widgetdata, message, imageUrl);
     myPopover.sendReplyText.innerText = widgetdata.reply_to_type == 'feedpost'
                                             ? "The reply was posted."
                                             : "The reply was sent.";

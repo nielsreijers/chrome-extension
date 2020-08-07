@@ -75,15 +75,13 @@ function _postFbCommentWithImage(message, imageUrl, post_id) {
     });
 }
 
-function facebookSendOrPostReply(widgetdata, evaluation, includeImage) { //message, imageUrl, id_type, id) {
-    let message = evaluationToReplyMessageText(evaluation);
-
+function facebookSendOrPostReply(widgetdata, message, imageUrl) {
     if (widgetdata.reply_to_type == 'user') {
         let params = {}
         params['body'] = message;
         params[`ids[${widgetdata.reply_to_id}]`] = widgetdata.reply_to_id;
-        if (includeImage) {
-            _sendFbMessageWithImage(params, evaluation.imageUrl);
+        if (imageUrl != null) {
+            _sendFbMessageWithImage(params, imageUrl);
         } else {
             _sendFbMessage(params);        
         }
@@ -91,14 +89,14 @@ function facebookSendOrPostReply(widgetdata, evaluation, includeImage) { //messa
         let params = {}
         params['body'] = message;
         params['tids'] = `cid.g.${widgetdata.reply_to_id}`;
-        if (includeImage) {
-            _sendFbMessageWithImage(params, evaluation.imageUrl);
+        if (imageUrl != null) {
+            _sendFbMessageWithImage(params, imageUrl);
         } else {
             _sendFbMessage(params);        
         }
     } else if (widgetdata.reply_to_type == 'feedpost') {
-        if (includeImage) {
-            _postFbCommentWithImage(message, evaluation.imageUrl, widgetdata.reply_to_id);
+        if (imageUrl != null) {
+            _postFbCommentWithImage(message, imageUrl, widgetdata.reply_to_id);
         } else {
             _postFbComment(message, widgetdata.reply_to_id);
         }
