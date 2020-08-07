@@ -35,9 +35,9 @@ X use cofacts to search for rumors in text messages (without a link) (messenger.
 X refactor popup layout: title should be what we searched for, below should be the text from Cofacts, the link to cofacts, and optional reference links. Strip newlines in title
 X use cofacts to search for rumors in text messages (without a link) (facebook message box)
 X make suggested reply editable
+X change GET to POST to avoid logging messages in webserver logs
 
 2do before send it to Nanyi
-- change GET to POST to avoid logging messages in webserver logs
 - use cofacts to search normal facebook feed post texts
 
 - i18n

@@ -7,7 +7,9 @@ function cofactsGetEvaluationPromise(content, contentType) {
 function _getCofactsDataPromise(content) {
     // Use a temporary Heroku app as a proxy to avoid CORS errors
     let truncatedContent = content.substr(0, 512); // No need to send more data, and sending too much results in a http 414.
-    return fetch(`https://pure-meadow-03854.herokuapp.com/cofacts?text=${encodeURIComponent(truncatedContent)}`).then(r => r.json()).then(d => d.data);
+    return fetch(`https://pure-meadow-03854.herokuapp.com/cofacts`, { method: 'POST', body: content })
+                .then(r => r.json())
+                .then(d => d.data);
 }
 
 const _cofactsReplyTypes = {
