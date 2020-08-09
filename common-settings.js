@@ -3,6 +3,15 @@ var _settings;
 let SETTING_EVALUATOR = "evaluator"
 let SETTING_DEBUG = "debug"
 
+let SETTING_CHECK_POST_CONTENT = "check_post_content";
+let SETTING_CHECK_MESSAGE_CONTENT = "check_message_content";
+
+const contentToCheck = {
+    NONE: 'none',
+    URLS_ONLY: 'urlsOnly',
+    URLS_AND_TEXT: 'urlsAndText'
+}
+
 function loadSettings() {
     return _loadSettingsPromise;
 }
@@ -47,7 +56,32 @@ function _defaultSettingsWhereEmpty(s) {
     if (!s.hasOwnProperty(SETTING_DEBUG)) {
         s[SETTING_DEBUG] = false;
     }
+    if (!s.hasOwnProperty(SETTING_CHECK_POST_CONTENT)) {
+        s[SETTING_CHECK_POST_CONTENT] = contentToCheck.URLS_AND_TEXT;
+    }
+    if (!s.hasOwnProperty(SETTING_CHECK_MESSAGE_CONTENT)) {
+        s[SETTING_CHECK_MESSAGE_CONTENT] = contentToCheck.URLS_ONLY;
+    }
+
     return s;
+}
+
+function _resetDefaultSettings() {
+    _settings=_defaultSettingsWhereEmpty({})
+    _saveSettings()
+}
+
+function checkPostUrls() {
+    return getSetting(SETTING_CHECK_POST_CONTENT) != contentToCheck.NONE;
+}
+function checkPostText() {
+    return getSetting(SETTING_CHECK_POST_CONTENT) == contentToCheck.URLS_AND_TEXT;
+}
+function checkMessageUrls() {
+    return getSetting(SETTING_CHECK_MESSAGE_CONTENT) != contentToCheck.NONE;
+}
+function checkMessageText() {
+    return getSetting(SETTING_CHECK_MESSAGE_CONTENT) == contentToCheck.URLS_AND_TEXT;
 }
 
 function _saveSettings() {

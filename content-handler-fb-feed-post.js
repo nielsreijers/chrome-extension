@@ -16,9 +16,9 @@ facebookFeedPostHandler = {
                 let FB_QUERY_FEED_POST_WITH_LINK_B = "._58jw > p > a";
                 let FB_QUERY_FEED_POST_WITH_LINK_C = "._5pbx > p > a";
 
-                let textElements = Array.from(addedNode.parentElement.querySelectorAll(FB_QUERY_FEED_POST_TEXT));
+                let textElements = checkPostText() ? Array.from(addedNode.parentElement.querySelectorAll(FB_QUERY_FEED_POST_TEXT)) : [];
                 let query = [FB_QUERY_FEED_POST_WITH_LINK_A, FB_QUERY_FEED_POST_WITH_LINK_B, FB_QUERY_FEED_POST_WITH_LINK_C].join(',');
-                let linkElements = Array.from(addedNode.parentElement.querySelectorAll(query));
+                let linkElements = checkPostUrls() ? Array.from(addedNode.parentElement.querySelectorAll(query)) : [];
 
                 // A message may or may not include a link.
                 // If they do we only want to keep the link, and discard the surrounding element.

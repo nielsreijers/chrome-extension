@@ -8,8 +8,8 @@ facebookFeedMessageboxHandler = {
                 let FB_QUERY_MESSAGE = "._5yl5 > span";
                 let FB_QUERY_MESSAGE_LINK = "._5yl5 > span > a";
 
-                let textElements = Array.from(addedNode.querySelectorAll(FB_QUERY_MESSAGE));
-                let linkElements = Array.from(addedNode.querySelectorAll(FB_QUERY_MESSAGE_LINK));
+                let textElements = checkMessageText() ? Array.from(addedNode.querySelectorAll(FB_QUERY_MESSAGE)) : [];
+                let linkElements = checkMessageUrls() ? Array.from(addedNode.querySelectorAll(FB_QUERY_MESSAGE_LINK)) : [];
 
                 // A message may or may not include a link.
                 // If they do we only want to keep the link, and discard the surrounding element.

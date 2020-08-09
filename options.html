@@ -38,20 +38,26 @@
   <!-- Settings Section -->
   <div class="w3-container w3-padding-32" id="settings">
     <h3 class="w3-border-bottom w3-border-light-grey w3-padding-16">Settings</h3>
-    <p>Show these icons:</p>
-    <div id="VLIEGTUIG_SETTINGS_ICONS_TO_ADD"></div>
+    <p>Which icons should be shown?</p>
+    <div id="VLIEGTUIG_SETTINGS_ICONS_TO_ADD" class="w3-margin-left"></div>
 
-    <p>Backend used for evaluation (requires page reload):</p>
-    <div class="w3-margin-top">
-      <input type="radio" id="evaluator-newsguard" name="evaluator" value="newsguard">
-      <img src="images/NewsGuard_Logo.svg" alt="NewsGuard" height=64>
+    <p>Which content should be checked? (requires page reload)</p>
+    <div id="VLIEGTUIG_SETTINGS_CONTENT_TO_CHECK" class="w3-margin-left">
+      <span class="w3-small">Content needs to be sent to our server to check. All data is sent over secure connections and no data is recorded, but if you prefer to limit the content that is checked you can do so below.</span>
     </div>
-    <div class="w3-margin-top">
-      <input type="radio" id="evaluator-cofacts" name="evaluator" value="cofacts">
-      <img src="images/cofacts-logo.png" alt="Cofacts" height=64>
+
+    <p>Which backend should be used for evaluation? NewsGuard can only check links. (requires page reload)</p>
+    <div class="w3-margin-left">
+      <div class="w3-margin-top">
+        <input type="radio" id="evaluator-newsguard" name="evaluator" value="newsguard">
+        <img src="images/NewsGuard_Logo.svg" alt="NewsGuard" height=64>
+      </div>
+      <div class="w3-margin-top">
+        <input type="radio" id="evaluator-cofacts" name="evaluator" value="cofacts">
+        <img src="images/cofacts-logo.png" alt="Cofacts" height=64>
+      </div>
     </div>
   </div>
-
 
 
 
