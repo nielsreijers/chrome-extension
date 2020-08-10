@@ -9,8 +9,17 @@ function newsguardGetEvaluationPromise(content, contentType) {
         }
         return _newsguardPromisePerUrl[url];
     } else {
-        // NewsGuard only rates urls.
-        return null;
+        return new Promise((resolve) => resolve({
+            icon: iconUnknown,
+            unicodeSymbol: "❔",
+            imageUrl:  URL_QUESTIONMARK_IMAGE,
+            alt: "not found",
+            shortText: `NewsGuard cannot check post/message texts, only links.`,
+            longText: null,
+            dataFoundFor: content,
+            infoLink: null,
+            showReplyButton: false
+        }));
     }
 }
 
