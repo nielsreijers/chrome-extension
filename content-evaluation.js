@@ -18,7 +18,7 @@ function _isContentToEvaluate(content, contentType) {
 
 function getEvaluationPromise(content, contentType) {
     if (_isContentToEvaluate(content, contentType)) {
-        if (getSetting(SETTING_EVALUATOR) == 'cofacts') {
+        if (getSetting(SETTING_EVALUATOR) == evaluator.COFACTS) {
             return cofactsGetEvaluationPromise(content, contentType);
         } else {
             return newsguardGetEvaluationPromise(content, contentType);

@@ -12,6 +12,11 @@ const contentToCheck = {
     URLS_AND_TEXT: 'urlsAndText'
 }
 
+const evaluator = {
+    NEWSGUARD: 'newsguard',
+    COFACTS: 'cofacts'
+}
+
 function loadSettings() {
     return _loadSettingsPromise;
 }
@@ -51,7 +56,7 @@ function _defaultSettingsWhereEmpty(s) {
         }        
     });
     if (!s.hasOwnProperty(SETTING_EVALUATOR)) {
-        s[SETTING_EVALUATOR] = 'newsguard';
+        s[SETTING_EVALUATOR] = evaluator.NEWSGUARD;
     }
     if (!s.hasOwnProperty(SETTING_DEBUG)) {
         s[SETTING_DEBUG] = false;
