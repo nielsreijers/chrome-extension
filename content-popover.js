@@ -89,6 +89,7 @@ function _setPopupContentForLink(widgetdata) {
             myPopover.evalIcon.alt = "error";
             myPopover.evalShortText.innerText = error;
             myPopover.evalInfoLinkDiv.style.display = "none";
+            myPopover.evalDataFoundForPleaseCheckMessage.style.display = "none";
             myPopover.sendReplyDiv.style.display = "none";
         });
 }

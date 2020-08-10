@@ -27,6 +27,7 @@
                 "content.js",
                 "content-popover.js",
                 "content-add-widgets.js",                
+                "content-hashes.js",
                 "content-evaluation.js",
                 "content-evaluator-newsguard.js",
                 "content-evaluator-cofacts.js",

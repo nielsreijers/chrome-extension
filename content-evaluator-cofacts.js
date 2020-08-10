@@ -4,10 +4,13 @@ function cofactsGetEvaluationPromise(content, contentType) {
     return _getCofactsDataPromise(content).then(data => _cofactsDataToEvaluation(data, content, contentType));
 }
 
+_md5 = new Hashes.MD5
 function _getCofactsDataPromise(content) {
     // Use a temporary Heroku app as a proxy to avoid CORS errors
     let truncatedContent = content.substr(0, 512); // No need to send more data, and sending too much results in a http 414.
-    return fetch(`https://pure-meadow-03854.herokuapp.com/cofacts`, { method: 'POST', body: content })
+    let hash = _md5.hex(content);
+    let uriencodedContent = encodeURIComponent(truncatedContent);
+    return fetch(`https://pure-meadow-03854.herokuapp.com/cofacts?hash=${hash}`, { headers: { text: uriencodedContent } })
                 .then(r => r.json())
                 .then(d => d.data);
 }
