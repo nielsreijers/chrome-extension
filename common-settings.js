@@ -6,6 +6,8 @@ let SETTING_DEBUG = "debug"
 let SETTING_CHECK_POST_CONTENT = "check_post_content";
 let SETTING_CHECK_MESSAGE_CONTENT = "check_message_content";
 
+let SETTING_HASH_SALT = "hash_salt";
+
 const contentToCheck = {
     NONE: 'none',
     URLS_ONLY: 'urlsOnly',
@@ -66,6 +68,9 @@ function _defaultSettingsWhereEmpty(s) {
     }
     if (!s.hasOwnProperty(SETTING_CHECK_MESSAGE_CONTENT)) {
         s[SETTING_CHECK_MESSAGE_CONTENT] = contentToCheck.URLS_ONLY;
+    }
+    if (!s.hasOwnProperty(SETTING_HASH_SALT)) {
+        s[SETTING_HASH_SALT] = Math.random().toString();
     }
 
     return s;
