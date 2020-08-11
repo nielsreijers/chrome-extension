@@ -19,7 +19,8 @@
     <div class="w3-right w3-hide-small">
       <a href="#settings" class="w3-bar-item w3-button">Settings</a>
       <a href="#about" class="w3-bar-item w3-button">About</a>
-      <a href="#contact" class="w3-bar-item w3-button">Contact</a>
+      <a href="#privacy" class="w3-bar-item w3-button">Privacy</a>
+      <!-- <a href="#contact" class="w3-bar-item w3-button">Contact</a> -->
     </div>
   </div>
 </div>
@@ -38,23 +39,25 @@
   <!-- Settings Section -->
   <div class="w3-container w3-padding-32" id="settings">
     <h3 class="w3-border-bottom w3-border-light-grey w3-padding-16">Settings</h3>
-    <p>Which icons should be shown?</p>
+    <div class="w3-large" style="margin-top: 30px">Which icons should be shown?</div>
     <div id="VLIEGTUIG_SETTINGS_ICONS_TO_ADD" class="w3-margin-left"></div>
 
-    <p>Which content should be checked? (requires page reload)</p>
+    <div class="w3-large" style="margin-top: 30px">Which content should be checked? (requires page reload)</div>
     <div id="VLIEGTUIG_SETTINGS_CONTENT_TO_CHECK" class="w3-margin-left">
       <span class="w3-small">Content needs to be sent to our server to check. All data is sent over secure connections and no data is recorded, but if you prefer to limit the content that is checked you can do so below.</span>
     </div>
 
-    <p>Which backend should be used for evaluation? NewsGuard can only check links. (requires page reload)</p>
-    <div class="w3-margin-left">
-      <div class="w3-margin-top">
-        <input type="radio" id="evaluator-newsguard" name="evaluator" value="newsguard">
-        <img src="images/NewsGuard_Logo.svg" alt="NewsGuard" height=64>
-      </div>
-      <div class="w3-margin-top">
-        <input type="radio" id="evaluator-cofacts" name="evaluator" value="cofacts">
-        <img src="images/cofacts-logo.png" alt="Cofacts" height=64>
+    <div id="VLIEGTUIG_SETTINGS_BACKEND_DIV" style="display: none;">
+      <div class="w3-large" style="margin-top: 30px">Which backend should be used for evaluation? NewsGuard can only check links. (requires page reload)</div>
+      <div class="w3-margin-left">
+        <div class="w3-margin-top">
+          <input type="radio" id="evaluator-newsguard" name="evaluator" value="newsguard">
+          <img src="images/NewsGuard_Logo.svg" alt="NewsGuard" height=64>
+        </div>
+        <div class="w3-margin-top">
+          <input type="radio" id="evaluator-cofacts" name="evaluator" value="cofacts">
+          <img src="images/cofacts-logo.png" alt="Cofacts" height=64>
+        </div>
       </div>
     </div>
   </div>
@@ -64,13 +67,34 @@
   <!-- About Section -->
   <div class="w3-container w3-padding-32" id="about">
     <h3 class="w3-border-bottom w3-border-light-grey w3-padding-16">About</h3>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Excepteur sint
-      occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-      laboris nisi ut aliquip ex ea commodo consequat.
-    </p>
+    <p>This extension can check content on your Facebook feed and in Facebook messages for any matches on <a href="https://cofacts.g0v.tw/">Cofacts</a>.</p>
+
+    <p>Cofacts is a community effort. Users share messages or posts they find suspicious, which are then rated by a group of volunteer editors.</p>
+
+    <p>If a match is found, an icon will appear to indicate whether it is marked as misinformation <img src="images/check-t-red.png" width="16" height="16">, true information <img src="images/check-t-green.png" width="16" height="16">, or a personal opinion <img src="images/check-t-opinion.png" width="16" height="16">. By hovering over this icon, you can view the opinion written by Cofacts' editors, and if you choose to do so, share this information by sending it as a reply (for messages), or posting it as a comment (for feed posts).</p>
   </div>
 
+  <!-- Privacy Section -->
+  <div class="w3-container w3-padding-32" id="privacy">
+    <h3 class="w3-border-bottom w3-border-light-grey w3-padding-16">Privacy</h3>
+    <p>This extension needs to send content to our server to check it. This then uses Cofacts' API to search for any matching articles.</p>
+    <p><u>We do not record any of the text sent to our server</u>.</p>
+
+    <p>Technical details:</p>
+    <div style="margin-left: 20px" class="w3-small">
+      <p>You can monitor the communication with our server using Chrome's developer tools 'network' tab and searching for 'cofacts'. The extension will send GET requests, to allow the browser to cache the results.</p>
+
+      <p>However, we don't want the text that is being checked to be stored in the browser cache, or in any proxy or server log. To prevent this, the content is sent in the HTTP header instead of the url, as would be normal for these requests.</p>
+
+      <p>Since the browser cache only looks at the url to determine if it needs to get the data from the server, or can use a previously retrieved value, we add a <a href="https://en.wikipedia.org/wiki/SHA-2">hash</a> value to the request url that identifies the content. The same text will always result in the same hash value, but the original text cannot be reconstructed from this value. This allows the browser to cache the results for different content, without storing the content itself.</p>
+
+      <p>In theory, while it is impossible to reconstruct the original text from the hash value, it <i>is</i> possible to test whether the original text was identical to another text, since it results in the same hash value. To prevent this, a large <a href="https://en.wikipedia.org/wiki/Salt_(cryptography)">random number</a> is added to the content before calculating the hash. This random number is stored in the extension's storage, but never sent to the server. This ensures checking the same text will result in different hash values for different users, since each user will add a different random number to the text.</p>
+    </div>
+  </div>
+
+
   <!-- Contact Section -->
+  <!--
   <div class="w3-container w3-padding-32" id="contact">
     <h3 class="w3-border-bottom w3-border-light-grey w3-padding-16">Contact</h3>
     <p>Lets get in touch and talk about your next project.</p>
@@ -84,6 +108,7 @@
       </button>
     </form>
   </div>
+  -->
   
 <!-- End page content -->
 </div>
@@ -91,7 +116,7 @@
 
 <!-- Footer -->
 <footer class="w3-center w3-black w3-padding-16">
-  <p>Powered by <a href="https://www.twisc.org" >Taiwan Information Security Centre</a></p>
+  <p>Provided by <a href="https://www.twisc.org" >Taiwan Information Security Centre</a></p>
 </footer>
 
 </body>

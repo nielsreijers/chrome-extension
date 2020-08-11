@@ -28,11 +28,13 @@ function _addContentToCheckCombobox(settingName, txt) {
 
     let div = document.createElement("div");
 
-    let span = document.createElement("span");
-    span.classList.add("w3-quarter");
+    let span = document.createElement("div");
+    span.style.width = "130px";    
+    span.style.display = "inline-block";    
     span.innerText = txt;
 
     let select = document.createElement("select");
+    select.style.width = "200px";
 
     addOption = (optionValue, optionText) => {
         let option = document.createElement("option");
@@ -65,7 +67,7 @@ loadSettings().then(() => {
     _addIconCheckbox(iconGreen.url, iconGreen.settingName, ': content rated as safe');
     _addIconCheckbox(iconOpinion.url, iconOpinion.settingName, ': content rated as containing a personal perspective');
     _addIconCheckbox(iconRed.url, iconRed.settingName, ': content rated as potentially unsafe');
-    _addIconCheckbox(iconNotRated.url, iconNotRated.settingName, ': content that is known in NewsGuard or Cofacts, but not (yet) rated');
+    _addIconCheckbox(iconNotRated.url, iconNotRated.settingName, ': content that is known in Cofacts, but not yet rated');
     _addIconCheckbox(iconUnknown.url, iconUnknown.settingName, ': content for which no match was found');
     _addIconCheckbox(iconLoading.url, iconLoading.settingName, ': shown while loading');
     _addIconCheckbox(iconError.url, iconError.settingName, ': shown when an error occurs');
@@ -73,6 +75,9 @@ loadSettings().then(() => {
     _addContentToCheckCombobox(SETTING_CHECK_MESSAGE_CONTENT, 'Messages:');
     _addContentToCheckCombobox(SETTING_CHECK_POST_CONTENT, 'Facebook posts:');
 
+    if (isDebugMode()) {
+        document.getElementById("VLIEGTUIG_SETTINGS_BACKEND_DIV").style.display = "block";
+    }
 
     // Set currently selected evaluator
     for (var e of document.getElementsByName("evaluator")) {
