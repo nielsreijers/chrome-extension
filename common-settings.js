@@ -54,11 +54,11 @@ function setSetting(settingName, value) {
 function _defaultSettingsWhereEmpty(s) {
     widgetIcons.forEach(icon => {
         if (!s.hasOwnProperty(icon.settingName)) {
-            s[icon.settingName] = true;
+            s[icon.settingName] = icon.settingDefault;
         }        
     });
     if (!s.hasOwnProperty(SETTING_EVALUATOR)) {
-        s[SETTING_EVALUATOR] = evaluator.NEWSGUARD;
+        s[SETTING_EVALUATOR] = evaluator.COFACTS;
     }
     if (!s.hasOwnProperty(SETTING_DEBUG)) {
         s[SETTING_DEBUG] = false;
