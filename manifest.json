@@ -1,7 +1,7 @@
 {
     "name": "Disinformation Extension",
     "version": "1.0",
-    "description": "POC for auto-reply like feature for FB messenger",
+    "description": "Checks Facebook and Messenger content using cofacts.g0v.tw. Shows a warning if a match is found, and lets you auto-reply Cofacts' evaluation.",
     "permissions": ["activeTab", "declarativeContent", "storage"],
     "background": {
         "scripts": ["background.js"],
