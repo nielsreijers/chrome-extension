@@ -51,6 +51,12 @@ function _handle_popover_mouseenter() {
     }
 }
 
+function _handle_textarea_input() {
+    // Pin the popup when the user start editing the reply
+    popoverPinned = true;
+    myPopover.closeButton.innerText = "×";
+}
+
 function _handle_popover_mouseleave() {
     if (!popoverPinned) {
         _startHidePopoverTimer();
@@ -227,6 +233,7 @@ fetch(chrome.extension.getURL("popover-template.html")).then(r => r.text()).then
     };
     myPopover.twiscLogo.src = chrome.extension.getURL("images/twisc.png");
     myPopover.mainDiv.onmouseenter = _handle_popover_mouseenter;
+    myPopover.evalProposedReply.oninput = _handle_textarea_input;
     myPopover.mainDiv.onmouseleave = _handle_popover_mouseleave;
     myPopover.closeButton.onclick = _handle_close_clicked;
     myPopover.closeButton.innerText = '';
