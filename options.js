@@ -23,10 +23,16 @@ function _addIconCheckbox(imgSrc, settingName, txt) {
     parentDiv.append(div);
 }
 
-function _addContentToCheckCombobox(settingName, txt) {
+function _addContentToCheckCombobox(settingName, txt, imgSrc) {
     let parentDiv = document.getElementById('VLIEGTUIG_SETTINGS_CONTENT_TO_CHECK');
 
     let div = document.createElement("div");
+
+    let img = document.createElement("img");
+    img.setAttribute("src", imgSrc);
+    img.setAttribute("width", 64);
+    img.setAttribute("height", 64);
+    img.setAttribute("class", "vliegtuig-checkbox");
 
     let span = document.createElement("div");
     span.style.width = "130px";    
@@ -51,7 +57,7 @@ function _addContentToCheckCombobox(settingName, txt) {
         setSetting(settingName, select.value);
     };
 
-    div.append(span, select);
+    div.append(img, span, select);
     parentDiv.append(div);
 }
 
@@ -72,8 +78,8 @@ loadSettings().then(() => {
     _addIconCheckbox(iconLoading.url, iconLoading.settingName, ': shown while loading');
     _addIconCheckbox(iconError.url, iconError.settingName, ': shown when an error occurs');
 
-    _addContentToCheckCombobox(SETTING_CHECK_MESSAGE_CONTENT, 'Messages:');
-    _addContentToCheckCombobox(SETTING_CHECK_POST_CONTENT, 'Facebook posts:');
+    _addContentToCheckCombobox(SETTING_CHECK_POST_CONTENT, 'Facebook posts:', 'images/fb-post.png');
+    _addContentToCheckCombobox(SETTING_CHECK_MESSAGE_CONTENT, 'Messages:', 'images/fb-message.jpg');
 
     if (isDebugMode()) {
         document.getElementById("VLIEGTUIG_SETTINGS_BACKEND_DIV").style.display = "block";

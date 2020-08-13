@@ -38,9 +38,10 @@ X make suggested reply editable
 X change GET to POST to avoid logging messages in webserver logs
 X add option to only check urls (so no message texts will be sent)
 X use cofacts to search normal facebook feed post texts
+X improve settings page: should have debug mode with all current options, and normal mode showing the option to check urls only or all messages
 
 - i18n
-- improve settings page: should have debug mode with all current options, and normal mode showing the option to check urls only or all messages, and maybe later an option to share data with us or not.
+- add option to volutarily share usage data
 - use TfIdf on server to check query/article similarity
 - settings popup is not showing in messenger.com
 - widget should be about double size in messenger.com
