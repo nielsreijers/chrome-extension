@@ -154,7 +154,7 @@ function _setPopupContentInner(widgetdata, evaluation) {
         myPopover.sendReplyDiv.style.display = "block";
         if (!evaluation.showReplyButton || widgetdata.reply_to_type == null) {
             if (!evaluation.showReplyButton) {
-                myPopover.sendReplyText.innerText = "Can't auto-reply because no match could not be found.";                
+                myPopover.sendReplyText.innerText = "Can't auto-reply because no match could be found.";                
             } else {
                 myPopover.sendReplyText.innerText = "Can't auto-reply because the id to reply to could not be found.";
             }
