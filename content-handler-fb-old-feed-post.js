@@ -1,4 +1,4 @@
-facebookFeedPostHandler = {
+facebookOldFeedPostHandler = {
     findElements:
         function (addedNode) {
             if (addedNode.parentElement == null || addedNode.parentElement == undefined) {

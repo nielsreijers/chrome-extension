@@ -138,7 +138,7 @@ function _stripFbClid(url) {
 
 var _dtsgToken = null
 function _getDtsgToken() {
-    // This works on facebook.com
+    // This works on old facebook.com
     if (_dtsgToken == null) {
         var dtsgElement = document.getElementsByName("fb_dtsg")[0];
         if (dtsgElement != undefined) {
@@ -148,6 +148,16 @@ function _getDtsgToken() {
     // This works on messenger.com
     if (_dtsgToken == null) {
         var headtext = document.head.innerText;
+        let re = new RegExp(`\{\"token\":\"([^"]*)`);
+        let match = re.exec(headtext);
+        if (match != null) {
+            _dtsgToken = match[1];
+        }
+
+    }
+    // This works on new facebook.com
+    if (_dtsgToken == null) {
+        var headtext = document.body.innerHTML;
         let re = new RegExp(`\{\"token\":\"([^"]*)`);
         let match = re.exec(headtext);
         if (match != null) {
