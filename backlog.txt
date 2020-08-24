@@ -39,7 +39,9 @@ X change GET to POST to avoid logging messages in webserver logs
 X add option to only check urls (so no message texts will be sent)
 X use cofacts to search normal facebook feed post texts
 X improve settings page: should have debug mode with all current options, and normal mode showing the option to check urls only or all messages
+X fix CORB error
 
+- modify handler for new FB layout
 - i18n
 - add option to volutarily share usage data
 - use TfIdf on server to check query/article similarity
