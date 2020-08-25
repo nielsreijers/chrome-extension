@@ -1,4 +1,4 @@
-facebookFeedMessageboxHandler = {
+facebookOldFeedMessageboxHandler = {
     findElements:
         function (addedNode) {
             if (addedNode.querySelectorAll == undefined) {
@@ -26,14 +26,14 @@ facebookFeedMessageboxHandler = {
         },
     elementToWidgetData:
         function (e) {
-            var reply_to_type = null;
-            var reply_to_id = _findFantaTab('user', e);
-            if (reply_to_id!=null) {
-                reply_to_type = 'user';
+            var replyToType = null;
+            var replyToId = _findFantaTab('user', e);
+            if (replyToId!=null) {
+                replyToType = 'user';
             } else {
-                reply_to_id = _findFantaTab('thread', e);
-                if (reply_to_id!=null) {
-                    reply_to_type = 'group';
+                replyToId = _findFantaTab('thread', e);
+                if (replyToId!=null) {
+                    replyToType = 'group';
                 }
             }
             // The element can be either a <a> link, or text in a <span>
@@ -46,11 +46,12 @@ facebookFeedMessageboxHandler = {
             }
             let evaluationPromise = getEvaluationPromise(content, contentType);
             return {
+                source:widgetSource.FEEDMESSAGE,
                 element:e,
                 content:content,
                 contentType:contentType,
-                reply_to_type:reply_to_type,
-                reply_to_id:reply_to_id,
+                replyToType:replyToType,
+                replyToId:replyToId,
                 evaluationPromise:evaluationPromise
             }
         },

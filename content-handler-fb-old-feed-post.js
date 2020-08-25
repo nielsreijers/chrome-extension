@@ -27,10 +27,10 @@ facebookOldFeedPostHandler = {
         },
     elementToWidgetData:
         function (e) {
-            var reply_to_type = null;
-            var reply_to_id = _findFeedPostId(e);
-            if (reply_to_id != null) {
-                reply_to_type = 'feedpost';
+            var replyToType = null;
+            var replyToId = _findFeedPostId(e);
+            if (replyToId != null) {
+                replyToType = 'feedpost';
             };
             if (e.tagName=="A") {
                 var content = stripFacebookExtras(e.href);
@@ -41,11 +41,12 @@ facebookOldFeedPostHandler = {
             }
             let evaluationPromise = getEvaluationPromise(content, contentType);
             return {
+                source:widgetSource.FEEDPOST,
                 element:e,
                 content:content,
                 contentType:contentType,
-                reply_to_type:reply_to_type,
-                reply_to_id:reply_to_id,
+                replyToType:replyToType,
+                replyToId:replyToId,
                 evaluationPromise:evaluationPromise
             }
         },

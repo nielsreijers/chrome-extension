@@ -2,7 +2,7 @@
     "name": "Disinformation Extension",
     "version": "1.0",
     "description": "Checks Facebook and Messenger content using cofacts.g0v.tw. Shows a warning if a match is found, and lets you auto-reply Cofacts' evaluation.",
-    "permissions": ["activeTab", "declarativeContent", "storage"],
+    "permissions": ["activeTab", "declarativeContent", "storage", "clipboardRead", "clipboardWrite"],
     "background": {
         "scripts": ["background.js"],
         "persistent": false
@@ -34,7 +34,8 @@
                 "content-evaluator-cofacts.js",
                 "content-fb.js",
                 "content-handler-fb.js",
-                "content-handler-fb-feed-messagebox.js",
+                "content-handler-fb-old-feed-messagebox.js",
+                "content-handler-fb-new-feed-messagebox.js",
                 "content-handler-fb-old-feed-post.js",
                 "content-handler-fb-new-feed-post.js",
                 "content-handler-fb-messenger.js"]

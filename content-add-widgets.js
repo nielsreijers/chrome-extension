@@ -45,7 +45,7 @@ function _getHandlers() {
         if (window.location.href.startsWith('https://www.messenger.com') || window.location.href.startsWith('https://www.facebook.com/messages')) {
             _handlers = [facebookMessengerHandler];
         } else if (window.location.href.startsWith('https://www.facebook.com')) {
-            _handlers = [facebookFeedMessageboxHandler,
+            _handlers = [facebookNewFeedMessageboxHandler,
                         facebookNewFeedPostHandler];
         } else {
             _handlers = [];

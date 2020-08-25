@@ -1,3 +1,9 @@
+const widgetSource = {
+    FEEDPOST: 'feedpost',
+    FEEDMESSAGE: 'feedmessage',
+    MESSENGERMESSAGE: 'messengermessage'
+}
+
 function filterElementsWithLinks(textElements, linkElements, textElementToParent, linkElementToParent) {
     // Find the parents of each link element.
     // These may be in the textElements list, in which case we want to search by link rather than by text.

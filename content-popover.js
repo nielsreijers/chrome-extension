@@ -96,7 +96,7 @@ function _setPopupContentForLink(widgetdata) {
             myPopover.evalShortText.innerText = error;
             myPopover.evalInfoLinkDiv.style.display = "none";
             myPopover.evalDataFoundForPleaseCheckMessage.style.display = "none";
-            myPopover.sendReplyDiv.style.display = "none";
+            myPopover.evalProposedReplyDiv.style.display = "none";
         });
 }
 
@@ -114,7 +114,6 @@ function _setPopupContentInner(widgetdata, evaluation) {
         myPopover.evalInfoLinkDiv.style.display = "none";
         myPopover.evalDataFoundForDiv.style.display = "none";
         myPopover.evalProposedReplyDiv.style.display = "none";
-        myPopover.sendReplyDiv.style.display = "none";
     } else {
         myPopover.title.innerText = searchTerm;
         myPopover.evalIcon.src = evaluation.icon.url;
@@ -151,34 +150,31 @@ function _setPopupContentInner(widgetdata, evaluation) {
             myPopover.evalProposedReply.value = proposedReply
         }
 
-        myPopover.sendReplyDiv.style.display = "block";
-        if (!evaluation.showReplyButton || widgetdata.reply_to_type == null) {
-            if (!evaluation.showReplyButton) {
-                myPopover.sendReplyText.innerText = "Can't auto-reply because no match could be found.";                
-            } else {
-                myPopover.sendReplyText.innerText = "Can't auto-reply because the id to reply to could not be found.";
-            }
-            myPopover.sendReplyControls.style.display = "none";
-            myPopover.sendReplyButton.onclick = () => { };
+        myPopover.sendReplyImageCheckboxSpan.style.display = isDebugMode() ? "inline-block" : "none";
+        if (widgetdata.source == widgetSource.FEEDPOST) {
+            myPopover.sendReplyTr.style.display = "none";
         } else {
-            if (widgetdata.reply_to_type == 'user') {
-                var text = isDebugMode() ? `Send this as a reply to user with id ${widgetdata.reply_to_id}:`
-                                       : `Send this reply to the user:`;
-            } else if (widgetdata.reply_to_type == 'group') {
-                var text = isDebugMode() ? `Send this as a reply to group with id ${widgetdata.reply_to_id}:`
-                                       : `Send this reply to the group:`;
-            } else if (widgetdata.reply_to_type == 'feedpost') {
-                var text = isDebugMode() ? `Post this as a comment to post with id ${widgetdata.reply_to_id}:`
-                                       : `Post this reply as a comment:`;
+            myPopover.sendReplyTr.style.display = "table-row";
+            if (widgetdata.replyToType == null) {
+                myPopover.sendReplyButton.disabled = true;
+                myPopover.sendReplyText.innerText = "We can only auto-reply to messages from the messenger.com or facebook.com/messages view.";
+                myPopover.sendReplyButton.onclick = () => { };
             } else {
-                var text = "Something went wrong...";
+                myPopover.sendReplyButton.disabled = false;
+                if (widgetdata.replyToType == 'user') {
+                    var text = isDebugMode() ? `Directly send this as a reply to user with id ${widgetdata.replyToId}:`
+                                           : `Directly send this reply.`;
+                } else if (widgetdata.replyToType == 'group') {
+                    var text = isDebugMode() ? `Directly send this as a reply to group with id ${widgetdata.replyToId}:`
+                                           : `Directly send this reply to the group.`;
+                } else {
+                    var text = "Something went wrong...";
+                }
+                myPopover.sendReplyText.innerText = text;
+                myPopover.sendReplyButton.onclick = () => {
+                    widgetdata.evaluationPromise.then(evaluation => _sendReply(widgetdata, myPopover.evalProposedReply.value, evaluation.imageUrl));
+                };
             }
-            myPopover.sendReplyText.innerText = text;
-            myPopover.sendReplyControls.style.display = "inline-block";
-            myPopover.sendReplyImageCheckboxSpan.style.display = isDebugMode() ? "inline-block" : "none";
-            myPopover.sendReplyButton.onclick = () => {
-                widgetdata.evaluationPromise.then(evaluation => _sendReply(widgetdata, myPopover.evalProposedReply.value, evaluation.imageUrl));
-            };
         }
     }
 }
@@ -191,10 +187,9 @@ function _sendReply(widgetdata, message, imageUrl) {
         imageUrl = null;
     }
     facebookSendOrPostReply (widgetdata, message, imageUrl);
-    myPopover.sendReplyText.innerText = widgetdata.reply_to_type == 'feedpost'
+    myPopover.sendReplyText.innerText = widgetdata.replyToType == 'feedpost'
                                             ? "The reply was posted."
                                             : "The reply was sent.";
-    myPopover.sendReplyControls.style.display = "none";
 }
 
 
@@ -223,9 +218,9 @@ fetch(chrome.extension.getURL("popover-template.html")).then(r => r.text()).then
         evalProposedReply: document.getElementById("VLIEGTUIG_EVAL_PROPOSED_REPLY_TEXT"),
         evalInfoLinkDiv: document.getElementById("VLIEGTUIG_EVAL_INFOLINK_DIV"),
         evalInfoLinkA: document.getElementById("VLIEGTUIG_EVAL_INFOLINK_A"),
-        sendReplyDiv: document.getElementById("VLIEGTUIG_SEND_REPLY_DIV"),
+        copyReplyButton: document.getElementById("VLIEGTUIG_COPY_REPLY_BUTTON"),
+        sendReplyTr: document.getElementById("VLIEGTUIG_SEND_REPLY_TR"),
         sendReplyText: document.getElementById("VLIEGTUIG_SEND_REPLY_TEXT"),
-        sendReplyControls: document.getElementById("VLIEGTUIG_SEND_REPLY_CONTROLS"),
         sendReplyButton: document.getElementById("VLIEGTUIG_SEND_REPLY_BUTTON"),
         sendReplyImageCheckbox: document.getElementById("VLIEGTUIG_SEND_REPLY_IMAGE_CHECKBOX"),
         sendReplyImageCheckboxSpan: document.getElementById("VLIEGTUIG_SEND_REPLY_IMAGE_CHECKBOX_SPAN"),
@@ -237,5 +232,11 @@ fetch(chrome.extension.getURL("popover-template.html")).then(r => r.text()).then
     myPopover.mainDiv.onmouseleave = _handle_popover_mouseleave;
     myPopover.closeButton.onclick = _handle_close_clicked;
     myPopover.closeButton.innerText = '';
+    myPopover.copyReplyButton.onclick = () => {
+        /* Select the text field */
+        myPopover.evalProposedReply.select();
+        myPopover.evalProposedReply.setSelectionRange(0, 99999); /*For mobile devices*/
+        document.execCommand("copy");
+    };
 });
 

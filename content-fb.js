@@ -76,29 +76,29 @@ function _postFbCommentWithImage(message, imageUrl, post_id) {
 }
 
 function facebookSendOrPostReply(widgetdata, message, imageUrl) {
-    if (widgetdata.reply_to_type == 'user') {
+    if (widgetdata.replyToType == 'user') {
         let params = {}
         params['body'] = message;
-        params[`ids[${widgetdata.reply_to_id}]`] = widgetdata.reply_to_id;
+        params[`ids[${widgetdata.replyToId}]`] = widgetdata.replyToId;
         if (imageUrl != null) {
             _sendFbMessageWithImage(params, imageUrl);
         } else {
             _sendFbMessage(params);        
         }
-    } else if (widgetdata.reply_to_type == 'group') {
+    } else if (widgetdata.replyToType == 'group') {
         let params = {}
         params['body'] = message;
-        params['tids'] = `cid.g.${widgetdata.reply_to_id}`;
+        params['tids'] = `cid.g.${widgetdata.replyToId}`;
         if (imageUrl != null) {
             _sendFbMessageWithImage(params, imageUrl);
         } else {
             _sendFbMessage(params);        
         }
-    } else if (widgetdata.reply_to_type == 'feedpost') {
+    } else if (widgetdata.replyToType == 'feedpost') {
         if (imageUrl != null) {
-            _postFbCommentWithImage(message, imageUrl, widgetdata.reply_to_id);
+            _postFbCommentWithImage(message, imageUrl, widgetdata.replyToId);
         } else {
-            _postFbComment(message, widgetdata.reply_to_id);
+            _postFbComment(message, widgetdata.replyToId);
         }
     }
 }
