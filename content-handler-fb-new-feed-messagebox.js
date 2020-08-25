@@ -34,6 +34,20 @@ facebookNewFeedMessageboxHandler = {
         function (e) {
             var replyToType = null;
             var replyToId = null;
+
+            let messageBox = findParentElementWithClass(e, 'iqfcb0g7');
+            if (messageBox != null) {
+                linkToProfile = messageBox.querySelector('a.d2edcug0');
+                if (linkToProfile != null) {
+                    let re = new RegExp(`\/([0-9]+)\/`);
+                    let match = re.exec(linkToProfile.href);
+                    if (match != null) {
+                        replyToType = 'user';
+                        replyToId = match[1];
+                    }
+                }
+            }
+
             // The element can be either a <a> link, or text in a <div>
             if (e.tagName=="A") {                
                 var content = stripFacebookExtras(e.href);

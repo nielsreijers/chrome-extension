@@ -157,7 +157,7 @@ function _setPopupContentInner(widgetdata, evaluation) {
             myPopover.sendReplyTr.style.display = "table-row";
             if (widgetdata.replyToType == null) {
                 myPopover.sendReplyButton.disabled = true;
-                myPopover.sendReplyText.innerText = "We can only auto-reply to messages from the messenger.com or facebook.com/messages view.";
+                myPopover.sendReplyText.innerText = "We can only auto-reply to this from the messenger.com or facebook.com/messages view.";
                 myPopover.sendReplyButton.onclick = () => { };
             } else {
                 myPopover.sendReplyButton.disabled = false;
