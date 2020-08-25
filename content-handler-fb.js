@@ -5,6 +5,8 @@ const widgetSource = {
 }
 
 function filterElementsWithLinks(textElements, linkElements, textElementToParent, linkElementToParent) {
+    linkElements = linkElements.filter(link => isLinkToCheck(link.href));
+
     // Find the parents of each link element.
     // These may be in the textElements list, in which case we want to search by link rather than by text.
     let parentsOfLinkElements = linkElements.map(linkElementToParent);

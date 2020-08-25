@@ -5,23 +5,29 @@ facebookNewFeedMessageboxHandler = {
                 // not an html node (probably text)
                 return []
             } else {
-                let FB_CLASS_MESSAGE = "h9e7qa53";
-                let FB_QUERY_MESSAGE = ".h9e7qa53 > span:nth-child(2)";
-                let FB_QUERY_MESSAGE_LINK = ".h9e7qa53 > span:nth-child(2) a";
+                let FB_CLASS_MESSAGE_OUT = "h9e7qa53";
+                let FB_QUERY_MESSAGE_OUT = ".h9e7qa53 > span:nth-child(2)";
+                let FB_QUERY_MESSAGE_OUT_LINK = ".h9e7qa53 > span:nth-child(2) a";
 
-                let textElements = checkMessageText() ? Array.from(addedNode.querySelectorAll(FB_QUERY_MESSAGE)) : [];
-                let linkElements = checkMessageUrls() ? Array.from(addedNode.querySelectorAll(FB_QUERY_MESSAGE_LINK)) : [];
-
+                let textElements_out = checkMessageText() ? Array.from(addedNode.querySelectorAll(FB_QUERY_MESSAGE_OUT)) : [];
+                let linkElements_out = checkMessageUrls() ? Array.from(addedNode.querySelectorAll(FB_QUERY_MESSAGE_OUT_LINK)) : [];
                 // A message may or may not include a link.
                 // If they do we only want to keep the link, and discard the surrounding element.
-                let filteredElements = filterElementsWithLinks(textElements, linkElements, t => findParentElementWithClass(t, FB_CLASS_MESSAGE), l => findParentElementWithClass(l, FB_CLASS_MESSAGE));
+                let filteredElements_out = filterElementsWithLinks(textElements_out, linkElements_out, t => findParentElementWithClass(t, FB_CLASS_MESSAGE_OUT), l => findParentElementWithClass(l, FB_CLASS_MESSAGE_OUT));
 
-                // In addition, a link with a preview picture may appear in the messages.
-                // This is a <a> link already with recognisable class.
-                let FB_QUERY_MESSAGE_A_WITH_PICTURE_BOX = "._5rw4";
-                let picture_box_links = Array.from(addedNode.querySelectorAll(FB_QUERY_MESSAGE_A_WITH_PICTURE_BOX));
 
-                return filteredElements.concat(picture_box_links);
+                let FB_CLASS_MESSAGE_IN = "jn8vp64t";
+                let FB_QUERY_MESSAGE_IN = ".jn8vp64t > div:nth-child(2)";
+                let FB_QUERY_MESSAGE_IN_LINK = ".jn8vp64t > div:nth-child(2) a";
+
+                let textElements_in = checkMessageText() ? Array.from(addedNode.querySelectorAll(FB_QUERY_MESSAGE_IN)) : [];
+                let linkElements_in = checkMessageUrls() ? Array.from(addedNode.querySelectorAll(FB_QUERY_MESSAGE_IN_LINK)) : [];
+                // A message may or may not include a link.
+                // If they do we only want to keep the link, and discard the surrounding element.
+                let filteredElements_in = filterElementsWithLinks(textElements_in, linkElements_in, t => findParentElementWithClass(t, FB_CLASS_MESSAGE_IN), l => findParentElementWithClass(l, FB_CLASS_MESSAGE_IN));
+
+
+                return filteredElements_out.concat(filteredElements_in);
             }
         },
     elementToWidgetData:
@@ -49,16 +55,29 @@ facebookNewFeedMessageboxHandler = {
         },
     addWidgetToElement:
         function (tag, e) {
-            let FB_CLASS_MESSAGE = "h9e7qa53";
-            let message = findParentElementWithClass(e, FB_CLASS_MESSAGE);
+            let FB_CLASS_MESSAGE_OUT = "h9e7qa53";
+            let FB_CLASS_MESSAGE_IN = "jn8vp64t";
+
+            var message = findParentElementWithClass(e, FB_CLASS_MESSAGE_OUT);
             if (message != null && message.nextElementSibling != null) {
                 if (message.nextElementSibling.querySelector('.vliegtuig-widget-div') == null) {
                     // Don't add a widget if it's already there. This happens for links that
                     // show both the url as a text, and the box with a preview and title.
                     message.nextElementSibling.prepend(tag);
+                    return;
                 }
-            } else {
-                e.prepend(tag);
             }
+
+            var message = findParentElementWithClass(e, FB_CLASS_MESSAGE_IN);
+            if (message != null && message.nextElementSibling != null) {
+                if (message.nextElementSibling.querySelector('.vliegtuig-widget-div') == null) {
+                    // Don't add a widget if it's already there. This happens for links that
+                    // show both the url as a text, and the box with a preview and title.
+                    message.nextElementSibling.prepend(tag);
+                    return;
+                }
+            }
+
+            e.prepend(tag);
         }
 };

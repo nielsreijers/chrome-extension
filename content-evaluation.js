@@ -3,16 +3,22 @@ const contentTypes = {
     TEXT: 'text'
 }
 
+function isLinkToCheck(url) {
+    url = stripFacebookExtras(url);
+    return url.startsWith('http')                           // Filter out local links like "/<facebook id>"
+           && !url.startsWith('https://www.facebook.com')   // Filter out links to facebook, messenger and cofacts
+           && !url.startsWith('https://www.messenger.com')
+           && !url.startsWith('https://cofacts.g0v.tw')
+           ;
+}
+
 function _isContentToEvaluate(content, contentType) {
     if (contentType == contentTypes.URL) {
-        url = stripFacebookExtras(content);
-        return url.startsWith('http')                           // Filter out local links like "/<facebook id>"
-               && !url.startsWith('https://www.facebook.com')   // Filter out links to facebook, messenger and cofacts
-               && !url.startsWith('https://www.messenger.com')
-               && !url.startsWith('https://cofacts.g0v.tw')
-               ;        
+        return isLinkToCheck(content)
     } else {
-        return content.length > 10;
+        return content.length > 10
+                && content != 'Thumbs-up sign'
+                && content != 'You unsent a message';
     }
 }
 
