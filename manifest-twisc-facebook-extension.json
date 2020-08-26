@@ -1,0 +1,67 @@
+{
+    "name": "Disinformation Extension",
+    "version": "1.0",
+    "description": "Checks Facebook and Messenger content using cofacts.g0v.tw. Shows a warning if a match is found, and lets you auto-reply Cofacts' evaluation.",
+    "permissions": ["activeTab", "declarativeContent", "storage", "clipboardRead", "clipboardWrite"],
+    "background": {
+        "scripts": ["twisc/background.js"],
+        "persistent": false
+    },
+    "options_page": "twisc/options.html",
+    "page_action": {
+        "default_popup": "twisc/popup.html",
+        "default_icon": {
+            "16": "twisc/images/get_started16.png",
+            "32": "twisc/images/get_started32.png",
+            "48": "twisc/images/get_started48.png",
+            "128": "twisc/images/get_started128.png"
+        }
+    },
+     "content_scripts": [
+       {
+         "matches": ["*://*.facebook.com/*",
+                     "*://*.messenger.com/*"],
+         "all_frames": true,
+         "css": ["twisc/styles.css"],
+         "js": ["twisc/common-resources.js",
+                "twisc/common-settings.js",
+                "twisc/content.js",
+                "twisc/content-popover.js",
+                "twisc/content-add-widgets.js",                
+                "twisc/content-hashes.js",
+                "twisc/content-evaluation.js",
+                "twisc/content-evaluator-newsguard.js",
+                "twisc/content-evaluator-cofacts.js",
+                "twisc/content-fb.js",
+                "twisc/content-handler-fb.js",
+                "twisc/content-handler-fb-old-feed-messagebox.js",
+                "twisc/content-handler-fb-new-feed-messagebox.js",
+                "twisc/content-handler-fb-old-feed-post.js",
+                "twisc/content-handler-fb-new-feed-post.js",
+                "twisc/content-handler-fb-messenger.js"]
+       }
+    ],
+    "icons": {
+        "16": "twisc/images/get_started16.png",
+        "32": "twisc/images/get_started32.png",
+        "48": "twisc/images/get_started48.png",
+        "128": "twisc/images/get_started128.png"
+    },
+    "manifest_version": 2,
+    "web_accessible_resources": [
+        "twisc/images/check-t-green.png",
+        "twisc/images/check-t-opinion.png",
+        "twisc/images/check-t-red.png",
+        "twisc/images/check-t-unknown.png",
+        "twisc/images/check-t-notrated.png",
+        "twisc/images/check-t-error.svg",
+        "twisc/images/check-t-loading.gif",
+        "twisc/images/green-check-mark.jpg",
+        "twisc/images/red-warning.jpg",
+        "twisc/images/big-questionmark.png",
+        "twisc/images/twisc.png",
+        "twisc/images/fb-post.png",
+        "twisc/images/fb-message.jpg",
+        "twisc/popover-template.html"
+    ]
+}
