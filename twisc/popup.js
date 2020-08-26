@@ -1,5 +1,5 @@
 document.getElementById('settingsButton').onclick = function(element) {
-    url = chrome.runtime.getURL('options.html');
+    url = chrome.runtime.getURL('twisc/options.html');
     window.open(url);
 }
 

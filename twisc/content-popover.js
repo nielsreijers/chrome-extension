@@ -197,7 +197,7 @@ function _sendReply(widgetdata, message, imageUrl) {
 // ----------------- Initialisation -----------------
 // Add the popover to the DOM and connect its events.
 var myPopover = null
-fetch(chrome.extension.getURL("popover-template.html")).then(r => r.text()).then(t => {
+fetch(chrome.extension.getURL("twisc/popover-template.html")).then(r => r.text()).then(t => {
     var tmp = document.createElement('div');
     tmp.innerHTML = t;
 
@@ -226,7 +226,7 @@ fetch(chrome.extension.getURL("popover-template.html")).then(r => r.text()).then
         sendReplyImageCheckboxSpan: document.getElementById("VLIEGTUIG_SEND_REPLY_IMAGE_CHECKBOX_SPAN"),
         twiscLogo: document.getElementById("VLIEGTUIG_TWISC_LOGO")
     };
-    myPopover.twiscLogo.src = chrome.extension.getURL("images/twisc.png");
+    myPopover.twiscLogo.src = chrome.extension.getURL("twisc/images/twisc.png");
     myPopover.mainDiv.onmouseenter = _handle_popover_mouseenter;
     myPopover.evalProposedReply.oninput = _handle_textarea_input;
     myPopover.mainDiv.onmouseleave = _handle_popover_mouseleave;
