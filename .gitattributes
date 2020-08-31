@@ -1,0 +1,2 @@
+# Javascript sources for the LINE extension will break if git converts LF to CRLF line endings.
+src/*.js eol=lf
