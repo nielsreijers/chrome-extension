@@ -6,13 +6,10 @@ function cofactsGetEvaluationPromise(content, contentType) {
 
 _sha256 = new Hashes.SHA256
 function _getCofactsDataPromise(content) {
-    // Use a temporary Heroku app as a proxy to avoid CORS errors
     let truncatedContent = content.substr(0, 512); // No need to send more data, and sending too much results in a http 414.
     let hash = _sha256.hex(getSetting(SETTING_HASH_SALT) + content);
-    let uriencodedContent = encodeURIComponent(truncatedContent);
-    return fetch(`https://pure-meadow-03854.herokuapp.com/cofacts?hash=${hash}`, { headers: { text: uriencodedContent } })
-                .then(r => r.json())
-                .then(d => d.data);
+    return fetchFromBackgroundPage({ backend: 'cofacts', content: content, hash: hash })
+            .then(data => data.data);
 }
 
 const _cofactsReplyTypes = {

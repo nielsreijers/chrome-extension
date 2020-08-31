@@ -3,6 +3,20 @@ const contentTypes = {
     TEXT: 'text'
 }
 
+function fetchFromBackgroundPage(message) {
+    message.contentScriptQuery = 'twiscFetch';
+    return new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage(message,
+            result => {
+                if (result.ok) {
+                    resolve(result.data);
+                } else {
+                    reject(result.error);
+                }
+            });
+    });
+}
+
 function isLinkToCheck(url) {
     url = stripFacebookExtras(url);
     return url.startsWith('http')                           // Filter out local links like "/<facebook id>"

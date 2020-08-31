@@ -24,10 +24,11 @@ function newsguardGetEvaluationPromise(content, contentType) {
 }
 
 function _getNewsGuardDataPromise(url) {
-    return fetch(`https://api.newsguardtech.com/check?url=${encodeURIComponent(url)}`).then(r => r.json());
+    return fetchFromBackgroundPage({ backend: 'newsguard', url: url });
 }
 
-function _newsGuardDataToEvaluation(data, url) {   
+function _newsGuardDataToEvaluation(data, url) {
+    console.log('hallo');console.log(data);
     if (data.identifier != null) {
         var url = data.identifier;
     } else {
