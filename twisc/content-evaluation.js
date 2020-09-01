@@ -18,7 +18,10 @@ function fetchFromBackgroundPage(message) {
 }
 
 function isLinkToCheck(url) {
-    url = stripFacebookExtras(url);
+    if (typeof stripFacebookExtras === "function") {
+        // Not available in the LINE version
+        url = stripFacebookExtras(url);
+    }
     return url.startsWith('http')                           // Filter out local links like "/<facebook id>"
            && !url.startsWith('https://www.facebook.com')   // Filter out links to facebook, messenger and cofacts
            && !url.startsWith('https://www.messenger.com')

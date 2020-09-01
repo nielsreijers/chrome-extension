@@ -1,7 +1,8 @@
 const widgetSource = {
     FEEDPOST: 'feedpost',
     FEEDMESSAGE: 'feedmessage',
-    MESSENGERMESSAGE: 'messengermessage'
+    MESSENGERMESSAGE: 'messengermessage',
+    LINEMESSAGE: 'linemessage'
 }
 
 function filterElementsWithLinks(textElements, linkElements, textElementToParent, linkElementToParent) {

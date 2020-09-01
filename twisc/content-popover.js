@@ -156,11 +156,13 @@ function _setPopupContentInner(widgetdata, evaluation) {
         } else {
             myPopover.sendReplyTr.style.display = "table-row";
             if (widgetdata.replyToType == null) {
-                myPopover.sendReplyButton.disabled = true;
+                myPopover.sendReplyButton.classList.remove('vliegtuig-button-enabled')
+                myPopover.sendReplyButton.classList.add('vliegtuig-button-disabled')
                 myPopover.sendReplyText.innerText = "We can only auto-reply to this from the messenger.com or facebook.com/messages view.";
                 myPopover.sendReplyButton.onclick = () => { };
             } else {
-                myPopover.sendReplyButton.disabled = false;
+                myPopover.sendReplyButton.classList.add('vliegtuig-button-enabled')
+                myPopover.sendReplyButton.classList.remove('vliegtuig-button-disabled')
                 if (widgetdata.replyToType == 'user') {
                     var text = isDebugMode() ? `Directly send this as a reply to user with id ${widgetdata.replyToId}:`
                                            : `Directly send this reply.`;
@@ -232,11 +234,16 @@ fetch(chrome.extension.getURL("twisc/popover-template.html")).then(r => r.text()
     myPopover.mainDiv.onmouseleave = _handle_popover_mouseleave;
     myPopover.closeButton.onclick = _handle_close_clicked;
     myPopover.closeButton.innerText = '';
+    myPopover.copyReplyButton.src = chrome.extension.getURL("twisc/images/copy.png");
     myPopover.copyReplyButton.onclick = () => {
         /* Select the text field */
         myPopover.evalProposedReply.select();
         myPopover.evalProposedReply.setSelectionRange(0, 99999); /*For mobile devices*/
         document.execCommand("copy");
     };
+    myPopover.sendReplyButton.src = chrome.extension.getURL("twisc/images/send.png");
+    myPopover.evalIcon.onclick = () => {
+        handle_widget_clicked();
+    }
 });
 

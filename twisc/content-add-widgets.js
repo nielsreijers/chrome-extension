@@ -47,6 +47,8 @@ function _getHandlers() {
         } else if (window.location.href.startsWith('https://www.facebook.com')) {
             _handlers = [facebookNewFeedMessageboxHandler,
                         facebookNewFeedPostHandler];
+        } else if (window.location.href.startsWith('chrome-extension://')) {
+            _handlers = [lineChromeExtensionHandler];
         } else {
             _handlers = [];
         }        
@@ -87,7 +89,9 @@ loadSettings().then(() => {
     let domObserver = new MutationObserver(mutations => {
         for(let mutation of mutations) {
             for(let addedNode of mutation.addedNodes) {
-                _scanDomAndAddWidgets(addedNode);
+                if(addedNode.classList && !addedNode.classList.contains('vliegtuig-widget-div')) {
+                    _scanDomAndAddWidgets(addedNode);
+                }
             }
         }
     });

@@ -1735,6 +1735,14 @@
 
   // exposes Hashes
   (function(window, undefined) {
+    // 20200901 NR: For LINE chrome extension bypass the code below.
+    //              Otherwise it will use the anonymous module approach below,
+    //              but I'm not sure what 'path mapping' is.
+    if (window.location.href.startsWith(chrome.extension.getURL("index.html"))) {
+      window.Hashes = Hashes;
+      return;
+    }
+
     var freeExports = false;
     if (typeof exports === 'object') {
       freeExports = exports;

@@ -5,7 +5,6 @@
     <header>
         <div class="vliegtuig-horizontal">
             <img id="VLIEGTUIG_EVAL_ICON" width=48 height=48 src="" alt="">
-            <!-- <img id="VLIEGTUIG_EVAL_ICON" width=48 height=48 src="images/check-t-red.png" alt=""> -->
             <div id="VLIEGTUIG_POPOVER_TITLE" class="vliegtuig-truncate">https://udn.com/news/story/7266/4747659?from=udn-relatednews_ch2&fbclid=IwAR00Hna0yETjJ_UJqHnObp7Vykh9pDHkZdnbORef80d7SlwBMSY06ym56Wc</div>
         </div>
     </header>
@@ -129,16 +128,16 @@
                 https://www.scmp.com/news/china/society/article/3074991/coronavirus-chinas-first-confirmed-covid-19-case-traced-back<br>                
             </textarea>
 
-            <hr style="margin-top: 20px; margin-bottom: 10px;">
+            <hr style="margin-top: 20px; margin-bottom: 10px; display: block">
 
             <table>
                 <tbody>
                     <tr>
-                        <td><button id="VLIEGTUIG_COPY_REPLY_BUTTON">Copy</button></td>
+                        <td><img class="vliegtuig-button-enabled" width=20 height=20 src="images/copy.jfif" id="VLIEGTUIG_COPY_REPLY_BUTTON" alt="Copy"></td>
                         <td><span>Copy this reply to the clipboard.</span></td>
                     </tr>
                     <tr id="VLIEGTUIG_SEND_REPLY_TR" style="display: table-row;">
-                        <td><button id="VLIEGTUIG_SEND_REPLY_BUTTON">Send</button></td>
+                        <td><img class="vliegtuig-button-disabled" width=20 height=20 src="images/copy.jfif" id="VLIEGTUIG_SEND_REPLY_BUTTON" alt="Send"></td>
                         <td><span id="VLIEGTUIG_SEND_REPLY_TEXT">Send a message:</span>
                             <span id="VLIEGTUIG_SEND_REPLY_IMAGE_CHECKBOX_SPAN"><input id="VLIEGTUIG_SEND_REPLY_IMAGE_CHECKBOX" type="checkbox">include picture (for debugging)</span>
                         </td>
@@ -150,9 +149,17 @@
     <div id="VLIEGTUIG_TWISC_LOGO_DIV">
         <a href="https://www.twisc.org">
             <img id="VLIEGTUIG_TWISC_LOGO" src="" alt="twisc-logo" width=90 height=25>
-            <!-- <img  src="images/twisc.png" alt="twisc-logo" width=90 height=25> -->
         </a>
     </div>
 </div>
 
 <link rel="stylesheet" type="text/css" href="styles.css">
+<script>
+    // Set img sources for debugging. Normally they are set by content-popover.js using getURL().
+    if (window.location.href.startsWith("file://")) {
+        document.getElementById('VLIEGTUIG_EVAL_ICON').src="images/check-t-red.png";
+        document.getElementById('VLIEGTUIG_COPY_REPLY_BUTTON').src="images/copy.png";
+        document.getElementById('VLIEGTUIG_SEND_REPLY_BUTTON').src="images/send.png";
+        document.getElementById('VLIEGTUIG_TWISC_LOGO').src="images/twisc.png";
+    }
+</script>
