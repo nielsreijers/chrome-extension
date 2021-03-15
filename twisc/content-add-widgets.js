@@ -89,7 +89,7 @@ loadSettings().then(() => {
     let domObserver = new MutationObserver(mutations => {
         for(let mutation of mutations) {
             for(let addedNode of mutation.addedNodes) {
-                if(addedNode.classList && !addedNode.classList.contains('vliegtuig-widget-div')) {
+                if(addedNode.classList != undefined && !addedNode.classList.contains('vliegtuig-widget-div')) {
                     _scanDomAndAddWidgets(addedNode);
                 }
             }
